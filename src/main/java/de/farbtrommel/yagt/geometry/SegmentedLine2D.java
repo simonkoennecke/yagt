@@ -1,4 +1,4 @@
-package geometry;
+package de.farbtrommel.yagt.geometry;
 
 /**
  * 2-Dimensional segmented Line represented in Hesse normal from.

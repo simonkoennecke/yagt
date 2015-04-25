@@ -1,4 +1,4 @@
-package geometry;
+package de.farbtrommel.yagt.geometry;
 
 /**
  * 2-Dimensional Line in Hesse normal form.

@@ -1,4 +1,4 @@
-package geometry;
+package de.farbtrommel.yagt.geometry;
 
 public interface Line {
     Point intersection(Line line);

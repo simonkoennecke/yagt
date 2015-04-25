@@ -1,4 +1,4 @@
-package geometry;
+package de.farbtrommel.yagt.geometry;
 
 public class Point2D implements Point {
     private double mX, mY;

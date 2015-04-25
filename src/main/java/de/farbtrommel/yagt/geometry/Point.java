@@ -1,4 +1,4 @@
-package geometry;
+package de.farbtrommel.yagt.geometry;
 
 public interface Point {
     void setPoint(double x, double y);
