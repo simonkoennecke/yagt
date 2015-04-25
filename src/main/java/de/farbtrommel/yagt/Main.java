@@ -6,7 +6,8 @@ public class Main {
     public static void main(String[] args){
         Point[] points = new Point[]{
                 new Point2D(0, 1), new Point2D(1, 0),
-                new Point2D(0, 0), new Point2D(1, 1)
+                new Point2D(0, 0), new Point2D(1, 1),
+                new Point2D(0, 0), new Point2D(0.3, 0.3)
         };
 
         for (Point pt: points) {
@@ -24,5 +25,9 @@ public class Main {
 
         Point pt = lines[0].intersection(lines[1]);
         System.out.println(pt);
+
+        SegmentedLine2D segmentedLine = new SegmentedLine2D(points[4], points[5]);
+
+        segmentedLine.intersection(lines[0]);
     }
 }
