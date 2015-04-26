@@ -39,4 +39,8 @@ public class SegmentedLine2D {
     public OrientatedLine2D getLine() {
         return mLine;
     }
+
+    public String toString() {
+        return "SegmentedLine(a: " + mStart + ", b: " + mEnd + ", line: (" + mLine + "))";
+    }
 }

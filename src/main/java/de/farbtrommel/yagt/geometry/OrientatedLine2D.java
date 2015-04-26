@@ -84,7 +84,21 @@ public class OrientatedLine2D implements Line {
      * Get Distance of the Point to the line.
      */
     public double getDistance(Point pt) {
-        return (mN.dotProduct(pt) - mD);
+        return Math.abs(mN.dotProduct(pt) - mD);
+    }
+
+    /**
+     * Get the side of the point related to the line.
+     * @param pt Where is this point?
+     * @return true => left side, false => right side
+     */
+    public boolean getSide(Point pt) {
+        double d = mN.dotProduct(pt) - mD;
+        if (d > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String toString() {
