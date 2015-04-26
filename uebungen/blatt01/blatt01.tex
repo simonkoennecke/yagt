@@ -77,9 +77,34 @@
 \section*{Aufgabe 1 - Geradendarstellung}
 
 \subsection*{(a) - Umrechnung zwischen verschiedenen Darstellungen} 
-\subsubsection*{(a) - affine Hülle}
 \begin{description}
- \item[affine Hülle \\rightarrow Nullstellenmenge] Um 
+ \item[affine Hülle $\rightarrow$ Nullstellenmenge:] 
+ Der Normalenvektor $\vec{n}$ der Geraden ist mit den Komponenten des Richtungsvektors $\vec{r} = (\vec{q} - \vec{p})$
+ als $\vec{n} = (-r_2, r_1)$ gegeben. Damit sind die Parameter $a = -r_2$ und $b = r_1$  der Nullstellenmenge bereits bestimmt.
+ Der Parameter $c$ lässt sich dann mittels der Komponenten des Punktes $p$ der affinen Hülle wie folgt berechnen: $c = -1 * (p_1a + p_2b)$.
+ 
+ \item[affine Hülle $\rightarrow$ Hessesche Normalform:] Um die Hessesche Normalform zu erhalten, wird ähnlich
+ wie zuvor beschrieben vorgegangen. Der Normalenvektor $\vec{n_r} = (-r_2, r_1)$ muss hier jedoch noch wegen $||\vec{n}|| = 1$ wie folgt 
+ normiert werden: $\vec{n} = \vec{n_r}/||\vec{n_r}||$.
+ 
+ \item[Nullstellenmenge $\rightarrow$ affine Hülle:]
+ Da der Normalenvektor $\vec{n} = (a,b)$ bereits durch die Nullstellenmengen-Darstellung gegeben ist, lässt sich der Richtungsvektor
+ der affinen Hülle $\vec{r}$
+ einfach mittels $\vec{r} = (b,-a)$ beschreiben. Als Stützvektor $\vec{p}$ kommt jeder beliebige Punkt auf der Geraden in Frage. Dazu bestimmt man ein
+ beliebiges $x \in \mathbb{R}$ und berechnet das zugehörige $y$ mittels der gegebenen linearen Gleichung wie folgt: $y = \frac{-c -ax}{b}$.
+ 
+ \item[Nullstellenmenge $\rightarrow$ Hessesche Normalform:]
+ Ähnlich wie im vorherigen Fall ist der Normalenvektor bereits mit $\vec{n_r} = (a,b)$ gegeben, muss jedoch noch wegen $||\vec{n}|| = 1$ wie folgt 
+ normiert werden: $\vec{n} = \vec{n_r}/||\vec{n_r}||$. Mit dem bereits gegebenen $c$ sind alle Bestandteile der Hesseschen Normalform damit bestimmt. 
+ 
+ \item[Hessesche Normalform $\rightarrow$ Nullstellenmenge:]
+ Die Parameter $a$ und $b$ sind bereits durch den Normalenvektor $\vec{n}$ gegeben. Das $c$ ist ebenfalls bekannt. 
+ Eine alternative Interpretation der Hesseschen Normalform reicht somit aus. Es sind keine arithmetischen Operationen notwendig. 
+ 
+ \item[Hessesche Normalform $\rightarrow$ affine Hülle:]
+ Mit der im vorherigen Schritt beschriebenen Interpretation lässt sich die affine Hülle wie in "`\textbf{Nullstellenmenge $\rightarrow$ affine Hülle}"'
+ berechnen/bestimmen. 
+ 
 \end{description}
 
 
