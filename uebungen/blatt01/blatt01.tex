@@ -167,22 +167,22 @@ public boolean isInSegment(Point pt) {
 Gegeben sei ein n-Eck $P$ in BHD. Es soll entschieden werden, ob $ p \in P$ und $g \cap P$ ist, wobei $g$ eine beliebigen Grade ist. $P$ wird hier als Menge aufgefasst. Wir wissen das der BHD eine Höhe von $log(n)$ hat. Der BHD kann in Level $P_0, P_1, ... P_k$ aufgeteilt werden und das n-Eck ist im Uhrzeigersinn mit $s_1, ..., s_n$ nummeriert.
 
 \begin{description}
-	\item[Es soll gezeigt werden, dass $p \in P$ in $log(n)$ entschieden werden kann:]
+	\item[Es soll gezeigt werden, dass $p \in P$ in $O(log(n))$ entschieden werden kann:]
 
 \begin{itemize}
 
-\item Schritt 1: Überprüfe ob $p$ gleich $s_1$ ist. Falls ja: gilt $p \in P$. Sonst weiter beim zweiten Schritt mit $i=1$.
+\item Schritt 1: Überprüfe ob $p$ gleich $s_1$ ist. Falls ja: gilt $p \in P$. Sonst weiter mit dem zweiten Schritt mit $i = 1$.
 
-\item Schritt 2: Sei $p \in P_i$, wenn $min(x_{s_i}, x_{s_i+1}) \leq p_x \leq max(x_{s_i}, x_{s_i+1})$ und $min(y_{s_i}, y_{s_i+1}) \leq p_x \leq max(y_{s_i}, y_{s_i+1})$. Sonst weiter mit dem dritten Schritt.
+\item Schritt 2: Sollte $p$ in den Halbraum von beiden Kindern $P_{i+1}$ liegen gilt $p \in P$.
 
-\item Schritt 3: Entscheide ob es im rechten oder linken Halbraum von $P_i$ liegt. Beim rechten Halbraum gehe $s_i$ Endpunkt der Strecke, also gehe zum zweiten Schritt mit $i= i-1$. Beim linken Halbraum $s_i$ der Startpunkt der Strecke ist also gehe zum zweiten Schritt mit $i= i+1$.
+\item Schritt 3: Entscheide ob es im rechten oder linken Halbraum von $P_i$ liegt. Sollte $p$ im rechten Halbraum liegen, gehen rechts eine Ebene den BHD tiefer. Sollte $p$ im linken Halbraum liegen, gehen links eine Ebene den BHD tiefer. 
+
+\item Schritt 4: Der zweite Schritt wird solange wiederholt bis irgendwann $p \in P$ gilt oder es exisitert kein Level $P_i$ mehr, dann gilt $p \notin P$.
 
 \end{itemize}
 
+Die Laufzeit ist im Worst-Case $O(log(n))$, da der Binär-Baum von der Wurzel bis zum Blatt durchlaufen werden muss. Da die Berechnungen der einzelnen Schritte in $O(1)$ vorgenommen werden können.
 
-
-
-	\item[Es soll gezeigt werden, dass $g \cap	 P$ in $log(n)$ entschieden werden kann:]
 
 \end{description}
 
