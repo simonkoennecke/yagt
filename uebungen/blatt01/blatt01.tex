@@ -87,7 +87,7 @@
  
  \item[affine Hülle $\rightarrow$ Hessesche Normalform:] Um die Hessesche Normalform zu erhalten, wird ähnlich
  wie zuvor beschrieben vorgegangen. Der Normalenvektor $\vec{n_r} = (-r_2, r_1)$ muss hier jedoch noch wegen $||\vec{n}|| = 1$ wie folgt 
- normiert werden: $\vec{n} = \vec{n_r}/||\vec{n_r}||$.
+ normiert werden: $\vec{n} = \vec{n_r}/||\vec{n_r}||$, bevor $c$ berechnet wird. 
  
  \item[Nullstellenmenge $\rightarrow$ affine Hülle:]
  Da der Normalenvektor $\vec{n} = (a,b)$ bereits durch die Nullstellenmengen-Darstellung gegeben ist, lässt sich der Richtungsvektor
@@ -97,7 +97,8 @@
  
  \item[Nullstellenmenge $\rightarrow$ Hessesche Normalform:]
  Ähnlich wie im vorherigen Fall ist der Normalenvektor bereits mit $\vec{n_r} = (a,b)$ gegeben, muss jedoch noch wegen $||\vec{n}|| = 1$ wie folgt 
- normiert werden: $\vec{n} = \vec{n_r}/||\vec{n_r}||$. Mit dem bereits gegebenen $c$ sind alle Bestandteile der Hesseschen Normalform damit bestimmt. 
+ normiert werden: $\vec{n} = \vec{n_r}/||\vec{n_r}||$. Weiterhin nehme gültigen Punkt $\vec{x}=(x_1,x_2)$ aus der Nullstellenmengen-Darstellung und berechne
+ hiermit $c$ wie folgt: $c = -1 * (n_1x_1 + n_2x_2)$.
  
  \item[Hessesche Normalform $\rightarrow$ Nullstellenmenge:]
  Die Parameter $a$ und $b$ sind bereits durch den Normalenvektor $\vec{n}$ gegeben. Das $c$ ist ebenfalls bekannt. 
