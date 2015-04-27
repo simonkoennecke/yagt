@@ -25,6 +25,8 @@
 %Figures with text around it:
 \usepackage{wrapfig}
 
+\usepackage{listings}
+
 %seitennummern rechts:
 % \usepackage{fancyhdr}
 % \fancyhf{} % clear all header and footers
@@ -111,13 +113,76 @@
 
 \subsection*{(b)}
 
-Sei gegeben $p \in \mathbb{R}^2$ und $g = \left\{x \in \mathbb{R}^2| nx + c = 0 \right\}$. Des Weiteren nehmen wir an, dass $|c|$ der Abstand von Koordinatenursprung und diese Annahme bewiesen sei.
+Sei gegeben $p \in \mathbb{R}^2$ und $g = \left\{x \in \mathbb{R}^2| nx + c = 0 \right\}$. Des Weiteren nehmen wir an, dass $|c|$ der Abstand von Koordinatenursprung und diese Annahme sei bewiesen.
 
-Sei $g'$ eine Grade die durch $p$ geht und die parallel zu $g$ verläuft, somit kann man $g'$ wie folt beschreiben: $g' = \left\{x \in \mathbb{R}^2| nx + c = \pm \delta \right\}$. Sei $d$ die Abstandfunktion. Dann kann man die Verhältnisse von $p$, $g$ und $g'$ wie folgt beschreiben: $d\left(p,g)\right) = d\left(g',g)\right) = \delta$. Daraus kann man schliessen $\delta = | \pm \left(nx+c\right)| = |nx+c|$.
+Sei $g'$ eine Grade die durch $p$ geht und die parallel zu $g$ verläuft, somit kann man $g'$ wie folt beschreiben wird: $g' = \left\{x \in \mathbb{R}^2| nx + c = \pm \delta \right\}$. Sei $d$ die Abstandfunktion. Dann kann man die Verhältnisse von $p$, $g$ und $g'$ wie folgt beschreiben: $d\left(p,g)\right) = d\left(g',g)\right) = \delta$. Daraus kann man schliessen $\delta = | \pm \left(nx+c\right)| = |nx+c|$.
+
 
 \section*{Aufgabe 2 - Implementierung}
 
+Siehe Ausgabe des Programms.
+
+Die zwei wichtigsten Funktionen sind $intersection$ von zwei Graden und die Funktion $isInSegment$ bei Schnittpunkte von Strecken. 
+
+\begin{lstlisting}
+public Point intersection(OrientatedLine2D line) {
+        // We need two points of each line.
+        Point p1 = getLocationVector();
+        Point p2 = getAnotherPointOnLine();
+        Point p3 = line.getLocationVector();
+        Point p4 = line.getAnotherPointOnLine();
+
+        //Please see for the formula here:
+        //http://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line
+
+        //When this is zero the both lines are parallel.
+        if (((p1.getX() - p2.getX())*(p3.getY() - p4.getY())) - ((p1.getY() - p2.getY()) * (p3.getX() - p4.getX())) == 0) {
+            return null;
+        }
+
+        double x, y, z;
+        //Divider
+        z = ((p1.getX() - p2.getX()) * (p3.getY() - p4.getY())) -
+                ((p1.getY() - p2.getY()) * (p3.getX() - p4.getX()));
+
+        x = (((p1.getX() * p2.getY()) - (p1.getY() * p2.getX())) * (p3.getX() - p4.getX())) -
+                (p1.getX() - p2.getX()) * (p3.getX() * p4.getY() - p3.getY() * p4.getX());
+        x /= z;
+        y = (p1.getX() * p2.getY() - p1.getY() * p2.getX()) * (p3.getY() - p4.getY()) -
+                (p1.getY() - p2.getY()) * (p3.getX() * p4.getY() - p3.getY() * p4.getX());
+        y /= z;
+        return new Point2D(x, y);
+    }
+\end{lstlisting}
+
+\begin{lstlisting}
+public boolean isInSegment(Point pt) {
+        return (mStart.distance(pt) + pt.distance(mEnd)) == mStart.distance(mEnd);
+}
+\end{lstlisting}
+
 \section*{Aufgabe 3 - BHD}
 
+Gegeben sei ein n-Eck $P$ in BHD. Es soll entschieden werden, ob $ p \in P$ und $g \cap P$ ist, wobei $g$ eine beliebigen Grade ist. $P$ wird hier als Menge aufgefasst. Wir wissen das der BHD eine Höhe von $log(n)$ hat. Der BHD kann in Level $P_0, P_1, ... P_k$ aufgeteilt werden und das n-Eck ist im Uhrzeigersinn mit $s_1, ..., s_n$ nummeriert.
+
+\begin{description}
+	\item[Es soll gezeigt werden, dass $p \in P$ in $log(n)$ entschieden werden kann:]
+
+\begin{itemize}
+
+\item Schritt 1: Überprüfe ob $p$ gleich $s_1$ ist. Falls ja: gilt $p \in P$. Sonst weiter beim zweiten Schritt mit $i=1$.
+
+\item Schritt 2: Sei $p \in P_i$, wenn $min(x_{s_i}, x_{s_i+1}) \leq p_x \leq max(x_{s_i}, x_{s_i+1})$ und $min(y_{s_i}, y_{s_i+1}) \leq p_x \leq max(y_{s_i}, y_{s_i+1})$. Sonst weiter mit dem dritten Schritt.
+
+\item Schritt 3: Entscheide ob es im rechten oder linken Halbraum von $P_i$ liegt. Beim rechten Halbraum gehe $s_i$ Endpunkt der Strecke, also gehe zum zweiten Schritt mit $i= i-1$. Beim linken Halbraum $s_i$ der Startpunkt der Strecke ist also gehe zum zweiten Schritt mit $i= i+1$.
+
+\end{itemize}
+
+
+
+
+	\item[Es soll gezeigt werden, dass $g \cap	 P$ in $log(n)$ entschieden werden kann:]
+
+\end{description}
 
 \end{document}
