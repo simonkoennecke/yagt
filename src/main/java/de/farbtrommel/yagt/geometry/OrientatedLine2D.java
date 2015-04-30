@@ -56,7 +56,7 @@ public class OrientatedLine2D implements Line, Drawable{
         return new Point2D(x, y);
     }
 
-    @Override
+    
     public Point intersection(Line line) {
         OrientatedLine2D l = new OrientatedLine2D(line.getLocationVector(),
                 line.getLocationVector().subtract(line.getAnotherPointOnLine()));
@@ -71,17 +71,17 @@ public class OrientatedLine2D implements Line, Drawable{
     }
 
 
-    @Override
+    
     public Point getLocationVector() {
         return mP;
     }
 
-    @Override
+    
     public Point getNormalVector() {
         return mN;
     }
 
-    @Override
+    
     /**
      * Get Distance of the Point to the line.
      */

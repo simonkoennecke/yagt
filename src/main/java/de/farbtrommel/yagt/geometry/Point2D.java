@@ -1,8 +1,6 @@
 package de.farbtrommel.yagt.geometry;
 
-import processing.core.PApplet;
-
-public class Point2D implements Point, Drawable {
+public class Point2D implements Point {
     private double mX, mY;
 
     Point2D(){
@@ -78,28 +76,13 @@ public class Point2D implements Point, Drawable {
     }
 
     @Override
-    /**
-     * @return Return Angle in Degree.
-     */
-    public double angle(Point pt) {
-        return Math.toDegrees(Math.acos(dotProduct(pt)/(norm() * pt.norm())));
-    }
-
-    @Override
-    public Point rotate(double degree) {
-        double rad = Math.toRadians(degree);
-        return new Point2D( getX() * Math.cos(rad) - getY() * Math.sin(rad),
-                            getX() * Math.sin(rad) + getY() * Math.cos(rad));
-    }
-
-    @Override
     public double dotProduct(Point pt) {
-        return getX()*pt.getX()+getY()*pt.getY();
+        return Math.sqrt(getX()*pt.getX()+getY()*pt.getY());
     }
 
     @Override
     public double norm() {
-        return Math.sqrt(getX()*getX()+getY()*getY());
+        return dotProduct(this);
     }
 
     @Override
@@ -110,10 +93,5 @@ public class Point2D implements Point, Drawable {
     @Override
     public String toString(){
         return "Pt2D(x: " + getX() + ", y: " + getY()+ ")";
-    }
-
-    @Override
-    public void draw(PApplet context) {
-        context.point((float) getX(), (float) getY());
     }
 }
