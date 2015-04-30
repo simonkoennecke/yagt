@@ -1,7 +1,11 @@
 package de.farbtrommel.yagt.geometry;
 
+import processing.core.PApplet;
+
 public class Point2D implements Point {
     private double mX, mY;
+
+    private static DrawSettings mDrawSettings = new DrawSettings();
 
     Point2D(){
 
@@ -90,5 +94,21 @@ public class Point2D implements Point {
 
     public String toString(){
         return "Pt2D(x: " + getX() + ", y: " + getY()+ ")";
+    }
+
+    @Override
+    public void draw(PApplet context) {
+        context.ellipse(mDrawSettings.getX(this), mDrawSettings.getY(this), 10, 10);
+    }
+
+    @Override
+    public void drawAddVertex(PApplet context) {
+        context.vertex(mDrawSettings.getX(this), mDrawSettings.getY(this));
+    }
+    public void drawLine(PApplet context, Point pt) {
+        context.line(
+                mDrawSettings.getX(this), mDrawSettings.getY(this),
+                mDrawSettings.getX(pt), mDrawSettings.getY(pt)
+                );
     }
 }

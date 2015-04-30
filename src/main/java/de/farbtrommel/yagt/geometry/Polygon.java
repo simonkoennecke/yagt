@@ -1,13 +1,16 @@
 package de.farbtrommel.yagt.geometry;
 
+import processing.core.PApplet;
+
 import java.util.ArrayList;
 
 //http://www.seas.gwu.edu/~simhaweb/alg/lectures/module1/module1.html
 
-public class Polygon {
+public class Polygon implements Drawable{
     private ArrayList<Point> mList;
-    private ArrayList<ArrayList<Integer>> mAntiPodal;
+    private ArrayList<ArrayList<Integer>> mAntipodal;
     private int mMaxPt = -1, mMinPt = -1;
+    private int[] mMaxAntipodal;
 
     public Polygon() {
         mList = new ArrayList<Point>();
@@ -63,14 +66,14 @@ public class Polygon {
     }
 
     private void initAntiPodalList() {
-        mAntiPodal = new ArrayList<ArrayList<Integer>>();
+        mAntipodal = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < mList.size(); i++) {
-            mAntiPodal.add(new ArrayList<Integer>());
+            mAntipodal.add(new ArrayList<Integer>());
         }
     }
     private void addAntiPodal(int i, int j) {
-        mAntiPodal.get(i).add(j);
-        mAntiPodal.get(j).add(i);
+        mAntipodal.get(i).add(j);
+        mAntipodal.get(j).add(i);
     }
 
     public void calcAntipodal() {
@@ -115,10 +118,10 @@ public class Polygon {
 
     public String getAntipodalPairs() {
         StringBuilder str = new StringBuilder();
-        for (int i = 0; i < mAntiPodal.size(); i++) {
+        for (int i = 0; i < mAntipodal.size(); i++) {
             str.append(i + ": ");
-            for (int j = 0; j < mAntiPodal.get(i).size(); j++) {
-                str.append(mAntiPodal.get(i).get(j) + " ");
+            for (int j = 0; j < mAntipodal.get(i).size(); j++) {
+                str.append(mAntipodal.get(i).get(j) + " ");
             }
             str.append("\n");
         }
@@ -130,12 +133,44 @@ public class Polygon {
      */
     public double getDiameter(){
         double max = -1, tmp;
-        for (int i = 0; i < mAntiPodal.size(); i++) {
-            for (int j = 0; j < mAntiPodal.get(i).size(); j++) {
-                tmp = getPoint(i).distance(getPoint(mAntiPodal.get(i).get(j)));
-                max = (max < tmp) ? tmp : max;
+        for (int i = 0; i < mAntipodal.size(); i++) {
+            for (int j = 0; j < mAntipodal.get(i).size(); j++) {
+                tmp = getPoint(i).distance(getPoint(mAntipodal.get(i).get(j)));
+                if (max < tmp) {
+                    max = tmp;
+                    mMaxAntipodal = new int[]{i, mAntipodal.get(i).get(j)};
+                }
             }
         }
         return max;
+    }
+
+    @Override
+    public void draw(PApplet context) {
+
+        context.beginShape();
+        context.fill(200f, 80f);
+        context.stroke(200f, 80f);
+        for(Point pt: mList) {
+            pt.drawAddVertex(context);
+        }
+        context.endShape(context.CLOSE);
+
+        context.fill(0f, 0f, 255f, 255f);
+        context.stroke(0f, 0f, 255f, 255f);
+        for(Point pt: mList) {
+            pt.draw(context);
+        }
+
+        calcAntipodal();
+        double max = getDiameter();
+        context.fill(255f, 0f, 0f, 255f);
+        context.stroke(255f, 0f, 0f, 255f);
+        for(Point pt: mList) {
+            getPoint(mMaxAntipodal[0]).drawLine(context, getPoint(mMaxAntipodal[1]));
+            getPoint(mMaxAntipodal[0]).draw(context);
+            getPoint(mMaxAntipodal[1]).draw(context);
+        }
+
     }
 }

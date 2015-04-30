@@ -1,5 +1,7 @@
 package de.farbtrommel.yagt.geometry;
 
+import processing.core.PApplet;
+
 public interface Point {
     void setPoint(double x, double y);
     void setPoint(Point pt);
@@ -17,4 +19,7 @@ public interface Point {
     double dotProduct(Point pt);
     double norm();
     double distance(Point pt);
+    void draw(PApplet context);
+    void drawLine(PApplet context, Point pt);
+    void drawAddVertex(PApplet context);
 }
