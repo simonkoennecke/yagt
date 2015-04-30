@@ -2,8 +2,11 @@ package de.farbtrommel.yagt;
 
 import de.farbtrommel.yagt.geometry.*;
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args){
+        /*
         int i = 0;
 
         System.out.println("Points:");
@@ -55,6 +58,21 @@ public class Main {
         } else {
             System.out.println("The two segmented lines are intersect at " + pt + ".");
         }
+        */
+        ArrayList<Point> pts = new ArrayList<Point>();
+        pts.add(new Point2D(1, 1));
+        pts.add(new Point2D(-3, 5));
+        pts.add(new Point2D(4, 12));
+        pts.add(new Point2D(6, 8));
+        pts.add(new Point2D(7, 2));
+        pts.add(new Point2D(4, 0));
+
+
+        Polygon polygon = new Polygon(pts);
+        polygon.calcAntipodal();
+        System.out.println("All antipodal Pairs:");
+        System.out.println(polygon.getAntipodalPairs());
+        System.out.println("Diameter of Polygon: " + polygon.getDiameter());
 
     }
 }

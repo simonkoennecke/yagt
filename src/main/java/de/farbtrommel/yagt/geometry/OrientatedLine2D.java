@@ -1,9 +1,11 @@
 package de.farbtrommel.yagt.geometry;
 
+import processing.core.PApplet;
+
 /**
  * 2-Dimensional Line in Hesse normal form.
  */
-public class OrientatedLine2D implements Line {
+public class OrientatedLine2D implements Line, Drawable{
     /**
      * mP = location vector
      * mQ = another vector on line
@@ -106,5 +108,10 @@ public class OrientatedLine2D implements Line {
                 ", q: " + getAnotherPointOnLine() +
                 ", r: " + mR +
                 ", n: " + getNormalVector() + ")";
+    }
+
+    @Override
+    public void draw(PApplet context) {
+        //TODO: implement draw function
     }
 }

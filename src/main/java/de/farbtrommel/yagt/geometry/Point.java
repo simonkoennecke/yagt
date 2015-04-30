@@ -12,6 +12,8 @@ public interface Point {
     Point multiply(Point pt);
     Point multiply(double val);
     Point rotate90Degrees();
+    Point rotate(double degree);
+    double angle(Point pt);
     double dotProduct(Point pt);
     double norm();
     double distance(Point pt);
