@@ -81,36 +81,43 @@ public class Polygon implements Drawable{
         findExtrema();
 
         int i = mMaxPt, j = mMinPt, cnt = 0;
+        //Vec[0-1] are current caliper
+        //Vec[2-3] are current edges
         Point[] vec = new Point[]{
                 new Point2D(1, 0),
                 new Point2D(-1, 0),
                 getPoint(getSuccessor(i)).subtract(getPoint(i)),
                 getPoint(getSuccessor(j)).subtract(getPoint(j))
         };
+        //angle[0]: Angle between upper caliper and edge
+        //angle[1]: Angle between lower caliper and edge
         double[] angle = new double[]{
                 vec[2].angle(vec[0]),
                 vec[3].angle(vec[1])
         };
 
         do {
-            //System.out.printf("%d: top(%d; %.1f), bottom(%d; %.3f)%n", cnt, i, angle[0], j, angle[1]);
-
             //On which Edge flash the caliper first?
             if (angle[0] > angle[1]) {
                 //Lower Bound flash first
                 j = getSuccessor(j);
+                //move caliper
                 vec[1] = vec[3];
                 vec[0] = vec[3].multiply(-1);
+                //goto next edge
                 vec[3] = getPoint(getSuccessor(j)).subtract(getPoint(j));
             } else {
                 //Upper Bound flash first
                 i = getSuccessor(i);
+                //move caliper
                 vec[0] = vec[2];
                 vec[1] = vec[2].multiply(-1);
+                //goto next edge
                 vec[2] = getPoint(getSuccessor(i)).subtract(getPoint(i));
             }
+            //Add new index as a antipodal pair
             addAntiPodal(i, j);
-
+            //Calc new angle between the current selected edge and caliper
             angle[0] = vec[2].angle(vec[0]);
             angle[1] = vec[3].angle(vec[1]);
         } while (i != mMinPt || j != mMaxPt);

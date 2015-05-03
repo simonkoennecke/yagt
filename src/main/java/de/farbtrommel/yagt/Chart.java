@@ -12,16 +12,17 @@ public class Chart extends PApplet {
     private Polygon polygon;
 
     public void setup() {
-        ArrayList<Point> pts = new ArrayList<Point>();
-        pts.add(new Point2D(1, 1));
-        pts.add(new Point2D(0, 5));
-        pts.add(new Point2D(4, 12));
-        pts.add(new Point2D(6, 8));
-        pts.add(new Point2D(7, 2));
-        pts.add(new Point2D(4, 0));
+
+        polygon = new Polygon();
+        polygon.add(new Point2D(1, 1));
+        polygon.add(new Point2D(0, 5));
+        polygon.add(new Point2D(4, 12));
+        polygon.add(new Point2D(6, 8));
+        polygon.add(new Point2D(7, 2));
+        polygon.add(new Point2D(4, 0));
 
 
-        polygon = new Polygon(pts);
+
         size(SCREEN_WIDTH, SCREEN_HEIGHT);
         background(0);
     }

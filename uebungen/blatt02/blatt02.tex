@@ -44,6 +44,28 @@
 \usepackage[german]{babel}
 
 
+\usepackage{listings}
+\usepackage{color}
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+ 
+\lstset{language=Java,
+basicstyle=\ttfamily,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=1,
+numbersep=5pt,
+tabsize=4,
+showspaces=false,
+lineskip={-1.5pt},
+showstringspaces=false}
+
 %Tabellenextras
 \usepackage{tabularx}
 
@@ -78,11 +100,86 @@
 
 \section*{Aufgabe 1 - Rotating Calipers}
 
-Siehe repo ??
+Der wichtigeste Algorihmus in unserem Programm ist die Prozedur $calcAntipodal$. Diese Prozedur berechnet alle Antipodal Punkte von einem konvexen Polygon.
 
+\begin{lstlisting}
+    public void calcAntipodal() {
+        initAntiPodalList();
+        findExtrema();
+
+        int i = mMaxPt, j = mMinPt, cnt = 0;
+        //Vec[0-1] are current caliper
+        //Vec[2-3] are current edges
+        Point[] vec = new Point[]{
+                new Point2D(1, 0),
+                new Point2D(-1, 0),
+                getPoint(getSuccessor(i)).subtract(getPoint(i)),
+                getPoint(getSuccessor(j)).subtract(getPoint(j))
+        };
+        //angle[0]: Angle between upper caliper and edge
+		//angle[1]: Angle between lower caliper and edge
+        double[] angle = new double[]{
+                vec[2].angle(vec[0]),
+                vec[3].angle(vec[1])
+        };
+
+        do {
+            //On which Edge flash the caliper first?
+            if (angle[0] > angle[1]) {
+                //Lower Bound flash first
+                j = getSuccessor(j);
+                //move caliper
+                vec[1] = vec[3];
+                vec[0] = vec[3].multiply(-1);
+                //goto next edge
+                vec[3] = getPoint(getSuccessor(j)).subtract(getPoint(j));
+            } else {
+                //Upper Bound flash first
+                i = getSuccessor(i);
+                //move caliper
+                vec[0] = vec[2];
+                vec[1] = vec[2].multiply(-1);
+                //goto next edge
+                vec[2] = getPoint(getSuccessor(i)).subtract(getPoint(i));
+            }
+            //Add new index as a antipodal pair
+            addAntiPodal(i, j);
+			//Calc new angle between the current selected edge and caliper
+            angle[0] = vec[2].angle(vec[0]);
+            angle[1] = vec[3].angle(vec[1]);
+        } while (i != mMinPt || j != mMaxPt);
+    }
+
+\end{lstlisting}
+
+Das finden des maximalen Durchmesser wird mit dem durch gehen aller Antipodal ermöglicht. Dies könnte auch im Zuge des berechnen von der Funktion $calcAntipodal$ geschehen. Wir haben uns wegen der Übersichtlichkeit dagegen Entschieden und nehmen den mehr Aufwand in kauf und haben die Funktion $getDiameter$ wie folgt definiert:
+
+\begin{lstlisting}
+	public double getDiameter(){
+        double max = -1, tmp;
+        for (int i = 0; i < mAntipodal.size(); i++) {
+            for (int j = 0; j < mAntipodal.get(i).size(); j++) {
+                tmp = getPoint(i).distance(getPoint(mAntipodal.get(i).get(j)));
+                if (max < tmp) {
+                    max = tmp;
+                    mMaxAntipodal = new int[]{i, mAntipodal.get(i).get(j)};
+                }
+            }
+        }
+        return max;
+    }
+\end{lstlisting}
 
 \section*{Aufgabe 2 - Konvexe Hülle}
+
 \subsection*{(a) - Zeigen Sie, dass das Finden der Brücken in $\mathcal{O}(\log n)$ Zeit möglich ist.}
+
+Wie in der Aufgabenstellung beschrieben sind uns zwei disjunkte und konvexe Polygone $S_1$ und $S_2$ gegeben. Wobei die Punkte von $S_i$ im Uhrzeigersinn geordnet seien, $S_i \subseteq S \subseteq \mathcal{R}^2$, $i = \left\{1, 2\right\}$ und $|S| = n$ gilt. Des Weiteren kann man die Punkte $s_j \in S_1, 0 \leq j \leq |S_1|$ und $t_j \in S_2, 0 \leq j \leq |S_2|$ in konstanter Zeit addressieren, sprich in $\mathcal{O}(1)$.
+
+Es gilt zu zeigen, dass das Finden der Brücke zwischen zwei disjunkte und konvexen Polygonen in $\mathcal{O}(\log n)$ Zeit möglich ist. Dazu nehmen wir an, dass die Extrema $s_{y-min}$, $t_{y-min}$ und $s_{y-max}$, $t_{y-max}$ bekannt sein. Die Extrema kann man in im Divide-and-Conquer-Verfahren bei jeden Merg-Schritt in konstanter Zeit berechnen. Wir wählen ein Polygon aus, in unserem Fall $S_1$. Es wirdeine Brücke vom Punkt $s_{y-min}$ (hier genannt $s_k$) zu einem $t_j$ gesucht. Dabei soll der maximale Winkel gewählt werden: $max \left\{angle\left(\overline{s_k,s_{k+1}},\overline{s_k,t_j}\right)\right\}, 0 \leq j \leq |S_2|$. Die Suche nach dem maximalen Winkel kann durch die konstante Zugriffszeit auf die Elemente $t_j$ mit einer Binärsuche realisiert werden. Die Laufzeit der Binärsuche ist bekannt, nämlich $\mathcal{O}(\log n)$. Da wir nicht wissen in welcher Richtung die Winkel größer werden, werden beide Richtungen abgelaufen. Dieses Prozedere wird ebenfalls mit $s_{y-max}$ durch gespielt. Daraus resultieren zwei Brücken $\overline{s_{y-min}, t_r}$ und $\overline{s_{y-max}, t_p}$ die in einer Laufzeit von $\mathcal{O}(4 \cdot \log n)$ gefunden werden kann. Diese Laufzeit liegt wiederum in $\mathcal{O}(\log n)$.
+
+Quelle: http://www.cs.ubc.ca/~snoeyink/papers/nosep.ps.gz, Stand 03.05.2015 um 17:23 Uhr. 
+
 \subsection*{(b) - Analysieren Sie die Laufzeit des gesamten Algorithmus, getrennt nach der fürs 
 Sortieren am Anfang einerseits und dem rekursiven Teil andererseits. }
 
