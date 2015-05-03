@@ -175,7 +175,7 @@ Die Aufgabenstellung beschrieben zwei disjunkte und konvexe Polygone $S_1$ und $
 
 \subsection*{(a) - Zeigen Sie, dass das Finden der Brücken in $\mathcal{O}(\log n)$ Zeit möglich ist.}
 
-Es gilt zu zeigen, dass das Finden der Brücke zwischen zwei disjunkte und konvexen Polygonen in $\mathcal{O}(\log n)$ Zeit möglich ist. Dazu nehmen wir an, dass die Extrema $s_{y-min}$, $t_{y-min}$ und $s_{y-max}$, $t_{y-max}$ bekannt sein. Die Extrema kann man in im Divide-and-Conquer-Verfahren bei jeden Merg-Schritt in konstanter Zeit berechnen. Wir wählen ein Polygon aus, in unserem Fall $S_1$. Es wird eine Brücke vom Punkt $s_{y-min}$ (hier genannt $s_k$) zu $t_j$ gespannt. Dabei soll der Winkel maximal werden: $max \left\{\sphericalangle \left(\overline{s_k,s_{k+1}},\overline{s_k,t_j}\right)\right\}, 0 \leq j \leq |S_2|$. Es wird nach einem $j$ gesucht so das der Winkel maximal ist. Da auf die Elemente $t_j$ konstant zugegriffen werden kann die Binärsuche angewendet werden. Die Laufzeit der Binärsuche ist bekannt, nämlich $\mathcal{O}(\log n)$. Da wir nicht wissen in welcher Richtung die Winkel größer werden, werden beide Richtungen abgelaufen. Dieses Prozedere wird ebenfalls mit $s_{y-max}$ durch gespielt. Daraus resultieren zwei Brücken $\overline{s_{y-min}, t_r}$ und $\overline{s_{y-max}, t_p}$ die in einer Laufzeit von $\mathcal{O}(4 \cdot \log n)$ gefunden werden kann. Diese Laufzeit liegt wiederum in $\mathcal{O}(\log n)$.
+Es gilt zu zeigen, dass das Finden der Brücke zwischen zwei disjunkte und konvexen Polygonen in $\mathcal{O}(\log n)$ Zeit möglich ist. Dazu nehmen wir an, dass die Extrema $s_{y-min}$, $t_{y-min}$ und $s_{y-max}$, $t_{y-max}$ bekannt sein. Die Extrema kann man in im Divide-and-Conquer-Verfahren bei jeden Merg-Schritt in konstanter Zeit berechnen. Wir wählen ein Polygon aus, in unserem Fall $S_1$. Es wird eine Brücke vom Punkt $s_{y-min}$ (hier genannt $s_k$) zu $t_j$ gespannt. Dabei soll der Winkel maximal werden: $max \left\{\sphericalangle \left(\overline{s_k,s_{k+1}},\overline{s_k,t_j}\right)\right\}, 0 \leq j \leq |S_2|$. Es wird nach einem $j$ gesucht so das der Winkel maximal ist. Da auf die Elemente $t_j$ konstant Zugeriefen werden kann und das Polygon konvex ist, kann hier die Binärsuche angewendet werden. Die Laufzeit der Binärsuche ist bekannt, nämlich $\mathcal{O}(\log n)$. Da wir nicht wissen in welcher Richtung die Winkel größer werden, werden beide Richtungen abgelaufen. Dieses Prozedere wird ebenfalls mit $s_{y-max}$ durchgespielt. Das Resultat des Algorithmus sind zwei Brücken: $\overline{s_{y-min}, t_r}$ und $\overline{s_{y-max}, t_p}$. Die Brücken werden in $\mathcal{O}(4 \cdot \log n)$ Zeit gefunden. Diese Laufzeit liegt wiederum in $\mathcal{O}(\log n)$.
 
 Quelle: http://www.cs.ubc.ca/~snoeyink/papers/nosep.ps.gz, Stand 03.05.2015 um 17:23 Uhr. 
 
@@ -187,43 +187,44 @@ Die Beschreibung des Algorithmus erfolgt in drei Schritten:
 
 \item Sortiere $S$ anhand der $x$-Koordinate.
 
-\item Teile $S$ ($|S| = k$) in $S_1 = \left\{s_1, ..., s_{\lfloor \frac{k}{2} \rfloor } \right\}$ und $S_2 = \left\{s_{ \lceil \frac{k}{2} \rceil}, ..., s_n \right\}$ solange auf bis $|S| \leq 3$ ist.
+\item Teile $S$ ($|S| = k$) in $S_1 = \left\{s_1, ..., s_{\lfloor \frac{k}{2} \rfloor } \right\}$ und $S_2 = \left\{s_{ \lceil \frac{k}{2} \rceil}, ..., s_n \right\}$ solange bis $|S| \geq 3$ gilt.
 
 \item Führe die Polygone $S_1$ und $S_2$ zusammen, so das es ein konvex Polygon bildet.
 
 \end{enumerate}
 
 Der erste Schritt können wir mit dem Merg-Sort realisieren, die Laufzeit ist uns bekannt mit $\mathcal{O}(n \cdot \log n)$ wie die Rekursionsgleichung $T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + d$.
-Der zweite Schritt benötigt in etwa $\lceil \log n \rceil$ aufrufe. Der dritte Schritt beöntigt $\mathcal{O}(\log n)$ Zeit, dies wissen wir aus der vorherigen Teilaufgabe. Die Laufzeit vom dritten Schritt nimmt den Platz von $d$ bei Rekursionsgleich ein. Also erhalten wir für unseren Algorithmus folgende Rekursionsgleich:
+Der zweite Schritt benötigt in etwa $\lceil \log n \rceil$ aufrufe. Der dritte Schritt beöntigt $\mathcal{O}(\log n)$ Zeit, dies wissen wir aus der vorherigen Teilaufgabe. Die Laufzeit vom zweiten und dritten Schritt kann ebenfalls in einer Rekursionsgleich ausgedrückt werden. Also erhalten wir für unseren Algorithmus folgende Rekursionsgleich:
 
 \begin{equation}
-	T(1) = T(2) = T(3) = 1 	\linebreak
-\end{equation}
-
-\begin{equation}
-	T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + \log n \linebreak
+\begin{split}
+	T(1) &= T(2) = T(3) = 1  \\
+	T(n) &= T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + \log n
+\end{split}
 \end{equation}
 Sei $n=2^k$.
-
 \begin{equation}
-T(n) = 2 \cdot T(\frac{n}{2}) + \log n \linebreak
+\begin{split}
+T(n)   &= 2 \cdot T(\frac{n}{2}) + \log n \\
+T(2^k) &= 2 \cdot T(\frac{2^{k}}{2}) + \log 2^k \\
+	   &= 2 \cdot T(2^{k-1}) + k 
+\end{split}
 \end{equation}
-
+Nun betrachten wir die rekursive Entwicklung der Funktion $T$.
 \begin{equation}
-T(2^k) = 2 \cdot T(\frac{2^{k}}{2}) + \log 2^k = 2 \cdot T(2^{k-1}) + k
+\begin{split}
+T(2^k) &= 2 \cdot \left( 2 \cdot T(2^{k-2}) + k \right) + k \\
+	 &= \underbrace{2 \cdot ( 2 \cdot ( \underbrace{\dots (2 \cdot \underbrace{(1)}_{2^{1}} + k) \dots}_{2^{k-i}}) + k) + k)}_{2^k} 
+\end{split}
 \end{equation}
-
+Wie uns schon bekannt ist wird der zweite Schritt also $k$ maximal $\lceil \log n \rceil$ ausgeführt. Daraus können wir folgendes Schließen:
 \begin{equation}
-T(2^k) = 2 \cdot \left( 2 \cdot T(2^{k-2}) + k \right) + k
-\end{equation}
-Wie schon bekannt wird der zweite Schritt $\lceil \log n \rceil$ ausgeführt. Daher wird der rekursive Aufruf von $T(2^k)$ nur $\log n$ mal ausgeführt. Daraus können wir folgendes Schließen:
-\begin{equation}
-1 + \sum_{i=0}^{\log n} 2^i \cdot k \rightarrow 1 + k \cdot (2^{\log_2 n + 1} - 1) \rightarrow 1 + k \cdot (2 \cdot n - 1)
+\sum_{i=1}^{\log n} 2^i \cdot k \rightarrow k \cdot (2^{\log_2 n + 1} - 1) \rightarrow k \cdot (2 \cdot n - 1)
 \end{equation}
 Wir setzen für $k = log(n)$ wegen der oben getroffenen Annahme $n = 2^k$.
 \begin{equation}
-1 + \log n \cdot (2 \cdot n - 1) \rightarrow 1 + 2 \cdot n \cdot \log n - \log n
+\log n \cdot (2 \cdot n - 1) \rightarrow 2 \cdot n \cdot \log n - \log n
 \end{equation}
-Also liegt der Algorithmus in $\mathcal{O}(n \cdot \log n)$.
+Also liegt der Algorithmus mit dem ersten Schritt in $\mathcal{O}(n \cdot \log n)$.
 
 \end{document}
