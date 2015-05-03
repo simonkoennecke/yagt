@@ -109,7 +109,7 @@ Der wichtigeste Algorihmus in unserem Programm ist die Prozedur $calcAntipodal$.
 
         int i = mMaxPt, j = mMinPt, cnt = 0;
         //Vec[0-1] are current caliper
-        //Vec[2-3] are current edges
+        //Vec[2-3] are current edges of the polygon
         Point[] vec = new Point[]{
                 new Point2D(1, 0),
                 new Point2D(-1, 0),
@@ -151,8 +151,7 @@ Der wichtigeste Algorihmus in unserem Programm ist die Prozedur $calcAntipodal$.
     }
 
 \end{lstlisting}
-
-Das finden des maximalen Durchmesser wird mit dem durch gehen aller Antipodal ermöglicht. Dies könnte auch im Zuge des berechnen von der Funktion $calcAntipodal$ geschehen. Wir haben uns wegen der Übersichtlichkeit dagegen Entschieden und nehmen den mehr Aufwand in kauf und haben die Funktion $getDiameter$ wie folgt definiert:
+Das finden des maximalen Durchmessers wird mit dem betrachten aller Antipodal Paare ermöglicht. Die Berechnung könnte mit konstanten mehr Aufwand auch im Zuge der Ausführung der Funktion $calcAntipodal$ geschehen. Wir haben uns wegen der Übersichtlichkeit dagegen Entschieden und nehmen den Mehraufwand das wiederholte Durchgehens aller Antipodalen Paare in Kauf. Die Funktion $getDiameter$ übernimmt die Berechnung, wobei $calcAntipodal$ im Vorfeld ausgeführt werden muss.
 
 \begin{lstlisting}
 	public double getDiameter(){
@@ -172,15 +171,59 @@ Das finden des maximalen Durchmesser wird mit dem durch gehen aller Antipodal er
 
 \section*{Aufgabe 2 - Konvexe Hülle}
 
-\subsection*{(a) - Zeigen Sie, dass das Finden der Brücken in $\mathcal{O}(\log n)$ Zeit möglich ist.}
-
 Die Aufgabenstellung beschrieben zwei disjunkte und konvexe Polygone $S_1$ und $S_2$. Die die Punkte der Polygone $S_i$ seien im Uhrzeigersinn geordnet, $S_i \subseteq S \subseteq \mathcal{R}^2$, $i = \left\{1, 2\right\}$ und $|S| = n$ gilt. Des Weiteren kann man die Punkte $s_j \in S_1, 0 \leq j \leq |S_1|$ und $t_j \in S_2, 0 \leq j \leq |S_2|$ in konstanter Zeit addressieren, sprich in $\mathcal{O}(1)$.
+
+\subsection*{(a) - Zeigen Sie, dass das Finden der Brücken in $\mathcal{O}(\log n)$ Zeit möglich ist.}
 
 Es gilt zu zeigen, dass das Finden der Brücke zwischen zwei disjunkte und konvexen Polygonen in $\mathcal{O}(\log n)$ Zeit möglich ist. Dazu nehmen wir an, dass die Extrema $s_{y-min}$, $t_{y-min}$ und $s_{y-max}$, $t_{y-max}$ bekannt sein. Die Extrema kann man in im Divide-and-Conquer-Verfahren bei jeden Merg-Schritt in konstanter Zeit berechnen. Wir wählen ein Polygon aus, in unserem Fall $S_1$. Es wird eine Brücke vom Punkt $s_{y-min}$ (hier genannt $s_k$) zu $t_j$ gespannt. Dabei soll der Winkel maximal werden: $max \left\{angle\left(\overline{s_k,s_{k+1}},\overline{s_k,t_j}\right)\right\}, 0 \leq j \leq |S_2|$. Es wird nach einem $j$ gesucht so das der Winkel maximal ist. Da auf die Elemente $t_j$ konstant zugegriffen werden kann die Binärsuche angewendet werden. Die Laufzeit der Binärsuche ist bekannt, nämlich $\mathcal{O}(\log n)$. Da wir nicht wissen in welcher Richtung die Winkel größer werden, werden beide Richtungen abgelaufen. Dieses Prozedere wird ebenfalls mit $s_{y-max}$ durch gespielt. Daraus resultieren zwei Brücken $\overline{s_{y-min}, t_r}$ und $\overline{s_{y-max}, t_p}$ die in einer Laufzeit von $\mathcal{O}(4 \cdot \log n)$ gefunden werden kann. Diese Laufzeit liegt wiederum in $\mathcal{O}(\log n)$.
 
 Quelle: http://www.cs.ubc.ca/~snoeyink/papers/nosep.ps.gz, Stand 03.05.2015 um 17:23 Uhr. 
 
-\subsection*{(b) - Analysieren Sie die Laufzeit des gesamten Algorithmus, getrennt nach der fürs 
-Sortieren am Anfang einerseits und dem rekursiven Teil andererseits. }
+\subsection*{(b) - Analysieren Sie die Laufzeit des gesamten Algorithmus, getrennt nach der fürs Sortieren am Anfang einerseits und dem rekursiven Teil andererseits. }
+
+Die Beschreibung des Algorithmus erfolgt in drei Schritten:
+
+\begin{enumerate}
+
+\item Sortiere $S$ anhand der $x$-Koordinate.
+
+\item Teile $S$ ($|S| = k$) in $S_1 = \left\{s_1, ..., s_{\lfloor \frac{k}{2} \rfloor } \right\}$ und $S_2 = \left\{s_{ \lceil \frac{k}{2} \rceil}, ..., s_n \right\}$ solange auf bis $|S| \leq 3$ ist.
+
+\item Führe die Polygone $S_1$ und $S_2$ zusammen, so das es ein konvex Polygon bildet.
+
+\end{enumerate}
+
+Der erste Schritt können wir mit dem Merg-Sort realisieren, die Laufzeit ist uns bekannt mit $\mathcal{O}(n \cdot \log n)$ wie die Rekursionsgleichung $T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + d$.
+Der zweite Schritt benötigt in etwa $\lceil \log n \rceil$ aufrufe. Der dritte Schritt beöntigt $\mathcal{O}(\log n)$ Zeit, dies wissen wir aus der vorherigen Teilaufgabe. Die Laufzeit vom dritten Schritt nimmt den Platz von $d$ bei Rekursionsgleich ein. Also erhalten wir für unseren Algorithmus folgende Rekursionsgleich:
+
+\begin{equation}
+	T(1) = T(2) = T(3) = 1 	\linebreak
+\end{equation}
+
+\begin{equation}
+	T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + \log n \linebreak
+\end{equation}
+Sei $n=2^k$.
+
+\begin{equation}
+T(n) = 2 \cdot T(\frac{n}{2}) + \log n \linebreak
+\end{equation}
+
+\begin{equation}
+T(2^k) = 2 \cdot T(\frac{2^{k}}{2}) + \log 2^k = 2 \cdot T(2^{k-1}) + k
+\end{equation}
+
+\begin{equation}
+T(2^k) = 2 \cdot \left( 2 \cdot T(2^{k-2}) + k \right) + k
+\end{equation}
+Wie schon bekannt wird der zweite Schritt $\lceil \log n \rceil$ ausgeführt. Daher wird der rekursive Aufruf von $T(2^k)$ nur $\log n$ mal ausgeführt. Daraus können wir folgendes Schließen:
+\begin{equation}
+1 + \sum_{i=0}^{\log n} 2^i \cdot k \rightarrow 1 + k \cdot (2^{\log_2 n + 1} - 1) \rightarrow 1 + k \cdot (2 \cdot n - 1)
+\end{equation}
+Wir setzen für $k = log(n)$ wegen der oben getroffenen Annahme $n = 2^k$.
+\begin{equation}
+1 + \log n \cdot (2 \cdot n - 1) \rightarrow 1 + 2 \cdot n \cdot \log n - \log n
+\end{equation}
+Also liegt der Algorithmus in $\mathcal{O}(n \cdot \log n)$.
 
 \end{document}
