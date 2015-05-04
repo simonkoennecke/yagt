@@ -100,8 +100,8 @@ showstringspaces=false}
 
 \section*{Aufgabe 1 - Rotating Calipers}
 
-Der wichtigeste Algorihmus in unserem Programm ist die Prozedur $calcAntipodal$. Diese Prozedur berechnet alle Antipodal Punkte von einem konvexen Polygon.
-
+Der wichtigste Algorithmus in unserem Programm ist die Prozedur $calcAntipodal$. Diese Prozedur berechnet alle Antipodal-Punkte von einem konvexen Polygon.
+\vspace*{0.5cm}
 \begin{lstlisting}
     public void calcAntipodal() {
         initAntiPodalList();
@@ -151,8 +151,9 @@ Der wichtigeste Algorihmus in unserem Programm ist die Prozedur $calcAntipodal$.
     }
 
 \end{lstlisting}
-Das finden des maximalen Durchmessers wird mit dem betrachten aller Antipodal Paare ermöglicht. Die Berechnung könnte mit konstanten mehr Aufwand auch im Zuge der Ausführung der Funktion $calcAntipodal$ geschehen. Wir haben uns wegen der Übersichtlichkeit dagegen Entschieden und nehmen den Mehraufwand das wiederholte Durchgehens aller Antipodalen Paare in Kauf. Die Funktion $getDiameter$ übernimmt die Berechnung, wobei $calcAntipodal$ im Vorfeld ausgeführt werden muss.
+Das Finden des maximalen Durchmessers wird mit dem Betrachten aller Antipodal-Paare ermöglicht. Die Berechnung könnte mit konstantem Mehraufwand auch im Zuge der Ausführung der Funktion $calcAntipodal$ geschehen. Wir haben uns wegen der Übersichtlichkeit und Modularität des Programm-Codes jedoch dagegen entschieden und nehmen den Mehraufwand des wiederholten Durchgehens aller Antipodalen Paare in Kauf. Die Funktion $getDiameter$ übernimmt die Berechnung, wobei $calcAntipodal$ im Vorfeld ausgeführt werden muss.
 
+\vspace*{0.5cm}
 \begin{lstlisting}
 	public double getDiameter(){
         double max = -1, tmp;
@@ -171,13 +172,26 @@ Das finden des maximalen Durchmessers wird mit dem betrachten aller Antipodal Pa
 
 \section*{Aufgabe 2 - Konvexe Hülle}
 
-Die Aufgabenstellung beschrieben zwei disjunkte und konvexe Polygone $S_1$ und $S_2$. Die die Punkte der Polygone $S_i$ seien im Uhrzeigersinn geordnet, $S_i \subseteq S \subseteq \mathcal{R}^2$, $i = \left\{1, 2\right\}$ und $|S| = n$ gilt. Des Weiteren kann man die Punkte $s_j \in S_1, 0 \leq j \leq |S_1|$ und $t_j \in S_2, 0 \leq j \leq |S_2|$ in konstanter Zeit addressieren, sprich in $\mathcal{O}(1)$.
+Die Aufgabenstellung beschreibt zwei disjunkte und konvexe Polygone $S_1$ und $S_2$. Die Punkte der Polygone $S_i$ seien im Uhrzeigersinn geordnet, $S_i \subseteq S \subseteq \mathcal{R}^2$, $i = \left\{1, 2\right\}$ und $|S| = n$ gilt. Des Weiteren kann man die Punkte $s_j \in S_1, 0 \leq j \leq |S_1|$ und $t_j \in S_2, 0 \leq j \leq |S_2|$ in konstanter Zeit addressieren, sprich in $\mathcal{O}(1)$.
 
 \subsection*{(a) - Zeigen Sie, dass das Finden der Brücken in $\mathcal{O}(\log n)$ Zeit möglich ist.}
 
-Es gilt zu zeigen, dass das Finden der Brücke zwischen zwei disjunkte und konvexen Polygonen in $\mathcal{O}(\log n)$ Zeit möglich ist. Dazu nehmen wir an, dass die Extrema $s_{y-min}$, $t_{y-min}$ und $s_{y-max}$, $t_{y-max}$ bekannt sein. Die Extrema kann man in im Divide-and-Conquer-Verfahren bei jeden Merg-Schritt in konstanter Zeit berechnen. Wir wählen ein Polygon aus, in unserem Fall $S_1$. Es wird eine Brücke vom Punkt $s_{y-min}$ (hier genannt $s_k$) zu $t_j$ gespannt. Dabei soll der Winkel maximal werden: $max \left\{\sphericalangle \left(\overline{s_k,s_{k+1}},\overline{s_k,t_j}\right)\right\}, 0 \leq j \leq |S_2|$. Es wird nach einem $j$ gesucht so das der Winkel maximal ist. Da auf die Elemente $t_j$ konstant Zugeriefen werden kann und das Polygon konvex ist, kann hier die Binärsuche angewendet werden. Die Laufzeit der Binärsuche ist bekannt, nämlich $\mathcal{O}(\log n)$. Da wir nicht wissen in welcher Richtung die Winkel größer werden, werden beide Richtungen abgelaufen. Dieses Prozedere wird ebenfalls mit $s_{y-max}$ durchgespielt. Das Resultat des Algorithmus sind zwei Brücken: $\overline{s_{y-min}, t_r}$ und $\overline{s_{y-max}, t_p}$. Die Brücken werden in $\mathcal{O}(4 \cdot \log n)$ Zeit gefunden. Diese Laufzeit liegt wiederum in $\mathcal{O}(\log n)$.
+Es gilt zu zeigen, dass das Finden der Brücken zwischen zwei disjunkten und konvexen Polygonen in $\mathcal{O}(\log n)$ Zeit möglich ist. 
+Dazu nehmen wir an, dass die Extrema $s_{y-min}$, $t_{y-min}$ und $s_{y-max}$, $t_{y-max}$ bekannt seien. 
+Die Extrema kann man im Divide-and-Conquer-Verfahren bei jedem Merge-Schritt in konstanter Zeit berechnen.
+Wir wählen ein Polygon aus, in unserem Fall $S_1$. Es wird eine Brücke vom Punkt $s_{y-min}$ (hier genannt $s_k$) zu $t_j$ gespannt. 
+Dabei soll der Winkel maximal werden: $max \left\{\sphericalangle \left(\overline{s_k,s_{k+1}},\overline{s_k,t_j}\right) \biggr| 0 \leq j \leq |S_2|\right\}$. 
+Es wird nach einem $j$ gesucht, so dass der Winkel maximal ist. 
+Da auf die Elemente $t_j$ konstant zugegriffen werden kann und das Polygon konvex ist, kann hier die Binärsuche angewendet werden. 
+Die Laufzeit der Binärsuche ist bekannt, nämlich $\mathcal{O}(\log n)$. 
+Da wir nicht wissen in welcher Richtung die Winkel größer werden, müssen die ersten benachbarten Punkte getestet werden. Die Winkel können aufgrund der Konvexität nur in einer Richtung größer werden. 
+Sollten die Winkel in beiden Richtungen kleiner werden, befindet man sich bereits im Maximum.
+Dieses Prozedere wird ebenfalls mit $s_{y-max}$ durchgespielt.
+Das Resultat des Algorithmus sind zwei Brücken: $\overline{s_{y-min}, t_r}$ und $\overline{s_{y-max}, t_p}$. 
+Die Brücken werden in $\mathcal{O}(4 \cdot \log n)$ Zeit gefunden. 
+Diese Laufzeit liegt wiederum in $\mathcal{O}(\log n)$.
 
-Quelle: http://www.cs.ubc.ca/~snoeyink/papers/nosep.ps.gz, Stand 03.05.2015 um 17:23 Uhr. 
+Quelle: http://www.cs.ubc.ca/~snoeyink/papers/nosep.ps.gz, abgerufen am 03.05.2015 um 17:23 Uhr. 
 
 \subsection*{(b) - Analysieren Sie die Laufzeit des gesamten Algorithmus, getrennt nach der fürs Sortieren am Anfang einerseits und dem rekursiven Teil andererseits. }
 
@@ -189,12 +203,12 @@ Die Beschreibung des Algorithmus erfolgt in drei Schritten:
 
 \item Teile $S$ ($|S| = n$) in $S_1 = \left\{s_1, ..., s_{\lfloor \frac{k}{2} \rfloor } \right\}$ und $S_2 = \left\{s_{ \lceil \frac{k}{2} \rceil}, ..., s_n \right\}$ solange bis $|S| \geq 3$ gilt.
 
-\item Führe die Polygone $S_1$ und $S_2$ zusammen, so das es ein konvex Polygon bildet.
+\item Führe die Polygone $S_1$ und $S_2$ zusammen, so dass es ein konvexes Polygon bildet.
 
 \end{enumerate}
 
-Der erste Schritt können wir mit dem Merg-Sort realisieren, die Laufzeit ist uns bekannt mit $\mathcal{O}(n \cdot \log n)$ wie die Rekursionsgleichung $T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + d$.
-Der zweite Schritt benötigt in etwa $\lceil \log n \rceil$ aufrufe. Der dritte Schritt beöntigt $\mathcal{O}(\log n)$ Zeit, dies wissen wir aus der vorherigen Teilaufgabe. Die Laufzeit vom zweiten und dritten Schritt kann ebenfalls in einer Rekursionsgleich ausgedrückt werden. Also erhalten wir für unseren Algorithmus folgende Rekursionsgleich:
+Den ersten Schritt können wir mit dem Merge-Sort-Algorithmus realisieren, dessen Laufzeit $\mathcal{O}(n \cdot \log n)$ und Rekursionsgleichung $T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + d$ bekannt ist.
+Der zweite Schritt benötigt in etwa $\lceil \log n \rceil$ aufrufe. Der dritte Schritt benötigt $\mathcal{O}(\log n)$ Zeit. Dies wissen wir aus der vorherigen Teilaufgabe. Die Laufzeit des zweiten und dritten Schrittes kann ebenfalls in einer Rekursionsgleichung ausgedrückt werden. Also erhalten wir für unseren Algorithmus folgende Rekursionsgleichung:
 
 \begin{equation}
 \begin{split}
