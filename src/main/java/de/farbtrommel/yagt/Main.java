@@ -1,11 +1,17 @@
 package de.farbtrommel.yagt;
 
 import de.farbtrommel.yagt.geometry.*;
+import de.farbtrommel.yagt.geometry.Point;
+import de.farbtrommel.yagt.geometry.Polygon;
+import processing.core.PApplet;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-public class Main {
+public class Main extends Frame {
+
     public static void main(String[] args){
+
         /*
         int i = 0;
 
@@ -59,6 +65,10 @@ public class Main {
             System.out.println("The two segmented lines are intersect at " + pt + ".");
         }
         */
+
+        PApplet.main(new String[] { "de.farbtrommel.yagt.Chart" });
+
+        /*
         ArrayList<Point> pts = new ArrayList<Point>();
         pts.add(new Point2D(1, 1));
         pts.add(new Point2D(-3, 5));
@@ -73,6 +83,6 @@ public class Main {
         System.out.println("All antipodal Pairs:");
         System.out.println(polygon.getAntipodalPairs());
         System.out.println("Diameter of Polygon: " + polygon.getDiameter());
-
+        */
     }
 }

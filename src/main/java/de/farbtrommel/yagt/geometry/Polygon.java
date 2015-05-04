@@ -3,6 +3,7 @@ package de.farbtrommel.yagt.geometry;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //http://www.seas.gwu.edu/~simhaweb/alg/lectures/module1/module1.html
 
@@ -18,6 +19,10 @@ public class Polygon implements Drawable{
 
     public Polygon(ArrayList<Point> list) {
         mList = list;
+    }
+
+    public List<Point> getAllPoints() {
+        return mList;
     }
 
     public void add(Point pt) {
