@@ -96,12 +96,10 @@ public class Point2D implements Point {
         return "Pt2D(x: " + getX() + ", y: " + getY()+ ")";
     }
 
-    @Override
     public void draw(PApplet context) {
         context.ellipse(mDrawSettings.getX(this), mDrawSettings.getY(this), 10, 10);
     }
 
-    @Override
     public void drawAddVertex(PApplet context) {
         context.vertex(mDrawSettings.getX(this), mDrawSettings.getY(this));
     }
