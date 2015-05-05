@@ -3,3 +3,8 @@ out/
 target/
 *.gz
 Thumbs.db
+*~
+.classpath
+.project
+.settings/
+

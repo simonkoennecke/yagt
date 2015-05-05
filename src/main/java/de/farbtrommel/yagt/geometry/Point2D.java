@@ -7,8 +7,7 @@ import processing.core.PApplet;
 public class Point2D implements Point {
     private double mX, mY;
 
-    private final static DrawSettings mDrawSettings = new DrawSettings();
-    private final static Point2D mCenter = new Point2D();
+    private static DrawSettings mDrawSettings = new DrawSettings();
 
     Point2D(){
 
@@ -144,5 +143,4 @@ public class Point2D implements Point {
                 mDrawSettings.getX(pt), mDrawSettings.getY(pt)
                 );
     }
-
 }

@@ -180,7 +180,6 @@ public class Polygon implements Drawable {
         return max;
     }
 
-    @Override
     public void draw(PApplet context) {
 
         context.beginShape();
