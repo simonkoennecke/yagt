@@ -1,12 +1,8 @@
 package de.farbtrommel.yagt;
 
-import de.farbtrommel.yagt.geometry.*;
-import de.farbtrommel.yagt.geometry.Point;
-import de.farbtrommel.yagt.geometry.Polygon;
 import processing.core.PApplet;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Main extends Frame {
 

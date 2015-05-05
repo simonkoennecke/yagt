@@ -1,5 +1,8 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.geometry.abstraction.Line;
+import de.farbtrommel.yagt.geometry.abstraction.Point;
+
 /**
  * 2-Dimensional segmented Line represented in Hesse normal from.
  */

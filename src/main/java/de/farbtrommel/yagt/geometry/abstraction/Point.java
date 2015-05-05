@@ -1,4 +1,4 @@
-package de.farbtrommel.yagt.geometry;
+package de.farbtrommel.yagt.geometry.abstraction;
 
 import processing.core.PApplet;
 
@@ -13,6 +13,8 @@ public interface Point {
     Point add(double val);
     Point multiply(Point pt);
     Point multiply(double val);
+    Point divide(Point pt);
+    Point divide(double val);
     Point rotate90Degrees();
     Point rotate(double degree);
     double angle(Point pt);
@@ -20,6 +22,7 @@ public interface Point {
     double norm();
     double distance(Point pt);
     void draw(PApplet context);
+    void draw(PApplet context, String label);
     void drawLine(PApplet context, Point pt);
     void drawAddVertex(PApplet context);
 }

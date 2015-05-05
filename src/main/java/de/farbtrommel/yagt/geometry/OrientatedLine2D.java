@@ -1,11 +1,14 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.geometry.abstraction.Drawable;
+import de.farbtrommel.yagt.geometry.abstraction.Line;
+import de.farbtrommel.yagt.geometry.abstraction.Point;
 import processing.core.PApplet;
 
 /**
  * 2-Dimensional Line in Hesse normal form.
  */
-public class OrientatedLine2D implements Line, Drawable{
+public class OrientatedLine2D implements Line, Drawable {
     /**
      * mP = location vector
      * mQ = another vector on line

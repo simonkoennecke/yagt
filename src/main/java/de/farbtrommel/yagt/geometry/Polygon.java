@@ -1,13 +1,18 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.geometry.abstraction.Drawable;
+import de.farbtrommel.yagt.geometry.abstraction.Point;
+import de.farbtrommel.yagt.geometry.helper.LexicographicalComparator;
+import de.farbtrommel.yagt.geometry.helper.PolarCoordinateComparator;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //http://www.seas.gwu.edu/~simhaweb/alg/lectures/module1/module1.html
 
-public class Polygon implements Drawable{
+public class Polygon implements Drawable {
     private ArrayList<Point> mList;
     private ArrayList<ArrayList<Integer>> mAntipodal;
     private int mMaxPt = -1, mMinPt = -1;
@@ -31,6 +36,24 @@ public class Polygon implements Drawable{
 
     public void remove(Point pt) {
         mList.remove(pt);
+    }
+
+    public Point getCenter() {
+        Point center = new Point2D(0, 0);
+        for (Point pt : mList) {
+            center = center.add(pt);
+        }
+        center = center.divide(mList.size());
+
+        return center;
+    }
+
+    public void sortLexicographical() {
+        Collections.sort(mList, new LexicographicalComparator());
+    }
+    public void sortByPolarCoordinates() {
+        Point mCenter = getCenter();
+        Collections.sort(mList, new PolarCoordinateComparator(mCenter));
     }
 
     public int getPredecessor (int i) {
@@ -70,19 +93,19 @@ public class Polygon implements Drawable{
         return new int[]{mMinPt, mMaxPt};
     }
 
-    private void initAntiPodalList() {
+    private void initAntipodalList() {
         mAntipodal = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < mList.size(); i++) {
             mAntipodal.add(new ArrayList<Integer>());
         }
     }
-    private void addAntiPodal(int i, int j) {
+    private void addAntipodal(int i, int j) {
         mAntipodal.get(i).add(j);
         mAntipodal.get(j).add(i);
     }
 
     public void calcAntipodal() {
-        initAntiPodalList();
+        initAntipodalList();
         findExtrema();
 
         int i = mMaxPt, j = mMinPt, cnt = 0;
@@ -121,7 +144,7 @@ public class Polygon implements Drawable{
                 vec[2] = getPoint(getSuccessor(i)).subtract(getPoint(i));
             }
             //Add new index as a antipodal pair
-            addAntiPodal(i, j);
+            addAntipodal(i, j);
             //Calc new angle between the current selected edge and caliper
             angle[0] = vec[2].angle(vec[0]);
             angle[1] = vec[3].angle(vec[1]);
@@ -168,21 +191,41 @@ public class Polygon implements Drawable{
         }
         context.endShape(context.CLOSE);
 
+
         context.fill(0f, 0f, 255f, 255f);
         context.stroke(0f, 0f, 255f, 255f);
+        int i = 0;
         for(Point pt: mList) {
-            pt.draw(context);
+            pt.draw(context, String.valueOf(i) + ": " + pt);
+            i++;
         }
 
-        calcAntipodal();
-        double max = getDiameter();
         context.fill(255f, 0f, 0f, 255f);
         context.stroke(255f, 0f, 0f, 255f);
+        getCenter().draw(context);
+
+        /*
+        calcAntipodal();
+        double max = getDiameter();
+        context.fill(0f, 255f, 0f, 255f);
+        context.stroke(0f, 255f, 0f, 255f);
         for(Point pt: mList) {
             getPoint(mMaxAntipodal[0]).drawLine(context, getPoint(mMaxAntipodal[1]));
             getPoint(mMaxAntipodal[0]).draw(context);
             getPoint(mMaxAntipodal[1]).draw(context);
         }
+        */
 
+    }
+
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Polygon(" + mList.size() + ":[");
+        for (Point pt : mList) {
+            str.append(pt);
+            str.append(", ");
+        }
+        str.append("])");
+        return str.toString();
     }
 }

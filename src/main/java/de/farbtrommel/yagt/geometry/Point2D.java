@@ -1,15 +1,19 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.geometry.abstraction.Point;
+import de.farbtrommel.yagt.geometry.helper.DrawSettings;
 import processing.core.PApplet;
 
 public class Point2D implements Point {
     private double mX, mY;
 
-    private static DrawSettings mDrawSettings = new DrawSettings();
+    private final static DrawSettings mDrawSettings = new DrawSettings();
+    private final static Point2D mCenter = new Point2D();
 
     Point2D(){
 
     }
+
     Point2D(Point pt){
         setPoint(pt);
     }
@@ -43,33 +47,59 @@ public class Point2D implements Point {
     }
 
     public Point subtract(Point pt) {
+        //mX -= pt.getX();
+        //mY -= pt.getY();
         return new Point2D(getX() - pt.getX(), getY() - pt.getY());
     }
 
     public Point add(Point pt) {
+        //mX += pt.getX();
+        //mY += pt.getY();
         return new Point2D(getX() + pt.getX(), getY() + pt.getY());
     }
 
     public Point add(double val) {
-        mX += val;
-        mY += val;
-        return this;
+        //mX += val;
+        //mY += val;
+        return new Point2D(getX() * val, getY() * val);
     }
 
     public Point multiply(Point pt) {
+        //mX *= pt.getX();
+        //mY *= pt.getY();
         return new Point2D(getX() * pt.getX(), getY() * pt.getY());
     }
 
     public Point multiply(double val) {
+        //mX *= val;
+        //mY *= val;
         return new Point2D(getX() * val, getY() * val);
     }
 
+    public Point divide(Point pt) {
+        //mX /= pt.getX();
+        //mY /= pt.getY();
+        return new Point2D(getX() / pt.getX(), getY() / pt.getY());
+    }
+
+    public Point divide(double val) {
+        //mX /= val;
+        //mY /= val;
+        return new Point2D(getX() / val, getY() / val);
+    }
+
     public Point rotate90Degrees() {
+        //double x = getX(),y = getY();
+        //mX = y;
+        //mY = -x;
         return new Point2D(getY(), -getX());
     }
 
     public Point rotate(double degree) {
         double rad = Math.toDegrees(degree);
+        //double x = getX(),y = getY();
+        //mX = x * Math.cos(rad) - y * Math.sin(rad);
+        //mY = x * Math.sin(rad) + y * Math.cos(rad);
         return new Point2D(
                 getX() * Math.cos(rad) - getY() * Math.sin(rad),
                 getX() * Math.sin(rad) + getY() * Math.cos(rad)
@@ -96,12 +126,15 @@ public class Point2D implements Point {
         return "Pt2D(x: " + getX() + ", y: " + getY()+ ")";
     }
 
-    @Override
     public void draw(PApplet context) {
         context.ellipse(mDrawSettings.getX(this), mDrawSettings.getY(this), 10, 10);
     }
 
-    @Override
+    public void draw(PApplet context, String label) {
+        context.text(label, mDrawSettings.getX(this) - 5 , mDrawSettings.getY(this) - 10);
+        draw(context);
+    }
+
     public void drawAddVertex(PApplet context) {
         context.vertex(mDrawSettings.getX(this), mDrawSettings.getY(this));
     }
@@ -111,4 +144,5 @@ public class Point2D implements Point {
                 mDrawSettings.getX(pt), mDrawSettings.getY(pt)
                 );
     }
+
 }

@@ -1,11 +1,13 @@
-package de.farbtrommel.yagt.geometry;
+package de.farbtrommel.yagt.geometry.helper;
 
 import de.farbtrommel.yagt.Chart;
+import de.farbtrommel.yagt.geometry.Point2D;
+import de.farbtrommel.yagt.geometry.abstraction.Point;
 
 public class DrawSettings {
-    private Point2D mMin = new Point2D(-10, -10),
+    private Point2D mMin = new Point2D(-5, -5),
             mMax = new Point2D(20, 20),
-            mMove = new Point2D(10, 10);
+            mMove = new Point2D(8, 20);
 
     private double mXDelta, mYDelta;
 
@@ -19,7 +21,7 @@ public class DrawSettings {
     }
 
     public float getY(Point pt) {
-        return (float) ((pt.getY() + mMove.getY()) * mYDelta);
+        return (float) ((pt.getY() * -1 + mMove.getY()) * mYDelta);
     }
 
     public void setMin(Point2D pt) {
