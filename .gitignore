@@ -3,3 +3,4 @@ out/
 target/
 *.gz
 Thumbs.db
+*~
