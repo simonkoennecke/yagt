@@ -16,18 +16,24 @@ public class GrahamComparator implements Comparator<Point> {
     	a = a.subtract(mCenter);
     	b = b.subtract(mCenter);
     	
-    	if(a.getY() == 0 || b.getY() == 0){
-    		if(a.getY() != 0 || b.getY() != 0){ //XOR
-    			if(a.getY() == 0){
-    				return a.getX() < 0 ? 1 : -1;
-    			}else{
-    				return b.getX() < 0 ? -1 : 1;
-    			}
-    		}else{ //Both == 0
-    			return (a.getX() > b.getX()) ? 1 : -1;
-    		}
+    	// mind. 1 y-Koordinate == 0:
+    	if (a.getY() == 0 || b.getY() == 0) {
+    		if (a.getY() != 0 || b.getY() != 0) { //XOR
+    			//da mCenter "linkestes/unterstes" Element, Y==0 nur auf x > 0 möglich.
+    			return (a.getY() == 0) ? -1 : 1;
+    		} 
+    		//Both == 0
+    		return (a.getX() > b.getX()) ? 1 : -1;
     	}
 
-    	return (a.getX() / a.getY()) >= (b.getX() / b.getY()) ? -1 : 1;
+    	// y-Koordinate in beiden Fällen != 0:
+    	double delta = (a.getX() / a.getY() - b.getX() / b.getY());
+    	
+    	if (delta == 0) {
+    		return a.norm() < b.norm() ? -1 : 1;
+    	}
+    	
+    	return (int) delta;
+
     }
 }
