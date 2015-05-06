@@ -2,6 +2,7 @@ package de.farbtrommel.yagt.geometry;
 
 import de.farbtrommel.yagt.geometry.abstraction.Drawable;
 import de.farbtrommel.yagt.geometry.abstraction.Point;
+import de.farbtrommel.yagt.geometry.helper.GrahamComparator;
 import de.farbtrommel.yagt.geometry.helper.LexicographicalComparator;
 import de.farbtrommel.yagt.geometry.helper.PolarCoordinateComparator;
 import processing.core.PApplet;
@@ -37,6 +38,11 @@ public class Polygon implements Drawable {
     public void remove(Point pt) {
         mList.remove(pt);
     }
+    
+
+    public void remove(int i) {
+        mList.remove(i);
+    }
 
     public Point getCenter() {
         Point center = new Point2D(0, 0);
@@ -47,13 +53,29 @@ public class Polygon implements Drawable {
 
         return center;
     }
+    
+    public Point getMinYExtrema() {
+        Point min = null;
+        for (Point pt : mList) {
+            if (min == null || 
+            		min.getY() > pt.getY() || 
+            		(min.getY() == pt.getY() && min.getX() > pt.getX())
+            	) {
+            	min = pt;
+            }
+        }
+
+        return min;
+    }
 
     public void sortLexicographical() {
         Collections.sort(mList, new LexicographicalComparator());
     }
     public void sortByPolarCoordinates() {
-        Point mCenter = getCenter();
-        Collections.sort(mList, new PolarCoordinateComparator(mCenter));
+//        Point mCenter = getCenter();
+    	Point mCenter = getMinYExtrema();
+//        Collections.sort(mList, new PolarCoordinateComparator(mCenter));
+        Collections.sort(mList, new GrahamComparator(mCenter));
     }
 
     public int getPredecessor (int i) {

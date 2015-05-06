@@ -12,15 +12,25 @@ public class Chart extends PApplet {
 
     public void setup() {
         size(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+        	/*
         polygon.add(new Point2D(1, 1));
+        polygon.add(new Point2D(2, 2));
         polygon.add(new Point2D(0, 5));
         polygon.add(new Point2D(4, 12));
         polygon.add(new Point2D(6, 8));
         polygon.add(new Point2D(7, 2));
         polygon.add(new Point2D(4, 1));
-
-        polygon.calcAntipodal();
+			*/
+        polygon.add(new Point2D(1, 3));
+        polygon.add(new Point2D(2, 3));
+        polygon.add(new Point2D(3, 3));
+        polygon.add(new Point2D(2, 5));
+        polygon.add(new Point2D(6, 15));
+        polygon.add(new Point2D(-25, 15));
+        polygon.add(new Point2D(-5, 3));
+        
+        
+        //polygon.calcAntipodal();
         System.out.println(polygon);
         GrahamScan grahamScan = new GrahamScan(polygon);
         //polygon.sortByPolarCoordinates();
@@ -28,9 +38,9 @@ public class Chart extends PApplet {
         //System.out.println(grahamScan.getPolygon());
         System.out.println(polygon);
 
-        System.out.println("List all Antipodal Pairs:");
-        System.out.println(polygon.getAntipodalPairs());
-        System.out.println("Diameter of Polygon: " + polygon.getDiameter());
+        //System.out.println("List all Antipodal Pairs:");
+        //System.out.println(polygon.getAntipodalPairs());
+        //System.out.println("Diameter of Polygon: " + polygon.getDiameter());
 
         background(255);
         loop();
@@ -42,8 +52,8 @@ public class Chart extends PApplet {
         if (mousePressed) {
             line(mouseX, mouseY, pmouseX, pmouseY);
         }
-        if (polygon.getAllPoints().size() > 0) {
+        //if (polygon.getAllPoints().size() > 0) {
             polygon.draw(this);
-        }
+        //}
     }
 }

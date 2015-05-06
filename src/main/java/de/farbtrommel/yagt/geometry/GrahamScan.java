@@ -23,10 +23,10 @@ public class GrahamScan {
                     mPolygon.getPoint(mPolygon.getPredecessor(i)),
                     mPolygon.getPoint(mPolygon.getSuccessor(i)),
                     mPolygon.getPoint(i)) < 0) {
-                i = mPolygon.getSuccessor(i);
+                i++;
             } else {
-                mPolygon.remove(mPolygon.getPoint(i));
-                i = mPolygon.getPredecessor(i);
+                mPolygon.remove(i);
+                i--;
             }
         }
     }

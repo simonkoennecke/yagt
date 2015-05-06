@@ -5,9 +5,9 @@ import de.farbtrommel.yagt.geometry.Point2D;
 import de.farbtrommel.yagt.geometry.abstraction.Point;
 
 public class DrawSettings {
-    private Point2D mMin = new Point2D(-5, -5),
+    private Point2D mMin = new Point2D(-20, -20),
             mMax = new Point2D(20, 20),
-            mMove = new Point2D(8, 20);
+            mMove = new Point2D(20, 20);
 
     private double mXDelta, mYDelta;
 
