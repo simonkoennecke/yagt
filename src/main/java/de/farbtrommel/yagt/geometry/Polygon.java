@@ -14,8 +14,8 @@ import java.util.List;
 //http://www.seas.gwu.edu/~simhaweb/alg/lectures/module1/module1.html
 
 public class Polygon implements Drawable {
-    private ArrayList<Point> mList;
-    private ArrayList<ArrayList<Integer>> mAntipodal;
+    private List<Point> mList;
+    private List<ArrayList<Integer>> mAntipodal;
     private int mMaxPt = -1, mMinPt = -1;
     private int[] mMaxAntipodal;
 
@@ -23,7 +23,7 @@ public class Polygon implements Drawable {
         mList = new ArrayList<Point>();
     }
 
-    public Polygon(ArrayList<Point> list) {
+    public Polygon(List<Point> list) {
         mList = list;
     }
 
@@ -54,29 +54,6 @@ public class Polygon implements Drawable {
         return center;
     }
     
-    public Point getMinYExtrema() {
-        Point min = null;
-        for (Point pt : mList) {
-            if (min == null || 
-            		min.getY() > pt.getY() || 
-            		(min.getY() == pt.getY() && min.getX() > pt.getX())
-            	) {
-            	min = pt;
-            }
-        }
-
-        return min;
-    }
-
-    public void sortLexicographical() {
-        Collections.sort(mList, new LexicographicalComparator());
-    }
-    public void sortByPolarCoordinates() {
-//        Point mCenter = getCenter();
-    	Point mCenter = getMinYExtrema();
-//        Collections.sort(mList, new PolarCoordinateComparator(mCenter));
-        Collections.sort(mList, new GrahamComparator(mCenter));
-    }
 
     public int getPredecessor (int i) {
         i -= 1;
@@ -203,7 +180,6 @@ public class Polygon implements Drawable {
     }
 
     public void draw(PApplet context) {
-
         context.beginShape();
         context.fill(200f, 80f);
         context.stroke(200f, 80f);
@@ -225,7 +201,7 @@ public class Polygon implements Drawable {
         context.stroke(255f, 0f, 0f, 255f);
         getCenter().draw(context);
 
-        /*
+
         calcAntipodal();
         double max = getDiameter();
         context.fill(0f, 255f, 0f, 255f);
@@ -235,8 +211,6 @@ public class Polygon implements Drawable {
             getPoint(mMaxAntipodal[0]).draw(context);
             getPoint(mMaxAntipodal[1]).draw(context);
         }
-        */
-
     }
 
     public String toString() {

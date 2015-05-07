@@ -10,7 +10,8 @@ public class Point2D implements Point {
     private static DrawSettings mDrawSettings = new DrawSettings();
 
     Point2D(){
-
+        mX = Double.NaN;
+        mY = Double.NaN;
     }
 
     Point2D(Point pt){

@@ -6,26 +6,25 @@ import de.farbtrommel.yagt.geometry.abstraction.Point;
  * GrahamScan
  */
 public class GrahamScan {
-    private Polygon mPolygon;
+    private Set mSet;
 
-    public GrahamScan(Polygon polygon) {
-        mPolygon = polygon;
-        mPolygon.sortByPolarCoordinates();
+    public GrahamScan(Set polygon) {
+        mSet = polygon;
+        mSet.sortByPolarCoordinates();
         computeConvexHull();
     }
 
     private void computeConvexHull() {
         //http://de.wikipedia.org/wiki/Graham_Scan#Pseudocode
-        //TODO: läuft noch nicht!!
         int i = 1;
-        while (i < mPolygon.getAllPoints().size()) {
+        while (i < mSet.getAllPoints().size()) {
             if (determinant(
-                    mPolygon.getPoint(mPolygon.getPredecessor(i)),
-                    mPolygon.getPoint(mPolygon.getSuccessor(i)),
-                    mPolygon.getPoint(i)) < 0) {
+                    mSet.get(i - 1),
+                    mSet.get(i + 1),
+                    mSet.get(i)) < 0) {
                 i++;
             } else {
-                mPolygon.remove(i);
+                mSet.remove(i);
                 i--;
             }
         }
@@ -37,6 +36,6 @@ public class GrahamScan {
     }
 
     public Polygon getPolygon() {
-        return mPolygon;
+        return new Polygon(mSet.getAllPoints());
     }
 }
