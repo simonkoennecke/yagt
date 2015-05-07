@@ -1,5 +1,7 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.Chart;
+import de.farbtrommel.yagt.geometry.abstraction.Drawable;
 import de.farbtrommel.yagt.geometry.abstraction.Point;
 import de.farbtrommel.yagt.geometry.helper.DrawSettings;
 import processing.core.PApplet;
@@ -7,9 +9,7 @@ import processing.core.PApplet;
 public class Point2D implements Point {
     private double mX, mY;
 
-    private static DrawSettings mDrawSettings = new DrawSettings();
-
-    Point2D(){
+    public Point2D(){
         mX = Double.NaN;
         mY = Double.NaN;
     }
@@ -29,6 +29,14 @@ public class Point2D implements Point {
     public void setPoint(Point pt) {
         mX = pt.getX();
         mY = pt.getY();
+    }
+
+    public void setX(double x) {
+        mX = x;
+    }
+
+    public void setY(double y) {
+        mY = y;
     }
 
     public double getX() {
@@ -126,22 +134,27 @@ public class Point2D implements Point {
         return "Pt2D(x: " + getX() + ", y: " + getY()+ ")";
     }
 
-    public void draw(PApplet context) {
-        context.ellipse(mDrawSettings.getX(this), mDrawSettings.getY(this), 10, 10);
+    public void draw(Chart context) {
+        context.ellipse(context.getDrawSettings().getX(this), context.getDrawSettings().getY(this), 10, 10);
     }
 
-    public void draw(PApplet context, String label) {
-        context.text(label, mDrawSettings.getX(this) - 5 , mDrawSettings.getY(this) - 10);
+    public void draw(Chart context, String label) {
+        context.text(label, context.getDrawSettings().getX(this) - 5 , context.getDrawSettings().getY(this) - 10);
         draw(context);
     }
 
-    public void drawAddVertex(PApplet context) {
-        context.vertex(mDrawSettings.getX(this), mDrawSettings.getY(this));
+    public Point[] getExtrema() {
+        return new Point[]{this};
     }
-    public void drawLine(PApplet context, Point pt) {
+
+    public void drawAddVertex(Chart context) {
+        context.vertex(context.getDrawSettings().getX(this), context.getDrawSettings().getY(this));
+    }
+
+    public void drawLine(Chart context, Point pt) {
         context.line(
-                mDrawSettings.getX(this), mDrawSettings.getY(this),
-                mDrawSettings.getX(pt), mDrawSettings.getY(pt)
+                context.getDrawSettings().getX(this), context.getDrawSettings().getY(this),
+                context.getDrawSettings().getX(pt), context.getDrawSettings().getY(pt)
                 );
     }
 }

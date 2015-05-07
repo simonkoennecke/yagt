@@ -1,5 +1,7 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.Chart;
+import de.farbtrommel.yagt.geometry.abstraction.Drawable;
 import de.farbtrommel.yagt.geometry.abstraction.Point;
 import de.farbtrommel.yagt.geometry.helper.GrahamComparator;
 import de.farbtrommel.yagt.geometry.helper.LexicographicalComparator;
@@ -10,15 +12,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Set {
-    private List<Point> mList;
+public class Set implements Drawable {
+    private List<Point> mList = new ArrayList<Point>();
 
     public Set() {
-        mList = new ArrayList<Point>();
+
     }
 
     public Set(List<Point> list) {
-        mList = list;
+        //Clone List
+        for (Point pt: list) {
+            mList.add(pt);
+        }
     }
 
     public void addRandomPoints() {
@@ -42,12 +47,28 @@ public class Set {
         mList.remove(pt);
     }
 
+    public int getPredecessor (int i) {
+        i -= 1;
+        if (i == -1) {
+            i = mList.size() - 1;
+        }
+        return i;
+    }
+
+    public int getSuccessor(int i) {
+        i += 1;
+        i %= mList.size();
+        return i;
+    }
+
     public Point get(int i) {
         return mList.get(i);
     }
 
     public void remove(int i) {
-        mList.remove(i);
+        if (i > 0 && i < mList.size()) {
+            mList.remove(i);
+        }
     }
 
     public Point getCenter() {
@@ -58,6 +79,29 @@ public class Set {
         center = center.divide(mList.size());
 
         return center;
+    }
+    public Point[] getExtrema() {
+        return getExtrema(mList);
+    }
+
+    public static Point[] getExtrema(List<Point> list) {
+        Point[] extrema = new Point[]{new Point2D(Double.MAX_VALUE, Double.MAX_VALUE),
+                new Point2D(Double.MIN_VALUE, Double.MIN_VALUE)};
+        for (Point pt : list) {
+            if (extrema[0].getY() > pt.getY()) {
+                extrema[0].setY(pt.getY());
+            } else if (extrema[1].getY() < pt.getY()) {
+                extrema[1].setY(pt.getY());
+            }
+
+            if (extrema[0].getX() > pt.getX()) {
+                extrema[0].setX(pt.getX());
+            } else if (extrema[1].getX() < pt.getX()) {
+                extrema[1].setX(pt.getX());
+            }
+        }
+
+        return extrema;
     }
 
     public Point getMinYExtrema() {
@@ -73,6 +117,7 @@ public class Set {
 
         return min;
     }
+
     public void sort(Comparator<Point> comparator) {
         Collections.sort(mList, comparator);
     }
@@ -84,26 +129,33 @@ public class Set {
         sort(new GrahamComparator(center));
     }
 
-    public void draw(PApplet context) {
-        context.beginShape();
-        context.fill(200f, 80f);
-        context.stroke(200f, 80f);
-        for(Point pt: mList) {
-            pt.drawAddVertex(context);
-        }
-        context.endShape(context.CLOSE);
-
+    public void draw(Chart context) {
 
         context.fill(0f, 0f, 255f, 255f);
         context.stroke(0f, 0f, 255f, 255f);
         int i = 0;
         for(Point pt: mList) {
-            pt.draw(context, String.valueOf(i) + ": " + pt);
+            pt.draw(context, String.valueOf(i));
             i++;
         }
 
         context.fill(255f, 0f, 0f, 255f);
         context.stroke(255f, 0f, 0f, 255f);
         getCenter().draw(context);
+    }
+
+    public void draw(Chart context, String label) {
+        draw(context);
+    }
+
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Set(" + mList.size() + ":[");
+        for (Point pt : mList) {
+            str.append(pt);
+            str.append(", ");
+        }
+        str.append("])");
+        return str.toString();
     }
 }

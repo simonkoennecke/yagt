@@ -1,14 +1,10 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.Chart;
 import de.farbtrommel.yagt.geometry.abstraction.Drawable;
 import de.farbtrommel.yagt.geometry.abstraction.Point;
-import de.farbtrommel.yagt.geometry.helper.GrahamComparator;
-import de.farbtrommel.yagt.geometry.helper.LexicographicalComparator;
-import de.farbtrommel.yagt.geometry.helper.PolarCoordinateComparator;
-import processing.core.PApplet;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 //http://www.seas.gwu.edu/~simhaweb/alg/lectures/module1/module1.html
@@ -27,7 +23,7 @@ public class Polygon implements Drawable {
         mList = list;
     }
 
-    public List<Point> getAllPoints() {
+    public List<Point> getPoints() {
         return mList;
     }
 
@@ -70,10 +66,12 @@ public class Polygon implements Drawable {
     }
 
     public Point getPoint(int index) {
+        index %= mList.size();
+        index = (index <= -1) ? mList.size() - index : index;
         return mList.get(index);
     }
 
-    private int[] findExtrema() {
+    private int[] findYExtrema() {
         Point mMin, mMax;
         mMin = mMax = mList.get(0);
         for (int i = 1; i < mList.size(); i++) {
@@ -105,7 +103,7 @@ public class Polygon implements Drawable {
 
     public void calcAntipodal() {
         initAntipodalList();
-        findExtrema();
+        findYExtrema();
 
         int i = mMaxPt, j = mMinPt, cnt = 0;
         //Vec[0-1] are current caliper
@@ -179,7 +177,7 @@ public class Polygon implements Drawable {
         return max;
     }
 
-    public void draw(PApplet context) {
+    public void draw(Chart context) {
         context.beginShape();
         context.fill(200f, 80f);
         context.stroke(200f, 80f);
@@ -193,7 +191,7 @@ public class Polygon implements Drawable {
         context.stroke(0f, 0f, 255f, 255f);
         int i = 0;
         for(Point pt: mList) {
-            pt.draw(context, String.valueOf(i) + ": " + pt);
+            pt.draw(context, String.valueOf(i)); //  + ": " + pt
             i++;
         }
 
@@ -201,7 +199,7 @@ public class Polygon implements Drawable {
         context.stroke(255f, 0f, 0f, 255f);
         getCenter().draw(context);
 
-
+/*
         calcAntipodal();
         double max = getDiameter();
         context.fill(0f, 255f, 0f, 255f);
@@ -211,6 +209,15 @@ public class Polygon implements Drawable {
             getPoint(mMaxAntipodal[0]).draw(context);
             getPoint(mMaxAntipodal[1]).draw(context);
         }
+        */
+    }
+
+    public Point[] getExtrema() {
+        return Set.getExtrema(mList);
+    }
+
+    public void draw(Chart context, String label) {
+        draw(context);
     }
 
     public String toString() {

@@ -1,10 +1,12 @@
 package de.farbtrommel.yagt.geometry.abstraction;
 
-import processing.core.PApplet;
+import de.farbtrommel.yagt.Chart;
 
-public interface Point {
+public interface Point extends Drawable{
     void setPoint(double x, double y);
     void setPoint(Point pt);
+    void setX(double x);
+    void setY(double y);
     double getX();
     double getY();
     Point normalize();
@@ -21,8 +23,6 @@ public interface Point {
     double dotProduct(Point pt);
     double norm();
     double distance(Point pt);
-    void draw(PApplet context);
-    void draw(PApplet context, String label);
-    void drawLine(PApplet context, Point pt);
-    void drawAddVertex(PApplet context);
+    void drawLine(Chart context, Point pt);
+    void drawAddVertex(Chart context);
 }

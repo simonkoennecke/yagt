@@ -1,6 +1,8 @@
 package de.farbtrommel.yagt.geometry;
 
 import de.farbtrommel.yagt.geometry.abstraction.Point;
+import de.farbtrommel.yagt.geometry.helper.GrahamComparator;
+import de.farbtrommel.yagt.geometry.helper.PolarCoordinateComparator;
 
 /**
  * GrahamScan
@@ -8,9 +10,9 @@ import de.farbtrommel.yagt.geometry.abstraction.Point;
 public class GrahamScan {
     private Set mSet;
 
-    public GrahamScan(Set polygon) {
-        mSet = polygon;
-        mSet.sortByPolarCoordinates();
+    public GrahamScan(Set set) {
+        mSet = set;
+        mSet.sort(new GrahamComparator(set.getMinYExtrema()));
         computeConvexHull();
     }
 
@@ -19,9 +21,9 @@ public class GrahamScan {
         int i = 1;
         while (i < mSet.getAllPoints().size()) {
             if (determinant(
-                    mSet.get(i - 1),
-                    mSet.get(i + 1),
-                    mSet.get(i)) < 0) {
+                    mSet.get(mSet.getPredecessor(i)),
+                    mSet.get(mSet.getSuccessor(i)),
+                    mSet.get(i)) <= 0) {
                 i++;
             } else {
                 mSet.remove(i);

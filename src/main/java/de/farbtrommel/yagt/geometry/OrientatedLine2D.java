@@ -1,5 +1,6 @@
 package de.farbtrommel.yagt.geometry;
 
+import de.farbtrommel.yagt.Chart;
 import de.farbtrommel.yagt.geometry.abstraction.Drawable;
 import de.farbtrommel.yagt.geometry.abstraction.Line;
 import de.farbtrommel.yagt.geometry.abstraction.Point;
@@ -113,7 +114,15 @@ public class OrientatedLine2D implements Line, Drawable {
                 ", n: " + getNormalVector() + ")";
     }
 
-    public void draw(PApplet context) {
+    public void draw(Chart context) {
         //TODO: implement draw function
+    }
+
+    public void draw(Chart context, String label) {
+        draw(context);
+    }
+
+    public Point[] getExtrema() {
+        return new Point[0];
     }
 }
