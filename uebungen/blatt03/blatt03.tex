@@ -188,7 +188,31 @@ public class GrahamScan {
 
 \section*{Aufgabe 2 - Inkrementelle Konstruktion der konvexen Hülle}
 
+Es sei eine beliebige konvexes Polygon $S = CH(S) = \left\{p_i, \dots, p_n\right\} \subset \mathcal{R}^2$ und $|S| = n$ gegeben. Es soll ein Punkt $q$ zu $S$ hinzugefügt werden, dabei soll ggf. die konvexe Hülle angepasst werden, falls $q$ außer Halb von $CH(S)$ liegt. $s_m$ ist der Schwerpunkt von $S$, es kann in $\mathcal{O}(n)$ Zeit berechnet werden. $h_i$ ist eine Halbgerade von $s_m$ durch $p_i$. Das Prüfen ob ein Punkt rechts oder links von einer Halbgeraden liegt geht in $\mathcal{O}(1)$ (siehe Aufgabe 1).
 
+\begin{enumerate}
+
+\item Prüfe ob $q \notin CH(S)$, dann weiter mit 2, sonst fertig,
+
+\item Finde den Kegel beschrieben durch $K_{h_r,h_s}$ (wobei $h_s$ ist Nachfolger von $h_r$) in dem $q$ liegt.
+
+\begin{itemize}
+	\item $q$ wird zu $S$ hinzugefügt, so dass Nachfolger $p_s$ und Vorgänger $p_r$ ist.
+	
+	\item Sollte die konvexität verletzt sein muss ledeglich die Punkte $p_s$ und ggf. einige Nachfolger und/oder $p_r$ und ggf. einige Vorgänger gelöscht werden.
+\end{itemize}
+
+\end{enumerate}
+
+Notizen:
+Laufzeit für die Datenstruktur für $S$ um die Punkte zu verwalten.
+Es soll ein Dynamic Array verwendet werden.
+\begin{itemize}
+ \item Add: O(1)
+ \item Remove: O(1)
+ \item Find: O(1)
+ 
+\end{itemize}
 
 \section*{Aufgabe 3 - Untere Schranke}
 

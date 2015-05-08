@@ -209,7 +209,7 @@ public class Polygon implements Drawable {
             getPoint(mMaxAntipodal[0]).draw(context);
             getPoint(mMaxAntipodal[1]).draw(context);
         }
-        */
+*/
     }
 
     public Point[] getExtrema() {
