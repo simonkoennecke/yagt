@@ -32,7 +32,6 @@ public class GrahamComparator implements Comparator<Point> {
     	if (d1 == d2) {
     		return a.getX() * a.getX() + a.getY() * a.getY() < b.getX() * b.getX() + b.getY() * b.getY() ? -1 : 1;
     	}
-        //return (int) (delta * -1);
         return (d1 < d2) ? 1 : -1;
 
     }

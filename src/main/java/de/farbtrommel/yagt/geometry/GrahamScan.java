@@ -16,8 +16,10 @@ public class GrahamScan {
         computeConvexHull();
     }
 
+    /**
+     * Source: http://de.wikipedia.org/wiki/Graham_Scan#Pseudocode
+     */
     private void computeConvexHull() {
-        //http://de.wikipedia.org/wiki/Graham_Scan#Pseudocode
         int i = 1;
         while (i < mSet.getAllPoints().size()) {
             if (determinant(
@@ -32,7 +34,10 @@ public class GrahamScan {
         }
     }
 
-    private double determinant(Point a, Point b, Point c) {
+    /**
+     * @return AB zu C: 0 = collinear, 0 < right, 0 > left
+     */
+    private static double determinant(Point a, Point b, Point c) {
         return (b.getX() - a.getX()) * (c.getY() - a.getY()) -
                     (c.getX() - a.getX()) * (b.getY() - a.getY());
     }

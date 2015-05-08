@@ -100,7 +100,95 @@ showstringspaces=false}
 
 \section*{Aufgabe 1 - Implementation des Graham-Scan Algorithmus}
 
+Wir verwenden den unten stehende Comparator $GrahamComparator$ zum Sortieren der Koordinaten. Dabei ist $mCenter$ der Punkt mit der kleinsten y-Koordinate und sollten mehrere Punkte auf y-min liegen wird der mit dem geringsten x-Wert gewählt. $mCenter$ wird zu weiteren Berechnung als neuer Ursprung definiert. Die Sortierung verwendet das Vergleichskriterium  des Cotangens, also hier nur das Verhältnis von x- zu y-Koordinate ($\frac{x}{y}$). 
+Der Fall y == 0 wird vom Komparator abgefangen. Der entsprechende Punkt wird vor jedem anderen Punkt
+mit y != 0 einsortiert, da der Punkt aufgrund der Lage des $mCenter$-Punktes nur auf der positiven x-Achse liegen kann.
+
+Punkte mit gleichem Cotangens werden nach der Distanz zum Ursprung einsortiert (Punkte mit kleinerer Distanz vor Punkten mit größerer Distanz). 
+
+\begin{lstlisting}
+public class GrahamComparator implements Comparator<Point> {
+    private Point mCenter;
+
+    public GrahamComparator(Point center) {
+        mCenter = center;
+    }
+   
+    public int compare(Point a, Point b) {
+    	//Let 'center' be the new origin:
+    	a = a.subtract(mCenter);
+    	b = b.subtract(mCenter);
+    	
+    	// mind. 1 y-Koordinate == 0:
+    	if (a.getY() == 0 || b.getY() == 0) {
+    		if (a.getY() != 0 || b.getY() != 0) { //XOR
+    		    //Da mCenter "linkestes/unterstes" Element, y == 0 nur auf x groesser 0 moeglich.
+    			return (a.getY() == 0) ? -1 : 1;
+    		} 
+    		//Both == 0
+    		return (a.getX() > b.getX()) ? 1 : -1;
+    	}
+
+    	// y-Koordinate in beiden Faellen != 0:
+    	double d1 = a.getX() / a.getY(), d2 = b.getX() / b.getY();
+    	
+    	if (d1 == d2) {
+    		return a.getX() * a.getX() + a.getY() * a.getY() < b.getX() * b.getX() + b.getY() * b.getY() ? -1 : 1;
+    	}
+        return (d1 < d2) ? 1 : -1;
+
+    }
+}
+\end{lstlisting}
+
+Der Graham Scan bekommt eine Menge an unsortierten Punkten übergeben und berechnet eine konvexe Hülle. Die Berechnung der konvexen Hülle wird in der Funktion $computeConvexHull$ vorgenommen.
+
+\begin{lstlisting}
+public class GrahamScan {
+    private Set mSet;
+
+    public GrahamScan(Set set) {
+        mSet = set;
+        mSet.sort(new GrahamComparator(set.getMinYExtrema()));
+        computeConvexHull();
+    }
+
+    /**
+     * Source: http://de.wikipedia.org/wiki/Graham_Scan#Pseudocode
+     */
+    private void computeConvexHull() {
+        int i = 1;
+        while (i < mSet.getAllPoints().size()) {
+            if (determinant(
+                    mSet.get(mSet.getPredecessor(i)),
+                    mSet.get(mSet.getSuccessor(i)),
+                    mSet.get(i)) < 0) {
+                i++;
+            } else {
+                mSet.remove(i);
+                i--;
+            }
+        }
+    }
+
+    /**
+     * @return AB zu C: 0 = collinear, 0 < right, 0 > left
+     */
+    private static double determinant(Point a, Point b, Point c) {
+        return (b.getX() - a.getX()) * (c.getY() - a.getY()) -
+                    (c.getX() - a.getX()) * (b.getY() - a.getY());
+    }
+
+    public Polygon getPolygon() {
+        return new Polygon(mSet.getAllPoints());
+    }
+}
+\end{lstlisting}
+
+
 \section*{Aufgabe 2 - Inkrementelle Konstruktion der konvexen Hülle}
+
+
 
 \section*{Aufgabe 3 - Untere Schranke}
 
