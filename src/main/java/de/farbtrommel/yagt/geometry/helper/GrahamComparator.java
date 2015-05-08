@@ -27,13 +27,13 @@ public class GrahamComparator implements Comparator<Point> {
     	}
 
     	// y-Koordinate in beiden Fällen != 0:
-    	double delta = (a.getX() / a.getY() - b.getX() / b.getY());
+    	double d1 = a.getX() / a.getY(), d2 = b.getX() / b.getY();
     	
-    	if (delta == 0) {
-    		return a.norm() < b.norm() ? -1 : 1;
+    	if (d1 == d2) {
+    		return a.getX() * a.getX() + a.getY() * a.getY() < b.getX() * b.getX() + b.getY() * b.getY() ? -1 : 1;
     	}
-    	
-    	return (int) delta;
+        //return (int) (delta * -1);
+        return (d1 < d2) ? 1 : -1;
 
     }
 }

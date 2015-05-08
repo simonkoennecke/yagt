@@ -15,11 +15,11 @@ public class Lab3 extends Frame {
 
     public Lab3() {
         super("Lab 3");
-        setSize(Chart.SCREEN_WIDTH * 3, Chart.SCREEN_HEIGHT + 200);                            // Fenstergröße einstellen
+        setSize(Chart.SCREEN_WIDTH * 3, Chart.SCREEN_HEIGHT + 50);                            // Fenstergröße einstellen
         addWindowListener(new WindowListener()); // (notwendig, damit das Fenster geschlossen werden kann)
         setVisible(true);                            // Fenster (inkl. Inhalt) sichtbar machen
 
-        setLayout(new GridLayout(1,3));
+        setLayout(new GridLayout(1,5));
         add(mChartUnsorted);
         add(mChartSorted);
         add(mChartConvex);

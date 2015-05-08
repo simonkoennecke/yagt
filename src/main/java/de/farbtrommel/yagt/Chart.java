@@ -65,7 +65,8 @@ public class Chart extends PApplet {
     }
 
     public void draw() {
-        stroke(255);
+        stroke(0);
+        line(SCREEN_WIDTH - 1 , 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT);
         if (mousePressed) {
             line(mouseX, mouseY, pmouseX, pmouseY);
         }

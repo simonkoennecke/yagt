@@ -131,7 +131,7 @@ public class Point2D implements Point {
     }
 
     public String toString(){
-        return "Pt2D(x: " + getX() + ", y: " + getY()+ ")";
+        return String.format("Pt2D(x: %.2f, y: %.2f)", getX(), getY());
     }
 
     public void draw(Chart context) {

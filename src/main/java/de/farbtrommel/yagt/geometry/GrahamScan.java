@@ -23,7 +23,7 @@ public class GrahamScan {
             if (determinant(
                     mSet.get(mSet.getPredecessor(i)),
                     mSet.get(mSet.getSuccessor(i)),
-                    mSet.get(i)) <= 0) {
+                    mSet.get(i)) < 0) {
                 i++;
             } else {
                 mSet.remove(i);

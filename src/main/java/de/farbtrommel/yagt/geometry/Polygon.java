@@ -180,7 +180,7 @@ public class Polygon implements Drawable {
     public void draw(Chart context) {
         context.beginShape();
         context.fill(200f, 80f);
-        context.stroke(200f, 80f);
+        context.stroke(0f, 80f);
         for(Point pt: mList) {
             pt.drawAddVertex(context);
         }

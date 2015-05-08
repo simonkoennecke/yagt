@@ -7,10 +7,7 @@ import de.farbtrommel.yagt.geometry.helper.GrahamComparator;
 import de.farbtrommel.yagt.geometry.helper.LexicographicalComparator;
 import processing.core.PApplet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Set implements Drawable {
     private List<Point> mList = new ArrayList<Point>();
@@ -130,12 +127,13 @@ public class Set implements Drawable {
     }
 
     public void draw(Chart context) {
-
+        StringBuilder str = new StringBuilder();
+        Formatter formatter = new Formatter();
         context.fill(0f, 0f, 255f, 255f);
         context.stroke(0f, 0f, 255f, 255f);
         int i = 0;
         for(Point pt: mList) {
-            pt.draw(context, String.valueOf(i));
+            pt.draw(context, String.valueOf(i) + String.format(" (x: %.2f, y: %.2f)", pt.getX(), pt.getY()));
             i++;
         }
 
