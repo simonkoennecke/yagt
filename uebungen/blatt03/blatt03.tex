@@ -242,7 +242,34 @@ Die gesamte Laufzeit des Algorithmus kann also mit $\mathcal{O}(n)$ + $\mathcal{
 
 
 \section*{Aufgabe 3 - Untere Schranke}
+Die Laufzeit für die Konstruktion der konvexen Hülle einer Menge $S \subseteq \Re^2$ von $n$ 
+Punkten erfordert $\Omega(n \log n)$ Zeit. 
 
+Dies lässt sich durch eine Reduktion des Sortierproblems auf das Problem der Konstruktion der konvexen Hülle zeigen:
 
+Dazu betrachten wir (wie im Hinweis der Aufgabe bereits vorgeschlagen) eine beliebige zu sortierende
+Folge $a_1, ..., a_n$ von reellen Zahlen und konstruieren eine äquivalente Punktmenge $\{(a_1,a_1^2),...,(a_n,a_n^2)\} \subseteq \Re^2$ (benötigt $\mathcal{O}(n)$ Zeit). 
+Diese dient als Eingabe zur Berechnung der konvexen Hülle.
+
+Wie man sieht, liegen die Punkte nach Konstruktion auf der 
+Normalparabel $f(x) = x^2$. Damit müssen sie aufgrund der Konvexität der Parabel auch Eckpunkte der 
+resultierenden konvexen Hülle sein. Der "`Konvexe Hülle-Algorithmus"' liefert also genau
+die (im Uhrzeigersinn) sortierte Folge der Eingabepunkte als Ergebnis. 
+Um hieraus die sortierte Reihenfolge der Folge $a_1, ..., a_n$ zu erhalten, muss nun lediglich
+der Punkt mit der kleinsten/größten x-Koordinate gefunden werden ($\mathcal{O}(n)$ Zeit) und dessen x-Koordinate, sowie x-Koordinaten aller folgenden Punkte entsprechend gegen/im Uhrzeigersinn ausgegeben werden ($\mathcal{O}(n)$ Zeit).
+
+Für das Sortieren mit dem "`Konvexe Hülle-Algorithmus"' wird also folgende Laufzeit benötigt:
+
+\begin{itemize}
+	\item Konstruieren der Eingabe-Punktemenge: $\mathcal{O}(n)$
+	\item Ausführen des "`Konvexe Hülle-Algorithmus"': (?)
+	\item Rückgabe der sortierten Folge: 2 * $\mathcal{O}(n)$ = $\mathcal{O}(n)$
+\end{itemize}
+
+Die untere Schranke für das Berechnen der konvexen Hülle ist somit durch $\Omega(n \log n)$
+gegeben. Wäre der Algorithmus schneller, so wäre das Sortieren einer Folge $a_1, ..., a_n$
+in weniger als $\Omega(n \log n)$ Zeit möglich. Dies würde jedoch zu einem Widerspruch führen, da für  das Sortieren
+(wie im Aufgabenteil bereits genannt) die untere Schranke von $\Omega(n \log n)$ bekannt ist.
+$\square$
 
 \end{document}
