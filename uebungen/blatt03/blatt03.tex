@@ -188,31 +188,58 @@ public class GrahamScan {
 
 \section*{Aufgabe 2 - Inkrementelle Konstruktion der konvexen Hülle}
 
-Es sei eine beliebige konvexes Polygon $S = CH(S) = \left\{p_i, \dots, p_n\right\} \subset \mathcal{R}^2$ und $|S| = n$ gegeben. Es soll ein Punkt $q$ zu $S$ hinzugefügt werden, dabei soll ggf. die konvexe Hülle angepasst werden, falls $q$ außer Halb von $CH(S)$ liegt. $s_m$ ist der Schwerpunkt von $S$, es kann in $\mathcal{O}(n)$ Zeit berechnet werden. $h_i$ ist eine Halbgerade von $s_m$ durch $p_i$. Das Prüfen ob ein Punkt rechts oder links von einer Halbgeraden liegt geht in $\mathcal{O}(1)$ (siehe Aufgabe 1).
+Es sei eine beliebiges konvexes Polygon $S = CH(S) = \left\{p_i, \dots, p_n\right\} \subset \mathcal{R}^2$ und $|S| = n$ gegeben. Nun soll ein Punkt $q$ zu $S$ hinzugefügt werden. Dabei soll die konvexe Hülle ggf. angepasst werden, falls $q$ außerhalb von $CH(S)$ liegt. 
+
+Weiterhin sei $s_m$ der Schwerpunkt von $S$, welcher in $\mathcal{O}(n)$ Zeit berechnet werden kann. $h_i$ sei die Halbgerade von $s_m$ durch $p_i$. Das Prüfen, ob ein Punkt rechts oder links von einer Halbgeraden liegt, ist in $\mathcal{O}(1)$ Zeit möglich (siehe Aufgabe 1, durch Berechnung der Determinanten).
+
+\subsection*{Algorithmus}
 
 \begin{enumerate}
 
-\item Prüfe ob $q \notin CH(S)$, dann weiter mit 2, sonst fertig,
+\item Prüfe ob $q \notin CH(S)$, dann weiter mit 2, sonst fertig
 
-\item Finde den Kegel beschrieben durch $K_{h_r,h_s}$ (wobei $h_s$ ist Nachfolger von $h_r$) in dem $q$ liegt.
+\item Finde den Kegel beschrieben durch $K_{h_r,h_s}$ (wobei gilt: $h_s$ ist Nachfolger von $h_r$), in dem $q$ liegt.
 
 \begin{itemize}
-	\item $q$ wird zu $S$ hinzugefügt, so dass Nachfolger $p_s$ und Vorgänger $p_r$ ist.
+	\item[2.1] $q$ wird nun zu $S$ hinzugefügt, so dass $p_s$ Nachfolger und $p_r$ Vorgänger von $q$ ist.
 	
-	\item Sollte die konvexität verletzt sein muss ledeglich die Punkte $p_s$ und ggf. einige Nachfolger und/oder $p_r$ und ggf. einige Vorgänger gelöscht werden.
+	\item[2.2] entlang beider Richtungen in $S$ führe folgende Schritte (hier beschrieben im Uhrzeigersinn (gegen den Uhrzeigersinn ist analog zu verstehen)) ausgehend von $q$ aus:
+	
+	\begin{itemize}
+		\item bestimme die Determinante $T(q, Nachfolger(p_s), p_s)$. Ist diese $>0$ ($p_s$ ist Teil der konvexen Hülle von $S$), ist man fertig.
+		\item im anderen Fall entferne $p_s$ aus $S$ und fahre mit Schritt 2.2 und $p_s = Nachfolger(p_s)$ fort. 
+	\end{itemize}
+
 \end{itemize}
 
 \end{enumerate}
 
 Notizen:
-Laufzeit für die Datenstruktur für $S$ um die Punkte zu verwalten.
-Es soll ein Dynamic Array verwendet werden.
+Zur Verwaltung der Punkte von $S$ soll die Datenstruktur "`Dynamic Array"'
+eingesetzt werden. 
+Diese besitzt folgende armotisierte Laufzeiten:
 \begin{itemize}
  \item Add: O(1)
  \item Remove: O(1)
  \item Find: O(1)
- 
 \end{itemize}
+
+\subsection*{Laufzeit}
+\begin{enumerate}
+\item Der erste Schritt ist in $\mathcal{O}(n)$ Zeit berechenbar. (z.B. durch
+Prüfen, ob der Punkt in keinem der rechten Halbräume der Geraden, beschrieben durch
+zwei aufeinander folgende Punkte $pi$ und $p_{i+1}$ liegt)
+\item Im zweiten Schritt kann der Kegel, in welchem der Punkt $q$ liegt, in Laufzeit
+$\mathcal{O}(n)$ gefunden werden. (hier z.B. ähnlich zu Schritt 1 durch Vergleiche 
+mit den verschiedenen Halbräumen der $n$ Halbgeraden $h_i$)
+\item Der Punkt $q$ kann in Schritt 2.1 in Zeit $\mathcal{O}(1)$ zu $S$ hinzugefügt werden.
+\item Der Schritt 2.2 benötigt pro Durchlauf (also pro Berechnung und Auswertung der jeweiligen
+Determinante und eventuellem Entfernen des aktuellen Punktes $p_s$) konstante Zeit, also $\mathcal{O}(1)$. Insgesamt wird dieser Schritt pro Richtung grob abgeschätzt $< n$-mal häufig ausgeführt, für beide Richtungen also $< 2n$-mal. Damit hat der Schritt 2.2 insgesamt eine Laufzeit von $\mathcal{O}(n)$.
+\end{enumerate}
+
+Die gesamte Laufzeit des Algorithmus kann also mit $\mathcal{O}(n)$ + $\mathcal{O}(n)$ + $\mathcal{O}(1)$ + $\mathcal{O}(n)$ = $\mathcal{O}(n)$ abgeschätzt werden. 
+
+
 
 \section*{Aufgabe 3 - Untere Schranke}
 
