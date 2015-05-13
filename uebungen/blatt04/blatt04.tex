@@ -100,15 +100,15 @@ showstringspaces=false}
 
 \section*{Aufgabe 1 - Bewegungsplanung in der Ebene}
 
-Gegen sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$, das Ziel $t$ vom Roboter und den Radius $r$ des Roboters.
+Gegen sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$, das Ziel $t$ vom Roboter und den Radius $r$ des Roboters. Wir gehen davon aus, dass die Voronoi Kanten die einzig möglichen Wege sind. D. h. ein Umfahren ist nicht möglich.
 
 \begin{itemize}
 
-\item Berechne $VD(H \cup \left\{s,t\right\})$
+\item Berechne $VD(H \cup \left\{s,t\right\})$ ohne die Voronoi Kanten ins unendliche.
 
 \item Prüfe ob die umliegenden Kanten von $s$ und $t$ mehr als $r$ Abstand zu den Hindernissen haben. Sollte das nicht der Fall sein wäre keine Navigation vom Start oder zum Ziel möglich.
 
-\item Prüfe für alle Voronoi Kanten $e$, ob die Kante zu den Hindernissen $p_i$ und $p_j$ an der kleinsten Stelle mehr als $r$ Abstand haben. Sollte das nicht der Fall sein wird die Kante aus $VD$ entfernt. Die Kanten die ins unendliche laufen werden ebenfalls aus den Graphen $VD'$ entfernt, da die Kanten für die Navigation irrelevant sind.
+\item Prüfe für alle Voronoi Kanten $e$, ob die Kante zu den Hindernissen $p_i$ und $p_j$ an der kleinsten Stelle mehr als $r$ Abstand haben. Sollte das nicht der Fall sein wird die Kante aus $VD$ entfernt.
 
 \item Wähle für den Start ein Voronoi Knoten $q_s$ aus so dass der Knoten $q_s$ an der Voronoi Region $s$ liegt.
 
