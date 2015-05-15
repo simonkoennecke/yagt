@@ -100,23 +100,17 @@ showstringspaces=false}
 
 \section*{Aufgabe 1 - Bewegungsplanung in der Ebene}
 
-Gegen sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$, das Ziel $t$ vom Roboter und den Radius $r$ des Roboters. Wir gehen davon aus, dass die Voronoi Kanten die einzig möglichen Wege sind. D. h. ein Umfahren ist nicht möglich.
+Gegeben sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$, das Ziel $t$ und den Radius $r$ des Roboters. Des Weiteren ist der Start- und Endpunkt im Radius des Roboters frei von Hindernissen. Die Voronoi Kanten (VK) seien die einzig möglichen Wege für den Roboter. D. h. ein großzügiges Umfahren ist mit dem Algorithmus nicht möglich.
 
 \begin{itemize}
 
-\item Berechne $VD(H \cup \left\{s,t\right\})$ ohne die Voronoi Kanten ins unendliche.
+\item Berechne $VD(H \cup \left\{s,t\right\})$ ohne die VK ins unendliche.
 
-\item Prüfe ob die umliegenden Kanten von $s$ und $t$ mehr als $r$ Abstand zu den Hindernissen haben. Sollte das nicht der Fall sein wäre keine Navigation vom Start oder zum Ziel möglich.
+\item Prüfe für alle VK $e$, ob der Abstand zu den Hindernissen $p_i$ und $p_j$ an der kleinsten Stelle von der Kanten $e$ mehr als $r$ hat. Sollte das nicht der Fall sein wird die Kante aus $VD$ entfernt. Die Voronoi Kanten der Region $s$ und $t$ werden hier nicht berücksichtigt.
 
-\item Prüfe für alle Voronoi Kanten $e$, ob die Kante zu den Hindernissen $p_i$ und $p_j$ an der kleinsten Stelle mehr als $r$ Abstand haben. Sollte das nicht der Fall sein wird die Kante aus $VD$ entfernt.
+\item Stelle ein Graphen $G$ mit allen übriggebliebenen VK als $E$ mit den Kantengewicht von 1 auf. Die Knotenmenge $V$ wird so konstruiert, dass der Startpunkt $q_s$ alle VK der Voronoi Region (VR) $s$ vereint und für den Zielpunkt $q_t$ wird das selbe Verfahren angewendet. Sonst werden die VK einfach in $V$ übernommen. Der Graph kann zyklisch und nicht zusammenhängend sein.
 
-\item Wähle für den Start ein Voronoi Knoten $q_s$ aus so dass der Knoten $q_s$ an der Voronoi Region $s$ liegt.
-
-\item Wähle für das Ziel ein Voronoi Knoten $q_t$ aus so dass der Knoten $q_t$ an der Voronoi Region $t$ liegt.
-
-\item Stelle ein Graphen $G$ mit allen Voronoi Kanten als $E$ und mit allen Voronoi Knoten $V$ auf.
-
-\item Suche in den Graphen $G$ den Weg $w$ zwischen $q_s$ und $q_t$.
+\item Suche in den Graphen $G$ den Weg $w$ zwischen $q_s$ und $q_t$. Hier kann ein Shortest Path Algorithmus angewendet werden wie z. B. Dijkstra.
 
 \item Geben den Weg $w$ aus. Sollte $w$ kein Weg sein gibt es kein Pfad mit den gegebenen Hindernissen von $s$ nach $t$.
 
