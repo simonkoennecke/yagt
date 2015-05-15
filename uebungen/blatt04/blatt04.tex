@@ -129,5 +129,25 @@ https://www.ics.uci.edu/~eppstein/junkyard/euler/
 \section*{Aufgabe 3 - Voronoi-Diagramm}
 
 
+Wir haben ein Voronoi Diagramm $VD(S)$ gegeben, wobei die Voronoi Regionen (VR) und deren Voronoi Kanten (VK) in einen zyklischen Graphen $ZG_{p_i}$ geordnet sind. Die unendlichen Kanten einer offenen Facette sind benachbart im Graphen. 
+
+Algorithmus:
+
+\begin{itemize}
+
+\item Wir suchen den Punkt $p_i$ aus $S$ mit den kleinsten x- und y-Wert. Der Punkt $p_i$ ist offensichtlich in der konvexen Hülle. $p_i$ kann in $\mathcal{O}(n)$ Zeit berechnet werden.
+
+\item Nun wird von der VR $p_i$ eine unendliche Kante $e$ im Graph $ZG_{p_i}$ gesucht. Die Anzahl der Vergleiche kann in Worst-Case nicht mehr $3 n-6$ beanspruchen. Das liegt weiterhin in $\mathcal{O}(n)$.
+
+\item Die benachbarte VR $p_j$ von der Kante $e$ wird in die konvexe Hülle aufgenommen.
+
+\item Suche den Vorgänger und Nachfolger Kante von $e$ im $ZG_{p_j}$, einer der beiden Kanten muss eine unendliche Kante $e'$ sein. Das Finden der VR ist in $\mathcal{O}(1)$ Zeit möglich, wenn die Datenstruktur im $ZG$ eine konstante Zugriffszeit auf Vor- und Nachfolger möglich ist. 
+
+\item Füge die VR $p_{j+1}$ von $e'$ zu konvexen Hülle hinzu und setze $e = e'$ wie $j=j+1$. Führe den letzten Schritt solange aus bis $j=i$ ist. Dies kann in $\mathcal{O}(n)$ Zeit beanspruchen.
+
+\end{itemize}
+
+Also läuft der Algorithmus in $\mathcal{O}(n)$.
+
 
 \end{document}
