@@ -164,6 +164,24 @@ Beweis durch strukturelle Induktion:
 
 \subsection*{(b) Zeigen Sie, dass jede Triangulierung einer Menge von $n$ Punkten, von denen $r$ extrem sind, genau $2 (n - 1) - r$ Dreiecke enthält.}
 
+Beweis durch strukturelle Induktion (Annahme: Keine zwei Punkte $p_i$, $p_j$ sind identisch):
+
+\begin{itemize}
+	\item I.A. (n = 3)): Es gilt $2 (n - 1) - r = 2 (3 - 1) - 3 = 4 - 3 = 1$ . \checkmark
+	
+	(Im initialen Fall mit  n = 3 Punkten sind alle 3 Punkte extrem (also $r = 3$) und die Triangulierung liefert genau 1 Dreieck) 
+	\item I.V.: $2 (n - 1) - r$ gelte für eine beliebige Triangulierung mit $\geq 3$ Punkten.
+	\item I.S.: Alle weiteren Triangulierungen ($> 3$ Punkte) lassen sich nur durch folgende Operationen/Fälle aus der im I.A. gegebenen Triangulierung konstruieren :
+	\begin{enumerate}
+		\item \textbf{Hinzufügen eines neuen Punktes, welcher neuer Extrempunkt ist:}
+			Hier muss noch gezeigt werden, dass genau ein zusätzliches Dreieck entsteht.
+			???????
+		\item \textbf{Hinzufügen eines neuen Punktes, welcher kein neuer Extrempunkt ist:}
+			Der neue Punkt liegt, wenn er kein neuer Extrempunkt ist, in einem der 
+			bereits bestehenden Dreiecke $d$ der Triangulierung. $d$ lässt sich aufgrund
+			des neuen Punktes nun in 3 neue Dreiecke aufteilen. D.h. es kommen 2 neue Dreiecke hinzu. Dies entspricht dem Verhalten 	der Gleichung $2 (n - 1) - r$. Denn in diesem Fall wird $n$ um 1 erhöht, während $r$ gleich bleibt. D.h. es werden zwei zusätzliche Dreiecke ausgegeben. \checkmark
+	\end{enumerate}
+\end{itemize}
 
 
 \section*{Aufgabe 3 - Voronoi-Diagramm}
