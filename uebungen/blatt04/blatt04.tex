@@ -43,6 +43,8 @@
 %Sprache
 \usepackage[german]{babel}
 
+%Checkmarks: (usage: \checkmark)
+\usepackage{dingbat}
 
 \usepackage{listings}
 \usepackage{color}
@@ -130,17 +132,34 @@ Der Graph $G$ kann zyklisch und nicht zusammenhängend sein.
 
 https://www.ics.uci.edu/~eppstein/junkyard/euler/
 
+https://de.wikipedia.org/wiki/Eulerscher\_Polyedersatz
+
 Eulers Formel:
 
-\textit{Sei G ein planarer, zusammenhängender Graph, dann gilt:}
+\textit{Sei $G$ ein planarer, zusammenhängender Graph, dann gilt:}
  $$\underbrace{|V|}_{Knoten} = \underbrace{|E|}_{Kanten} - \underbrace{|F|}_{Facetten} + 2 $$
 
-Beweis durch Induktion über die Anzahl der Knoten:
+Beweis durch strukturelle Induktion:
 
 \begin{itemize}
-  \item I.A.: ( $|V| = 1$ )
-  \item I.V.: $|V| = |E| - |F| + 2 $ gelte für beliebiges $|V| \in \mathbb{N}$ 
-  \item I.S.: ( $|V| \leadsto |V| + 1$ ):  
+  \item I.A. ( Graph mit $|V| = 1$ ): 1 = 0 - 1 + 2. \checkmark
+  
+	(Wenn der planare Graph nur aus einem Knoten besteht, gibt es keine Kanten und genau
+	eine Außenfacette.)
+  
+  \item I.V.: $|V| = |E| - |F| + 2 $ gelte für beliebigen planaren Graphen $G$.
+  \item I.S.: Alle weiteren planaren Graphen lassen sich nur durch folgende Operationen aus dem im I.A. gegebenen Graphen konstruieren :
+  	\begin{enumerate}
+  		\item Hinzufügen eines Knotens, welcher über eine neue Kante mit dem Rest des Graphen verbunden ist. Damit steigt sowohl $|V|$ als auch $|E|$ um genau 1. Die Anzahl
+  		der Facetten $|F|$ bleibt gleich. Damit bleibt die Gültigkeit der Euler Formel erhalten (beide Seiten der Gleichung erhöhen sich um genau 1). 
+  		\item Hinzufügen einer Kante, die bereits bestehende Knoten verbindet. Die Anzahl
+  		der Knoten $|V|$ bleibt somit gleich. Die Anzahl der Kanten $|E|$ steigt um 1. 
+  		Die Anzahl der Facetten $|F|$ steigt ebenfalls um genau 1, da durch das Verbinden
+  		der bereits vorhandenen Knoten eine "`alte"' Facette in zwei "`neue"' Facetten
+  		(eine zusätzliche) aufgeteilt wird (Die rechte Seite der Gleichung bleibt gleich).
+  		
+	\end{enumerate}  
+	Damit ist die Gültigkeit der Euler Formel für beliebige planare Graphen gezeigt. \checkmark		  
 \end{itemize}
 
 \subsection*{(b) Zeigen Sie, dass jede Triangulierung einer Menge von $n$ Punkten, von denen $r$ extrem sind, genau $2 (n - 1) - r$ Dreiecke enthält.}
