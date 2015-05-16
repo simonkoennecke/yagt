@@ -100,19 +100,27 @@ showstringspaces=false}
 
 \section*{Aufgabe 1 - Bewegungsplanung in der Ebene}
 
-Gegeben sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$, das Ziel $t$ und den Radius $r$ des Roboters. Des Weiteren ist der Start- und Endpunkt im Radius des Roboters frei von Hindernissen. Die Voronoi Kanten (VK) seien die einzig möglichen Wege für den Roboter. D. h. ein großzügiges Umfahren ist mit dem Algorithmus nicht möglich.
+Gegeben sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$, das Ziel $t$ und der Radius $r$ des Roboters. Des Weiteren sind der Start- und Endpunkt im Radius des Roboters frei von Hindernissen. Die Voronoi Kanten (VK) seien die einzig möglichen Wege für den Roboter. D.h. ein großzügiges Umfahren ist mit dem Algorithmus nicht möglich.
 
 \begin{itemize}
 
-\item Berechne $VD(H \cup \left\{s,t\right\})$ ohne die VK ins unendliche.
+\item Berechne $VD(H \cup \left\{s,t\right\})$ ohne die VK ins Unendliche.
 
-\item Prüfe für alle VK $e$, ob der Abstand zu den Hindernissen $p_i$ und $p_j$ an der kleinsten Stelle von der Kanten $e$ mehr als $r$ hat. Sollte das nicht der Fall sein wird die Kante aus $VD$ entfernt. Die Voronoi Kanten der Region $s$ und $t$ werden hier nicht berücksichtigt.
+\item Prüfe für alle VK $e$ und die Punkte der angrenzenden Voronoi-Regionen $p_i$ und $p_j$, ob gilt: $d(p_i, p_j) \geq r$. In diesem Fall ist sichergestellt, dass der Roboter die Kante passieren kann, ohne mit einem der Hindernisse $p_i$ oder $p_j$ zu kollidieren. Sollte jedoch $d(p_i, p_j) < r$ gelten, so entferne $e$ aus $VD$. 
 
-\item Stelle ein Graphen $G$ mit allen übriggebliebenen VK als $E$ mit den Kantengewicht von 1 auf. Die Knotenmenge $V$ wird so konstruiert, dass der Startpunkt $q_s$ alle VK der Voronoi Region (VR) $s$ vereint und für den Zielpunkt $q_t$ wird das selbe Verfahren angewendet. Sonst werden die VK einfach in $V$ übernommen. Der Graph kann zyklisch und nicht zusammenhängend sein.
+Nach Voraussetzung brauchen
+die Kanten der Region $s$ und $t$ hier nicht berücksichtigt werden. 
 
-\item Suche in den Graphen $G$ den Weg $w$ zwischen $q_s$ und $q_t$. Hier kann ein Shortest Path Algorithmus angewendet werden wie z. B. Dijkstra.
+\item Erstelle einen Graphen $G = (V,E)$, wobei $E$
+der Menge der übrig gebliebenen Voronoi-Kanten entspricht.
+Das Kantengewicht einer jeden Kante $e$ des Graphen $G$
+wird auf den Wert $1$ festgelegt. Die Knotenmenge $V$ wird so konstruiert, dass der Startpunkt $q_s$ alle Voronoi-Kanten der Voronoi-Region $s$ vereint. Dasselbe Verfahren wird analog für den Zielpunkt $q_t$ angewandt. Alle anderen Voronoi-Konten VK werden direkt in $V$ übernommen. 
 
-\item Geben den Weg $w$ aus. Sollte $w$ kein Weg sein gibt es kein Pfad mit den gegebenen Hindernissen von $s$ nach $t$.
+Der Graph $G$ kann zyklisch und nicht zusammenhängend sein.
+
+\item Suche in dem Graphen $G$ den Weg $w$ zwischen $q_s$ und $q_t$. Hier kann ein Shortest Path Algorithmus angewendet werden, z.B. der Algorithmus von Dijkstra.
+
+\item Geben den Weg $w$ aus. Sollte $w$ kein Weg sein, existiert kein kollisionsfreier Pfad mit den gegebenen Hindernissen von $s$ nach $t$.
 
 \end{itemize}  
 
@@ -121,6 +129,19 @@ Gegeben sind die Hindernisse $H = \left\{p_1, \dots, p_n\right\}$, der Start $s$
 \subsection*{(a) Beweisen Sie Eulers Formel}
 
 https://www.ics.uci.edu/~eppstein/junkyard/euler/
+
+Eulers Formel:
+
+\textit{Sei G ein planarer, zusammenhängender Graph, dann gilt:}
+ $$\underbrace{|V|}_{Knoten} = \underbrace{|E|}_{Kanten} - \underbrace{|F|}_{Facetten} + 2 $$
+
+Beweis durch Induktion über die Anzahl der Knoten:
+
+\begin{itemize}
+  \item I.A.: ( $|V| = 1$ )
+  \item I.V.: $|V| = |E| - |F| + 2 $ gelte für beliebiges $|V| \in \mathbb{N}$ 
+  \item I.S.: ( $|V| \leadsto |V| + 1$ ):  
+\end{itemize}
 
 \subsection*{(b) Zeigen Sie, dass jede Triangulierung einer Menge von $n$ Punkten, von denen $r$ extrem sind, genau $2 (n - 1) - r$ Dreiecke enthält.}
 
