@@ -199,7 +199,7 @@ Algorithmus:
 
 \item Die gegenüberliegende VR $p_j$ von der Kante $e$ wird in die konvexe Hülle aufgenommen.
 
-\item Es wird die Vorgänger und Nachfolger Kante von $e$ im $ZG_{p_j}$ gesucht, einer der beiden Kanten muss eine unendliche Kante $e'$ sein. Das Finden der benachbarten VR die eine offen Facette ist kann in $\mathcal{O}(1)$ Zeit bestimmt werden. 
+\item Es werden die Vorgänger und Nachfolger Kante von $e$ im $ZG_{p_j}$ gesucht, einer der beiden Kanten muss eine unendliche Kante $e'$ sein. Das Finden der benachbarten VR die eine offen Facette ist kann somit in $\mathcal{O}(1)$ Zeit bestimmt werden. 
 
 \item Füge die VR $p_{j+1}$ von $e'$ zu konvexen Hülle hinzu und setze $e = e'$ wie $j=j+1$. Führe den letzten Schritt solange aus bis $j=i$ ist. Dies kann in $\mathcal{O}(n)$ Zeit beanspruchen.
 
