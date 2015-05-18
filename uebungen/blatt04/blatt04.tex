@@ -201,7 +201,7 @@ Algorithmus:
 
 \item Es werden die Vorgänger und Nachfolger Kante von $e$ im $ZG_{p_j}$ gesucht, einer der beiden Kanten muss eine unendliche Kante $e'$ sein. Das Finden der benachbarten VR die eine offen Facette ist kann somit in $\mathcal{O}(1)$ Zeit bestimmt werden. 
 
-\item Füge die VR $p_{j+1}$ von $e'$ zu konvexen Hülle hinzu und setze $e = e'$ wie $j=j+1$. Führe den letzten Schritt solange aus bis $j=i$ ist. Dies kann in $\mathcal{O}(n)$ Zeit beanspruchen.
+\item Füge die benachbarte VR $p_{j+1}$ von $e'$ zu konvexen Hülle hinzu und setze $e = e'$ wie $j=j+1$. Führe den letzten Schritt solange aus bis $j=i$ ist. Dies kann in $\mathcal{O}(n)$ Zeit beanspruchen.
 
 \end{itemize}
 
