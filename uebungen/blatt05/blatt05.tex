@@ -105,12 +105,13 @@ showstringspaces=false}
 \subsection*{Aufbau einer Datenstruktur}
 Annahme: Es ist der normalisierte ebene Graph $G$ gegeben. 
 
-Wir konstruieren im Folgenden auf Basis von $G$ eine Directed Acyclic Graph-Struktur $S$, mittels derer 
+Wir konstruieren im Folgenden auf Basis von $G$ eine Directed Acyclic Graph (DAG)-Struktur $S$, mittels derer 
 später in $\mathcal{O}(\log n)$ ermittelt werden kann, in welcher Facette/Dreieck des Graphen
 sich ein Punkt $p$ befindet:
 
-$S_i$ sei die Triangulierung der verbliebenen Punkte vom Graphen $G$ im Verarbeitungsschritt $i$, wobei
-zu Beginn gilt: $S_0$ = $G$.
+$S_i$ sei die Triangulierung der verbliebenen Punkte vom Graphen $G$ im Verarbeitungsschritt $i$.
+
+Zu Beginn gilt: $i = 0$ und $S_i$ = $G$.
 
 \begin{enumerate}
  \item Solange $S_i$ kein Dreieck
@@ -124,11 +125,20 @@ zu Beginn gilt: $S_0$ = $G$.
    \item Die Verbindungen zwischen $S_i$ und $S_{i+1}$ werden entsprechend der Kantenmenge
    
    $\left\{(e_{neu}, e_{alt}) \quad|\quad (e_{neu} \in \Delta_{neu}, e_{alt} \in \Delta_{alt} \right\}$ konstruiert.
+   (Die Kardinalität der Kantenmenge kann in bestimmten Fällen auch noch weiter reduziert werden)
   \end{enumerate}
   \item Setze $i = i + 1$
  \end{enumerate}
 
 \end{enumerate}
+
+
+TODOS:
+\begin{itemize}
+ \item Vorverabeitungszeit analysieren. (Einzelne Schritte analysieren und zeigen dass die Gesamtlaufzeit in O(n log n ) liegt..)
+ \item Zeigen, dass $S$ die Höhe von log n hat. 
+ \item Speicherplatzbedarf abschätzen.. 
+\end{itemize}
 
 
 \section*{Aufgabe 2 - $L_1$-Voronoi-Diagramme}
