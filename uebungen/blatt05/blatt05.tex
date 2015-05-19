@@ -10,6 +10,7 @@
 
 %Grafiken einbinden
 \usepackage{graphicx}
+\usepackage{subfigure} 
 
 %Position von Grafiken und Tabellen erzwingen:
 \usepackage{float}
@@ -101,8 +102,43 @@ showstringspaces=false}
 \maketitle
 
 \section*{Aufgabe 1 - Suchen in ebenen Unterteilungen}
+\subsection*{Aufbau einer Datenstruktur}
+Annahme: Es ist der normalisierte ebene Graph $G$ gegeben. 
+
+Wir konstruieren im Folgenden auf Basis von $G$ eine Directed Acyclic Graph-Struktur $S$, mittels derer 
+später in $\mathcal{O}(\log n)$ ermittelt werden kann, in welcher Facette/Dreieck des Graphen
+sich ein Punkt $p$ befindet:
+
+$S_i$ sei die Triangulierung der verbliebenen Punkte vom Graphen $G$ im Verarbeitungsschritt $i$, wobei
+zu Beginn gilt: $S_0$ = $G$.
+
+\begin{enumerate}
+ \item Solange $S_i$ kein Dreieck
+ \begin{enumerate}
+  \item Setze $S_{i+1} = S_i$
+  \item Finde eine unabhängige Knotenmenge $U_i$ von $S_i$, wobei jeder Knoten der Menge Grad $< 12$ besitzt.
+  \item Solange $U_i$ nicht leer
+  \begin{enumerate}
+   \item Enferne beliebigen Knoten $u \in U_i$ aus $S_{i+1}$. Benenne die hiermit entfallenen Dreiecke als $\Delta_{alt}$
+   \item Trianguliere die Nachbarschaft von $u$ in $S_{i+1}$ neu. Benenne die neu entstandenen Dreiecke als $\Delta_{neu}$.
+   \item Die Verbindungen zwischen $S_i$ und $S_{i+1}$ werden entsprechend der Kantenmenge
+   
+   $\left\{(e_{neu}, e_{alt}) \quad|\quad (e_{neu} \in \Delta_{neu}, e_{alt} \in \Delta_{alt} \right\}$ konstruiert.
+  \end{enumerate}
+  \item Setze $i = i + 1$
+ \end{enumerate}
+
+\end{enumerate}
+
 
 \section*{Aufgabe 2 - $L_1$-Voronoi-Diagramme}
+
+\begin{figure} [htbp] 
+    \subfigure[Voronoi-Diagramm (Manhattan-Distance) - Beispiel 1]{\includegraphics[width=0.5\textwidth]{01.jpg}} 
+    \subfigure[Voronoi-Diagramm (Manhattan-Distance) - Beispiel 2]{\includegraphics[width=0.5\textwidth]{02.jpg}} 
+    \subfigure[Voronoi-Diagramm (Manhattan-Distance) - Beispiel 3]{\includegraphics[width=0.5\textwidth]{03.jpg}} 
+%\caption{} 
+\end{figure} 
 
 \section*{Aufgabe 3 - Suche in ebenen Unterteilungen - Verallgemeinerung}
 
