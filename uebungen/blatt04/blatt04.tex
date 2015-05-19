@@ -129,10 +129,7 @@ Der Graph $G$ kann zyklisch und nicht zusammenhängend sein.
 \section*{Aufgabe 2 - Geometrische Graphen}
 
 \subsection*{(a) Beweisen Sie Eulers Formel}
-
-https://www.ics.uci.edu/~eppstein/junkyard/euler/
-
-https://de.wikipedia.org/wiki/Eulerscher\_Polyedersatz
+Quelle: https://de.wikipedia.org/wiki/Eulerscher\_Polyedersatz abgerufen am 16.05.2015 um 13:34 Uhr.
 
 Eulers Formel:
 
@@ -187,25 +184,46 @@ Beweis durch strukturelle Induktion (Annahme: Keine zwei Punkte $p_i$, $p_j$ sin
 \section*{Aufgabe 3 - Voronoi-Diagramm}
 
 
-Wir haben ein Voronoi Diagramm $VD(S)$ gegeben, wobei die Datenstruktur (DS) von den Voronoi Kanten (VK) einer Voronoi Region (VR) in einem doppelt verketteten Liste $ZG_{p_i}$ geordnet seien. Beachte das Head und Tail von $ZG$ verbunden sind. D.h. auch dass die unendlichen Kanten einer offenen Facette im Graphen benachbart sind und die Zugriffszeit auf die Nachbarn in konstanter Zeit möglich sind.
+Wir haben ein Voronoi Diagramm $VD(S)$ gegeben, wobei die Datenstruktur (DS) von den Voronoi Kanten (VK) einer Voronoi Region (VR) in einer doppelt verketteten Liste $ZG_{p_i}$ geordnet seien. Beachte, dass Head und Tail von $ZG$ verbunden sind. D.h. auch, dass die unendlichen Kanten einer offenen Facette im Graphen benachbart sind und die Zugriffe auf die Nachbarn in konstanter Zeit möglich sind.
 
 Algorithmus:
 
 \begin{itemize}
 
-\item Wir suchen den Punkt $p_i$ aus $S$ mit den kleinsten x- und y-Wert. Der Punkt $p_i$ ist offensichtlich in der konvexen Hülle. $p_i$ kann in $\mathcal{O}(n)$ Zeit berechnet werden.
+\item Wir suchen den Punkt $p_i$ aus $S$ mit dem kleinsten x- und y-Wert. Der Punkt $p_i$ ist offensichtlich auf der konvexen Hülle. Füge diesen als ersten Punkt in die Liste $L$ ein. $p_i$ kann in $\mathcal{O}(n)$ Zeit berechnet werden.
 
-\item Nun betrachten wir vom Voronoi Punkt $p_i$ die VR $p_i$ und suchen eine unendliche Kante $e$ in der Datenstruktur (DS) $ZG_{p_i}$. Die Anzahl der Vergleiche kann in Worst-Case nicht mehr $3 n-6$ beanspruchen, da es die maximale Anzahl von Kanten in einem VD entspricht. Das liegt weiterhin in $\mathcal{O}(n)$.
+\item Nun betrachten wir vom Voronoi Punkt $p_i$ die VR $p_i$ und suchen eine unendliche Kante $e$ in der DS $ZG_{p_i}$. Die Anzahl der Vergleiche kann in Worst-Case nicht mehr $3 n-6$ beanspruchen, da es die maximale Anzahl von Kanten in einem VD entspricht. Das liegt weiterhin in $\mathcal{O}(n)$.
 
-\item Die gegenüberliegende VR $p_j$ von der Kante $e$ wird in die konvexe Hülle aufgenommen.
+\item Die gegenüberliegende VR $p_j$ von der Kante $e$ wird in die Liste $L$ (Ende der Liste) mit aufgenommen.
 
-\item Es werden die Vorgänger und Nachfolger Kante von $e$ im $ZG_{p_j}$ gesucht, einer der beiden Kanten muss eine unendliche Kante $e'$ sein. Das Finden der benachbarten VR die eine offen Facette ist kann somit in $\mathcal{O}(1)$ Zeit bestimmt werden. 
+\item Es werden die Vorgänger- und Nachfolger-Kante von $e$ im $ZG_{p_j}$ gesucht. Eine der beiden Kanten muss eine unendliche Kante $e'$ sein. Das Finden der benachbarten VR, die eine offen Facette ist, kann somit in $\mathcal{O}(1)$ Zeit bestimmt werden. 
 
-\item Füge die benachbarte VR $p_{j+1}$ von $e'$ zu konvexen Hülle hinzu und setze $e = e'$ wie $j=j+1$. Führe den letzten Schritt solange aus bis $j=i$ ist. Dies kann in $\mathcal{O}(n)$ Zeit beanspruchen.
+\item Füge die benachbarte VR $p_{j+1}$ von $e'$ am Ende der Liste $L$ hinzu und setze $e = e'$ wie $j=j+1$. Führe diese Schritte solange aus bis $j=i$ ist. Dies kann $\mathcal{O}(n)$ Zeit beanspruchen.
+
+\item Nun beinhaltet $L$ die sortierte Liste aller potentiellen Randpunkte der konvexen Hülle. Auf dieser kann mit dem Graham-Algorithmus (ausgenommen der Sortierung, da diese bereits gegeben ist) die konvexe Hülle in $\mathcal{O}(n)$ berechnet werden.
 
 \end{itemize}
 
-Also läuft der Algorithmus in $\mathcal{O}(n)$.
+Insgesamt benötigt der Algorithmus also $\mathcal{O}(n)$ Zeit. \vspace*{0.5cm}
+
+\textit{Hinweis / Idee: 
+Sollte gezeigt werden können, dass alle Punkte in $L$ bereits aufgrund der Eigenschaften des Voronoi-Diagramms in der konvexen Hülle von der Punktemenge $S$ liegen, so kann der letzte Schritt, die Ausführung des Graham-Algorithmus, ausgelassen werden.
+Die Laufzeit bleibt damit bei $\mathcal{O}(n)$. }
+
+
+\subsection*{Kann man das Voronoi-Diagramm von S schneller als in $\Omega(n \log n)$ berechnet werden?}
+
+Eingabe sei eine Zahlenfolge $a_1, ..., a_n$.
+
+\begin{enumerate}
+ \item Berechne $(a_1, a_1^2), ..., (a_n, a_n^2) \in \mathcal{O}(n)$
+ \item Wähle einen beliebigen Algorithmus zur Berechnung des Voronoi-Diagramms.
+ \item Berechne mit dem oben beschriebenen Algorithmus die Ausgabe $(b_1, b_1^2), ..., (b_n, b_n^2) \in \mathcal{O}(n)$. 
+ 
+       $b_1$ bis $b_n$ sind sortiert. 
+\end{enumerate}
+
+Wir wissen, dass die Schritte 1-3 $\Omega(n \log n)$ Zeit benötigen. Daraus folgt, dass Schritt 2 ebenfalls in $\Omega(n \log n)$ liegen muss. $\square$	
 
 
 \end{document}
