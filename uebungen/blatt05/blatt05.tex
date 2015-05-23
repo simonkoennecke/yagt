@@ -121,7 +121,7 @@ Zu Beginn gilt: $i = 0$ und $S_i$ = $G$.
  \item Solange $S_i$ kein Dreieck
  \begin{enumerate}
   \item Setze $S_{i+1} = S_i$
-  \item Finde eine unabhängige Knotenmenge $U_i$ von $S_i$, wobei jeder Knoten der Menge Grad $< 12$ besitzt.
+  \item Finde eine unabhängige Knotenmenge $U_i$ von $S_i$, wobei jeder Knoten der Menge, innerer Knoten mit Grad $< 12$ ist.
   \item Solange $U_i$ nicht leer
   \begin{enumerate}
    \item Enferne beliebigen Knoten $u \in U_i$ aus $S_{i+1}$. Benenne die hiermit entfallenen Dreiecke als $\Delta_{alt}$
@@ -136,19 +136,60 @@ Zu Beginn gilt: $i = 0$ und $S_i$ = $G$.
 
 \end{enumerate}
 
-Um die Vorverarbeitungszeit sowie Speicherplatz abschätzen zu können, greifen wir auf folgende Überlegungen zurück:
+Um die Vorverarbeitungs-, Anfragezeit sowie Speicherplatz abschätzen zu können, greifen wir auf folgende Überlegungen zurück:
 
 \begin{itemize}
-\item Am Ende eines $i$-ten Schrittes: Für alle Dreiecke $\delta_{neu}$ gilt, dass diese jeweils maximal 11 Zeiger auf Dreiecke aus $\Delta_{alt}$ speichern.
-\end{itemize}
+\item Auf jeder Ebene $S_i$ mit $i > 0$ gilt: Alle Dreiecke $\delta_{neu}$ haben jeweils maximal 11 Zeiger auf Dreiecke aus $\Delta_{alt}$. Dies folgt direkt aus der Eigenschaft der unabhängigen Knotenmenge, welche nur Knoten mit Grad $ < 12$, also maximal Grad 11, beinhaltet. 
 
-TODOS:
+\item $|U_i| \geq \frac{n}{24} - \frac{1}{6}$, d.h. die Menge $U_i$ umfasst mindestens $\frac{n}{24} - \frac{1}{6}$ unabhängige Knoten und somit werden im $i$-ten Durchlauf auch mindestens $\frac{n}{24} - \frac{1}{6}$ Knoten der Triangulierung $S_{i+1}$ gelöscht. Dies folgt aus den Eigenschaften der unabhängigen Menge und der Triangulierung. Da die Menge $U_i$ aus der Menge der Knoten mit Grad $< 12$
+durch das Löschen von angrenzenden Knoten konstruiert wird und diese die Größe $\geq \frac{n}{2}-2$ besitzt, müssen am Ende $\geq \frac{\frac{n}{2}-2}{12} = \frac{n}{24} - \frac{1}{6}$ Knoten als Menge $U_i$ "`übrig bleiben"'.
+
+\item Die Höhe von $S$ lässt sich mit $\mathcal{O}(\log n)$ abschätzen. Denn, wenn sich die Knotenzahl
+pro Ebene $S_i$ (wie im vorigen Schritt genannt) um mindestens $\frac{n}{24} - \frac{1}{6}$ verringert, so bleiben höchstens $n - (\frac{1}{24} n - \frac{1}{6}) = \frac{23}{24} n + \frac{1}{6}$ Knoten in
+der nächsten Ebene über. 
+
+Angenommen, $k$ sei die Höhe von $S$, dann gilt mit wiederholtem Einsetzen (auf Höhe k besitzt $S_k$ nur noch 3 Knoten): 
+
+$(\frac{23}{24})^k n + \frac{1}{6} \sum_{i = 0}^{k-1} (\frac{23}{24})^i = 3 
+\Leftrightarrow 
+(\frac{23}{24})^k n + \frac{1}{6} \frac{1-(\frac{23}{24})^k}{1- \frac{23}{24}} = 3
+\Leftrightarrow 
+(\frac{23}{24})^k n + \frac{1-(\frac{23}{24})^k}{6- \frac{138}{144}} = 3
+\Leftrightarrow 
+(\frac{23}{24})^k (6- \frac{138}{144}) n + 1-(\frac{23}{24})^k = 3 (6- \frac{138}{144})
+\Leftrightarrow 
+(\frac{23}{24})^k ((6- \frac{138}{144}) n - 1) = 3 (6- \frac{138}{144}) - 1
+\Leftrightarrow 
+(\frac{23}{24})^k = \frac{3 (6- \frac{138}{144}) - 1}{((6- \frac{138}{144}) n - 1) }
+\Leftrightarrow 
+k = \log_{\frac{23}{24}}\frac{3 (6- \frac{138}{144}) - 1}{((6- \frac{138}{144}) n - 1) }
+= \mathcal{O}(\log n).
+$
+
+\end{itemize} 
+
+\subsection*{Vorverarbeitungszeit}
+Aufgrund der berechneten Höhe von $S = \mathcal{O}(\log n)$, wird "`1"'  $\mathcal{O}(\log n)$ mal ausgeführt. Die einzelnen Teilschritte lassen sich wie folgt einordnen:
+
 \begin{itemize}
- \item Vorverabeitungszeit analysieren. (Einzelne Schritte analysieren und zeigen dass die Gesamtlaufzeit in O(n log n ) liegt..)
- \item Zeigen, dass $S$ die Höhe von log n hat. 
- \item Speicherplatzbedarf abschätzen.. 
+\item[(a)] Das "`Kopieren"' von $S_i$ benötigt $\mathcal{O}(n)$ Zeit.
+\item[(b)] Das Finden einer unabhängigen Knotenmenge $S_i$ ist in $\mathcal{O}(n)$ Zeit möglich.
+\item[(c)] Dieser Schritt wird $\mathcal{O}(n)$ mal ausgeführt. Wie wir festgestellt haben, 
+           ist die Menge der neu entstehenden Dreiecke pro Schritt,
+           sowie folglich der Aufwand für das Neu-Triangulieren der Nachbarn pro Schritt konstant.
+           Insgesamt benötigt (c) damit $\mathcal{O}(n)$ Zeit.
+\item[(d)] Das Heraufsetzen der Indexvariable $i$ benötigt konstante Zeit.
 \end{itemize}
 
+Damit haben wir eine Gesamtlaufzeit für die Vorverarbeitung von $\mathcal{O}(\log n) (\mathcal{O}(n) +
+\mathcal{O}(n) + \mathcal{O}(n) + \mathcal{O}(1)) = \mathcal{O}(n \log n)$.
+
+\subsection*{Anfragezeit}
+Die Anfragezeit liegt entsprechend der Höhe der DAG-Struktur $S$ in $\mathcal{O}(\log n)$.
+
+\subsection*{Speicherplatzbedarf}
+Die Ebene $S_i$ hat einen Speicherplatzbedarf von $\mathcal{O}(n)$.
+Damit liegt der gesamte Speicherplatzbedarf in $\mathcal{O}(n \log n)$.
 
 \section*{Aufgabe 2 - $L_1$-Voronoi-Diagramme}
 
