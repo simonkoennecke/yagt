@@ -20,6 +20,10 @@
 
 \usepackage{amsmath}
 
+%Vektoren einfacher angeben:
+\newcommand{\vektor}[1]{\left( \begin{array}{c} #1 \end{array} \right) }
+
+
 %Schriftart Arial:
 % \usepackage{helvet}
 
@@ -103,7 +107,7 @@ showstringspaces=false}
 
 \section*{Aufgabe 1 - Suchen in ebenen Unterteilungen}
 \subsection*{Aufbau einer Datenstruktur}
-Annahme: Es ist der normalisierte ebene Graph $G$ gegeben. 
+Annahme: Es ist der ebene Graph $G$ gegeben. 
 
 Wir konstruieren im Folgenden auf Basis von $G$ eine Directed Acyclic Graph (DAG)-Struktur $S$, mittels derer 
 später in $\mathcal{O}(\log n)$ ermittelt werden kann, in welcher Facette/Dreieck des Graphen
@@ -124,7 +128,7 @@ Zu Beginn gilt: $i = 0$ und $S_i$ = $G$.
    \item Trianguliere die Nachbarschaft von $u$ in $S_{i+1}$ neu. Benenne die neu entstandenen Dreiecke als $\Delta_{neu}$.
    \item Die Verbindungen zwischen $S_i$ und $S_{i+1}$ werden entsprechend der Kantenmenge
    
-   $\left\{(e_{neu}, e_{alt}) \quad|\quad (e_{neu} \in \Delta_{neu}, e_{alt} \in \Delta_{alt} \right\}$ konstruiert.
+   $\left\{(\delta_{neu}, \delta_{alt}) \quad|\quad (\delta_{neu} \in \Delta_{neu}, \delta_{alt} \in \Delta_{alt} \right\}$ konstruiert.
    (Die Kardinalität der Kantenmenge kann in bestimmten Fällen auch noch weiter reduziert werden)
   \end{enumerate}
   \item Setze $i = i + 1$
@@ -132,6 +136,11 @@ Zu Beginn gilt: $i = 0$ und $S_i$ = $G$.
 
 \end{enumerate}
 
+Um die Vorverarbeitungszeit sowie Speicherplatz abschätzen zu können, greifen wir auf folgende Überlegungen zurück:
+
+\begin{itemize}
+\item Am Ende eines $i$-ten Schrittes: Für alle Dreiecke $\delta_{neu}$ gilt, dass diese jeweils maximal 11 Zeiger auf Dreiecke aus $\Delta_{alt}$ speichern.
+\end{itemize}
 
 TODOS:
 \begin{itemize}
@@ -143,11 +152,45 @@ TODOS:
 
 \section*{Aufgabe 2 - $L_1$-Voronoi-Diagramme}
 
+Um einen ersten Eindruck zu bekommen, betrachten wir den Bisektor zweier beliebiger Punkte $a, b \in \mathcal{R}^2$. Diese seien in $x$-Richtung aufsteigend sortiert. 
+
+Für die Gestalt des Bisektors gibt es folgende mögliche Fälle:
+\begin{enumerate}
+	\item $a = b$ : Wenn $a$ und $b$ identisch sind, entspricht der Bisektor dem gesamten $\mathcal{R}^2$.
+	\item $a$ und $b$ kollinear : Wenn $a_x = b_x$ oder $a_y = b_y$, dann ist der Bisektor genau durch deren Mittelsenkrechte gegeben. 
+	\item $|a_x - b_x| = |a_y - b_y|$ : Wenn $a$ und $b$ sowohl in $x$- als auch in $y$-Richtung 
+	den gleichen Abstand haben, ist der Bisektor durch die Flächen 
+	$F_1 = \left \{\vektor{a_x \\ b_y} + \lambda \vektor{-1 \\ 0} + \mu \vektor{0 \\ b_y - a_y} \quad |   \lambda, \mu \in \mathcal{R}  \geq 0 \right\}$ , 
+	
+	$F_2 = \left \{\vektor{b_x \\ a_y} + \lambda \vektor{1 \\ 0} + \mu \vektor{0 \\ a_y - b_y} \quad |   \lambda, \mu \in \mathcal{R}  \geq 0  \right \}$
+	und die Strecke
+	$S = \overline{(a_x, b_y) (b_x, a_y)}$ gegeben (siehe Beispiel in Abb. (a)). 
+	\item In allen anderen Fällen ist der Bisektor durch eine Strecke $S$ mit der Steigung 1 bzw. -1 und
+	zwei Strahlen $R_1, R_2$ gegeben (siehe Beispiele in Abb. (b),(c)).
+	
+	Der Mittelpunkt von $S$ ist gegeben mit $P = (\frac{a_x + b_x}{2}, \frac{a_y + b_y}{2})$, die Steigung von $S$ mit $m = \frac{a_y - b_y}{|a_y - b_y|}$. Damit ist die Strecke $S$ beschrieben durch
+	$\overline{(P_x + m (b_y - P_y), b_y) (P_x - m (b_y - P_y), a_y)}$, falls $|b_y - a_y| < |b_x - a_x|$
+	, ansonsten durch
+	$\overline{(a_x, P_y + m (a_x - P_x)) (b_x, P_y - m (a_x - P_x))}$. 
+	
+	Die Strahlen $R_1$ und $R_2$ sind im Fall $|b_y - a_y| < |b_x - a_x|$ durch $R1 = \left \{\vektor{P_x + m (b_y - P_y) \\ b_y} + \lambda \vektor{0 \\ -m}   \quad |   \lambda \in \mathcal{R}  \geq 0  \right \}$ und $R2 = \left \{\vektor{P_x - m (b_y - P_y)\\ a_y} + \lambda \vektor{0 \\ m}   \quad |   \lambda \in \mathcal{R}  \geq 0  \right \}$, ansonsten durch $R1 = \left \{\vektor{a_x \\ P_y + m (a_x - P_x)} + \lambda \vektor{m \\ 0}   \quad |   \lambda \in \mathcal{R}  \geq 0  \right \}$ und $R2 = \left \{\vektor{b_x\\ P_y - m (a_x - P_x)} + \lambda \vektor{-m \\ 0}   \quad |   \lambda \in \mathcal{R}  \geq 0  \right \}$ gegeben. 
+	
+\end{enumerate}
+
+Wie zu sehen ist, bestehen die $L_1$-Kanten in den meisten Fällen aus Kurven , welche aus einem horizontalen/vertikalen Strahl, einer Strecke der Steigung 1/-1 und einem weiteren horizontalen/vertikalen Strahl zusammengesetzt sind. Allerdings können wie im ersten oder dritten Fall 
+auch ganze ("`unendliche"') Flächen Teil der Voronoi-Kanten sein. Die folgenden Abbildungen illustrieren
+ein paar beispielhafte Fälle eines $L_1$-VDs.
+
+
 \begin{figure} [htbp] 
+	\subfigure[Bisektor der Punkte (0,0), (1,1)]{\includegraphics[width=0.5\textwidth]{bisector1}}
+	\subfigure[Bisektor der Punkte (0,0), (2,1)]{\includegraphics[width=0.5\textwidth]{bisector2}}
+	\subfigure[Bisektor der Punkte (0,2), (1,0)]{\includegraphics[width=0.5\textwidth]{bisector3}}
     \subfigure[Voronoi-Diagramm (Manhattan-Distance) - Beispiel 1]{\includegraphics[width=0.5\textwidth]{01.jpg}} 
     \subfigure[Voronoi-Diagramm (Manhattan-Distance) - Beispiel 2]{\includegraphics[width=0.5\textwidth]{02.jpg}} 
     \subfigure[Voronoi-Diagramm (Manhattan-Distance) - Beispiel 3]{\includegraphics[width=0.5\textwidth]{03.jpg}} 
-%\caption{} 
+%\caption{test}
+\label{test} 
 \end{figure} 
 
 \section*{Aufgabe 3 - Suche in ebenen Unterteilungen - Verallgemeinerung}
