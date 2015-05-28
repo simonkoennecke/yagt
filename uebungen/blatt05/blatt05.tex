@@ -235,9 +235,51 @@ ein paar beispielhafte Fälle eines $L_1$-VDs.
 \end{figure} 
 
 \section*{Aufgabe 3 - Suche in ebenen Unterteilungen - Verallgemeinerung}
+\subsection*{Erweiterung der Datenstruktur}
+Es sei eine ebene Unterteilung $G$ gegeben. Wir wissen, dass $LDS(G)$ eine triangulierte Unterteilung voraussetzt, wobei die äußerste
+umschließende Struktur ein Dreieck ist. Bei der Triangulierung einer Ebene kann in konstanter Zeit die Zugehörigkeit der Facetten
+zu ihren Triangulierungen mitgeführt werden. 
+
+Um alle Unterteilungen der Ebene, inklusive Unterteilungen mit mehreren unbeschränkten Facetten zu unterstützen, 
+gehen wir wie folgt vor:
+
+\begin{itemize}
+ \item Trianguliere zunächst den gegebenen Graphen $G$. (unbeschränkte Facetten werden hierbei nicht berücksichtigt)
+ \item Füge das "`unendliche"' Dreieck $\Delta$ zu $G$ hinzu (wähle die Eckpunkte z.B. so: $(-\infty,-\infty), (\infty,-\infty), (-\infty,\infty) $):
+  
+       $G' = G \cup \Delta$
+       
+       Dabei seien die Kanten des "`unendlichen"' Dreiecks mit einem Marker $m$ markiert. 
+ 
+ \item Trianguliere $G'$ erneut, wobei die neu hinzugefügten Kanten ebenfalls mit einem Marker $m$ markiert werden.  
+ \item $G'$ kann nun an den Algorithmus zur Berechnung von $LDS(G')$ übergeben werden.
+\end{itemize}
+
+Die Vorbearbeitungszeit benötigt weiterhin nur $\mathcal{O}(n \log n)$, da die Triangulierung mit oder ohne markieren $\mathcal{O}(n \log n)$ und das erstellen vom $LDS$ ebenfalls nur $\mathcal{O}(n \log n)$ benötigt.
 
 
+\subsection*{Anpassung der Anfrage}
+Die Anfrage an $LDS(G')$ muss nun noch wie folgt erweitert werden:
 
+\begin{itemize}
+ \item Suche wie zuvor in $LDS(G')$ das zum Punkt $p$ der Anfrage gehörige Dreieck $\delta$.
+ \item Erweitere die Anfrage um den folgenden Test von $\delta$:
+ \begin{enumerate}
+  \item Sind alle Kanten $e$ von $\delta$ ohne Marker, gib die zugehörige Ebene von $\delta$ aus.
+  \item Sind alle Kanten $e$ von $\delta$ mit Marker, gib: "`Punkt $p$ liegt in der Außenfacette"' aus.
+  \item Sonst: $p$ liegt in der zu $\delta$ gehörigen offenen Facette.
+ \end{enumerate}
+
+\end{itemize}
+
+Die drei Fälle können in konstanter Zeit bearbeitet werden, daher bleibt die Anfragezeit bei $\mathcal{O}(log n)$.
+
+\subsection*{Speicherbedarf}
+
+Der Speicherplatzbedarf erhöht sich durch die Erweiterung nach dem beschriebenen Verfahren lediglich durch die Verwendung von zusätzlichen Markern, 
+sowie durch zusätzlich zu speichernde Dreiecke, die durch die Triangulierung mit dem "`unendlichen"' Dreieck entstehen. Der Speicherplatzbedarf
+für die zusätzlichen Dreiecke liegt jedoch in $\mathcal{O}(n)$. Die zusätzlichen Marker besitzen pro zu speichernder Kante lediglich konstanten Speicherplatzbedarf. 
+Insgesamt ergibt sich damit ein Speicherplatzbedarf von $\mathcal{O}(n \log n)$.
 
 
 \end{document}
