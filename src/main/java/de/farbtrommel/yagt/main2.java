@@ -43,7 +43,7 @@ public class main2 extends java.applet.Applet{
 
   
   public void init(){
-    col1=Color.;
+    col1=Color.blue;
     col2=Color.green;
     col3=Color.blue;
     cl[0]=Color.yellow;
