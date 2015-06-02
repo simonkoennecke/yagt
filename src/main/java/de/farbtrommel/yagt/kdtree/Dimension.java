@@ -35,9 +35,17 @@ public class Dimension {
     }
 
     public static Integer getNextKey(List<Integer> ignoreList, Integer i) {
-        int next = ++i % mLabelToDataType.size();
+
+        int next = (i+1) % mLabelToDataType.size();
+
+        //FIXME: ja irgendwas komisch hier...
+        if (mLabelToDataType.size() == Dimension.size()) {
+            //System.out.println("Shouldn't be!");
+            return next;
+        }
+
         while (ignoreList.contains(next)) {
-            next = ++i % mLabelToDataType.size();
+            next = ++next % mLabelToDataType.size();
         }
         return next;
     }

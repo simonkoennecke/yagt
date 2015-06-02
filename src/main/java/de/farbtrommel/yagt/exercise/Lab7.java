@@ -12,8 +12,8 @@ import static org.apache.commons.csv.CSVFormat.*;
 
 public class Lab7 {
     public static void main(String[] args) {
-        simpleExample();
-        //notSoSimpleExample();
+        //simpleExample();
+        notSoSimpleExample();
     }
 
     public static void notSoSimpleExample() {
@@ -23,7 +23,7 @@ public class Lab7 {
             //Define Columns
             dataSet.addColumn("Country", new String());
             dataSet.addColumn("City", new String());
-            dataSet.addColumn("Region", new String());
+            dataSet.addColumn("Region", new Integer(1));
             dataSet.addColumn("Latitude", new Double(0));
             dataSet.addColumn("Longitude", new Double(0));
 
@@ -33,29 +33,30 @@ public class Lab7 {
             int i=0;
             for (final CSVRecord record : parser) {
                 Entity entity = new Entity();
-                System.out.println(record.toString());
+                //System.out.println(record.toString());
 
                 entity.add("Country", record.get("Country"));
                 entity.add("City", record.get("City"));
-                entity.add("Region", record.get("Region"));
+                entity.add("Region", new Integer(record.get("Region")));
                 entity.add("Latitude", new Double(record.get("Latitude")));
                 entity.add("Longitude", new Double(record.get("Longitude")));
 
                 dataSet.addRow(entity);
-                if(i++ == 200) {
+                if(i++ == 20000) {
                     break;
                 }
             }
 
-            System.out.println("Data set valid: " + ((dataSet.valid()) ? "yes" : "no"));
-            System.out.println("Data Set size: " + dataSet.size());
+            System.out.println(dataSet);
             System.out.println();
 
             System.out.println("Creating kd-Tree: ");
             KdTree kdTree = new KdTree(dataSet);
+            System.out.println("Finished the initialization of kd-Tree...");
 
             System.out.println("Query: ");
-            kdTree.addFilter("Country", new Range("A", "B"));
+            kdTree.addFilter("Country", new Range<String>("A", "B"));
+            kdTree.addFilter("Region", new Range<Integer>(1, 2));
             printFilter(kdTree);
 
             System.out.println("Result: ");

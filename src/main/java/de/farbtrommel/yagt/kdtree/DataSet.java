@@ -82,7 +82,9 @@ public class DataSet {
     }
 
     public void addIgnoreDimension(Integer dimension) {
-        mIgnoredDimension.add(dimension);
+        if (!mIgnoredDimension.contains(dimension)) {
+            mIgnoredDimension.add(dimension);
+        }
     }
 
     public List<Integer> getIgnoredDimension() {
@@ -112,6 +114,9 @@ public class DataSet {
 
     public String toString() {
         StringBuilder str = new StringBuilder();
+        str.append("Data set valid: " + ((valid()) ? "yes" : "no") + "\n");
+        str.append("Data Set size: " + size() + "\n");
+        str.append("Data Set: \n");
         for (int i = 0; i < mDataTable.size(); i++) {
             str.append(mDataTable.get(i));
             if (i < (mDataTable.size() - 1)) {

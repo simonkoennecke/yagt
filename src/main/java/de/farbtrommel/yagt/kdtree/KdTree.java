@@ -29,18 +29,11 @@ import java.util.List;
 public class KdTree {
     private Vertex mRoot;
     private List<Entity> mResultSet;
-    private List<Range> mQuery = new ArrayList<Range>();
+    private List<Range<?>> mQuery;
 
     public KdTree(DataSet set) {
+        clearFilter();
         mRoot = new Vertex(set, 0);
-    }
-
-    public void clearFilter() {
-        mQuery = new ArrayList<Range>();
-    }
-
-    public void addFilter(String label, Range range) throws Exception {
-        mQuery.add(Dimension.getKey(label), range);
     }
 
     /**
@@ -149,8 +142,18 @@ public class KdTree {
         }
         return range;
     }
+    public void clearFilter() {
+        mQuery = new ArrayList<Range<?>>();
+        for (int i = 0; i < Dimension.size(); i++) {
+            mQuery.add(i, null);
+        }
+    }
 
-    public List<Range> getFilter() {
+    public void addFilter(String label, Range<?> range) throws Exception {
+        mQuery.add(Dimension.getKey(label), range);
+    }
+
+    public List<Range<?>> getFilter() {
         return mQuery;
     }
 
