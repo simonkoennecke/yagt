@@ -2,7 +2,8 @@ package de.farbtrommel.yagt.kdtree;
 
 import java.util.ArrayList;
 
-public class Entity extends ArrayList<Pair>{
+
+public class Entity extends ArrayList<Pair> {
     private Dimension sDimension = new Dimension();
 
     public void add(String label, Comparable value) throws Exception {

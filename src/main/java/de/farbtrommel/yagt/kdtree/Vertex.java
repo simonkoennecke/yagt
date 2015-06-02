@@ -87,10 +87,19 @@ public class Vertex {
         return mEntity;
     }
 
+    public Vertex getVertex(int i) {
+        if (i == 0) {
+            return mVertexLower;
+        } else if (i == 1) {
+            return mVertexEqual;
+        } else {
+            return mVertexUpper;
+        }
+    }
+
     public Vertex getLowerVertex() {
         return mVertexLower;
     }
-
     public Vertex getEqualVertex() {
         return mVertexEqual;
     }

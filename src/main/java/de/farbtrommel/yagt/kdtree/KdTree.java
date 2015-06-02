@@ -1,6 +1,7 @@
 package de.farbtrommel.yagt.kdtree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,11 +30,55 @@ import java.util.List;
 public class KdTree {
     private Vertex mRoot;
     private List<Entity> mResultSet;
+    private Entity mSearchEntity;
+    private Entity mBestEntity;
+    private Double mBestDist;
+    private DistanceComparator mDistanceComparator = new DistanceComparator();
     private List<Range<?>> mQuery;
 
     public KdTree(DataSet set) {
         clearFilter();
         mRoot = new Vertex(set, 0);
+    }
+
+    public List<Entity> kNearestNeighbourSearch(Entity entity) {
+        mResultSet = new ArrayList<Entity>();
+        mSearchEntity = entity;
+        mDistanceComparator.setOrigin(entity);
+        searchHelperKNN(mRoot);
+
+        mDistanceComparator.setOrigin(mBestEntity);
+        Collections.sort(mResultSet, mDistanceComparator);
+        return mResultSet;
+    }
+
+    private void setBestEntity(Entity entity) {
+        mBestEntity = mRoot.getEntity();
+        mBestDist = mDistanceComparator.distanceToOrigin(mBestEntity);
+    }
+    private void searchHelperKNN(Vertex vertex) {
+        if (vertex == null || vertex.getEntity() == null) {
+            return;
+        }
+        double[] dist = new double[]{
+                mDistanceComparator.distanceToOrigin(vertex.getLowerVertex().getEntity()),
+                mDistanceComparator.distanceToOrigin(vertex.getEqualVertex().getEntity()),
+                mDistanceComparator.distanceToOrigin(vertex.getUpperVertex().getEntity())
+        };
+        boolean[] visitedBranches = new boolean[]{false, false, false};
+        for (int i = 0; i < dist.length; i++) {
+            if (!visitedBranches[i] && dist[i] < mBestDist) {
+                Vertex newBestFit = vertex.getVertex(i);
+                //change the best fit entity
+                setBestEntity(newBestFit.getEntity());
+                //Mark branch as viewed
+                visitedBranches[i] = true;
+                //Search for a better fit.
+                searchHelper(newBestFit);
+                //Start the loop again
+                i = 0;
+            }
+        }
     }
 
     /**
