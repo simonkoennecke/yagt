@@ -108,7 +108,7 @@ showstringspaces=false}
 
 \subsection*{Welcher Art sind die Kurven, die die Voronoi-Kanten beschreiben?}
 
-Die sieben Arten können am Diagramm a) abgelesen werden. Dabei kann man verschiedene Ausprägung von den Bereiche Mittelsenkrechte(ac), Parabel(c, ab), Winkelhalbierende(cd, ba), Parabel(b, cd), Winkelhalbierende(ab, cd), Parabel(d, ab), Mittelsenkrechte(a, d) erstellen.
+Die sieben Arten können am Diagramm a) abgelesen werden. Dabei können verschiedene Ausprägungen der  Bereiche Mittelsenkrechte(ac), Parabel(c, ab), Winkelhalbierende(cd, ba), Parabel(b, cd), Winkelhalbierende(ab, cd), Parabel(d, ab) und Mittelsenkrechte(a, d) auftreten.
 \begin{figure} [!htb] 
 	\subfigure[Bisektor zweier Strecken]{\includegraphics[width=0.5\textwidth]{bisektoren_zweier_strecken}} 
 \end{figure} 
@@ -117,9 +117,9 @@ Quelle: uni-forst.gwdg.de/~wkurth/cb/html/alg\_v08b.pdf abgerufen am 28.05.2015 
 \subsection*{Zusammenhängende Voronoi Regionen}
 
 Sei $S$ eine Menge von Strecken und $l \in S$ eine Strecke und $d$ die Distanzfunktion.
-Zu zeigen gilt: Das alle Punkt $x$ einer Voronoi Region  $VR(l, S)$ und alle Punkte einer Strecke von $\overline{x, y_x}$ in der VR liegt (dabei sei $y_x$ der nächste Punkt auf $l$).
+Zu zeigen gilt: Alle Punkte $x$ einer Voronoi Region  $VR(l, S)$ und alle Punkte einer Strecke von $\overline{x, y_x}$ liegen in VR (dabei sei $y_x$ der nächste Punkt auf $l$).
 
-Beweis: Wir wählen ein Punkt $a \in \overline{x, y_x}$ so das es im Abschluss einer VR $l'$ liegt. Dann wäre $d(l, z) \geq d(l', z)$ und $y_a$ sei der nächste Punkt auf der Strecke $l'$ so würde folgen
+Beweis: Wir wählen ein Punkt $a \in \overline{x, y_x}$,so dass es im Abschluss einer VR $l'$ liegt. Dann wäre $d(l, z) \geq d(l', z)$ und $y_a$ sei der nächste Punkt auf der Strecke $l'$ so würde folgen:
 
 \begin{align}
 d(l,x)=d(y_x, x) &= d(y_x,a)+d(a, x)\\
@@ -128,12 +128,18 @@ d(l,x)=d(y_x, x) &= d(y_x,a)+d(a, x)\\
 &= d(y_a, a) +  d(a, x) \geq d(y_a, x) \geq d(l', x)
 \end{align} 
 
-dies steht im Widerspruch zu unserer Annahme $x \in VR(l,S)$. $\square$ Daraus können wir direkt folgern das Voronoi Region von Strecken zusammenhängend Mengen sind.
+Dies steht im Widerspruch zu unserer Annahme $x \in VR(l,S)$. $\square$ 
+
+Daraus können wir direkt folgern, dass Voronoi Regionen von Strecken zusammenhängende Mengen sind.
 
 \cite{Klein1997}
 
-\subsection*{Aus wie vielen Ecken, Kanten und Zellen kann $VD(S)$ höchstens bestehen?}
 
+\subsection*{Aus wie vielen Ecken, Kanten und Zellen kann $VD(S)$ höchstens bestehen?}
+Wir wissen, dass für ein $VD(S)$ mit einer Menge von Punkten $S \subset \mathcal{R}^2$ gilt, dass
+die Anzahl der Ecken, Kanten sowie Zellen in $\mathcal{O}(n)$ liegt. 
+Wie wir gezeigt haben, bleiben Voronoi-Regionen auch im Falle einer Menge von Strecken zusammenhängend.
+Außerdem lässt sich die Voronoi-Kante einer Strecke in genau 7, also $\mathcal{O}(1)$ Teilsegmente zerlegen. Die Anzahl der Ecken, Kanten und Zellen bleibt somit in $\mathcal{O}(n)$.
 
 
 
@@ -150,14 +156,14 @@ dies steht im Widerspruch zu unserer Annahme $x \in VR(l,S)$. $\square$ Daraus k
 \end{figure} 
 
 
-Der Fortune-Sweep-Line-Algorithmus lässt eine Linie $l$ in (den Abbildungen eine rot vertikale Linie) von dem kleinsten bis zu größten x-Wert über die Punktmenge bewegen, dabei werden folgende Events behandelt:
+Der Fortune-Sweep-Line-Algorithmus lässt eine Linie $l$ in (den Abbildungen eine rot vertikale Linie) von dem kleinsten bis zum größten x-Wert über die Punktmenge bewegen. Dabei werden folgende Events behandelt:
 
 \begin{itemize}
 	\item zu b) Der erste Punkt $(0, 0)$ betrachtet und die sogenannte Beach Line wird um eine Parabel erweitert.
 	\item zu c) Die Sweep-Line wird auf den nächsten Eventpunkt $(1, 2)$ vorgerückt. Die Beach Line wird um ein weitere Parabel erweitert.
-	\item zu d) Das gleiche passiert beim Punkt $(2, 3)$, die Beach Line wird um eine dritte Parabel erweitert. Der Schnitt Punkt der ersten beiden Parabeln zeigt schon eine Kante zwischen den beiden Voronoi Region (0, 0) und (1, 2), wobei der Voronoi Knoten noch nicht definiert ist.
-	\item zu e) Der letzte Punkte $(4, 3)$ wird in der Event Queue bearbeitet und die Beach Line wird um die letzte Parabel ergänzt.
-	\item zu f) Leider wird aus der Visualisierung das erstellen der beiden Voronoi Knoten nicht deutlich aber es werden lediglich beim entfernen einer Beach Line Abschnittst ein Voronoi Knoten (VK) hinzugefügt und die damit verbunden Kanten. Der erste VK liegt bei $(3, 1)$ und der zweite VK bei $(3.5, -0.5)$
+	\item zu d) Das gleiche passiert beim Punkt $(2, 3)$. Die Beach Line wird um eine dritte Parabel erweitert. Der Schnitt Punkt der ersten beiden Parabeln zeigt schon eine Kante zwischen den beiden Voronoi Region (0, 0) und (1, 2), wobei der Voronoi Knoten noch nicht definiert ist.
+	\item zu e) Der letzte Punkt $(4, 3)$ wird in der Event Queue bearbeitet und die Beach Line wird um die letzte Parabel ergänzt.
+	\item zu f) Leider wird aus der Visualisierung das Erstellen der beiden Voronoi Knoten nicht deutlich, aber es werden lediglich beim Entfernen einer Beach Line-Abschnitts ein Voronoi Knoten (VK) hinzugefügt und die damit verbundenen Kanten. Der erste VK liegt bei $(3, 1)$ und der zweite VK bei $(3.5, -0.5)$
 	\begin{itemize}
 		\item	1. Kante: $(3, \infty)$, $(3, 1)$
 		\item	2. Kante: $(-\infty, \infty)$, $(3, 1)$
@@ -171,12 +177,42 @@ Der Fortune-Sweep-Line-Algorithmus lässt eine Linie $l$ in (den Abbildungen ein
 
 \section*{Aufgabe 3 - Durchschnitt einfacher Polygone}
 
-%Quelle: http://geomalgorithms.com/a09-_intersect-3.html
+Gegeben sind zwei einfache Polygone $P$ und $Q$. 
+Gesucht ist der Durchschnitt von $P$ und $Q$.
+
+\subsection*{Vorbereitung}
+Wir berechnen die Schnittpunkte $SP$ beider Polygone $P$ und $Q$ mit dem 
+Bentley-Ottmann-Algorithmus und speichern dabei zusätzlich
+die Nachbarschaft eines jeden Schnittpunktes. Dieser benötigt $\mathcal{O}((n+k) \log n)$ Zeit, wobei $k$
+gleich der Anzahl der Schnittpunkte von $P$ und $Q$ ist. 
+
+Um den Durchschnitt beider Polygone zu erhalten benötigen wir zusätzlich zu $SP$
+eine Menge $I$, für die gilt:
+
+$I = {p | p \in P \cap Q, wobei p Eckpunkt von P oder Q}$
+
+Mit $SP \cup I$ liegen nun alle Eckpunkte der Ergebnispolygone vor. 
+Diese müssen noch in richtiger Reihenfolge und Partitionierung ausgegeben werden. 
+
+\begin{itemize}
+\item Fall 1: $SP = {}$: Wähle einen beliebigen Punkt $i \in I$. Falls $i \in P$, gebe $P$ als einziges
+Ergebnispolygon aus, sonst geben $Q$ aus.
+\item Fall 2: $SP != {}$: 
+\begin{itemize}
+	\item Wähle einen beliebigen Punkt $s$ aus $SP$. 
+\end{itemize} 
+\end{itemize}
+
+
+Quelle: http://geomalgorithms.com/a09-\_intersect-3.html
+
+Leider unvollständig..
+
+
+\bibliographystyle{plain}
+\bibliography{blatt06}
 
 
 
 \end{document}
-
-\bibliographystyle{plain}
-\bibliography{blatt06}
 
