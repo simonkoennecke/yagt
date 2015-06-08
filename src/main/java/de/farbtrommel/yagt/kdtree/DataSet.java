@@ -75,7 +75,7 @@ public class DataSet {
 
     public Entity getMedian(Integer dimension) {
         //Sorting to select the median
-        //Maybe the median of medians algorithm could be better.
+        //Maybe the median of medians algorithm should be better.
         sort(dimension);
         int median = mDataTable.size() / 2;
         return mDataTable.get(median);

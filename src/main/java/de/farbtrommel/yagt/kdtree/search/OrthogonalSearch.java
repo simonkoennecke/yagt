@@ -5,6 +5,17 @@ import de.farbtrommel.yagt.kdtree.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The orthogonal search algorithm for kd-tree.
+ * <code>
+ * OrthogonalSearch orthogonalSearch = new OrthogonalSearch();
+ * orthogonalSearch.addFilter("City", new Range<String>("w", "z"));
+ * orthogonalSearch.addFilter("Latitude", new Range<Double>(52.4d, 53d));
+ * orthogonalSearch.addFilter("Longitude", new Range<Double>(12.45, 13.4));
+ *
+ * List<Entity> list = orthogonalSearch.search(kdTree.getRootVertex());
+ * </code>
+ */
 public class OrthogonalSearch {
     private List<Entity> mResultSet;
     private List<Range<?>> mQuery;

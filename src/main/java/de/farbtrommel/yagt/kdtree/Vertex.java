@@ -45,17 +45,6 @@ public class Vertex {
 
         //Building subtree
         DataSet[] splitDataSet = set.split(dimension);
-        /*
-        System.out.printf("Split Data Set (%d, %d, %d) %n",
-                splitDataSet[0].size(),
-                splitDataSet[1].size(),
-                splitDataSet[2].size()
-                );
-        */
-        /** TODO: nextDimension kann irgendwann kein wert zurück lieferen,
-         * da mIgnoredDimension alle Dimensionen umfässt
-         * Warum?!?!
-         */
 
         Integer nextDimension = Dimension.getNextKey(mIgnoredDimension, dimension);
         if (splitDataSet[0].size() != 0) {

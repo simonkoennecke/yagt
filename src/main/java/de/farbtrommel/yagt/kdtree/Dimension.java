@@ -35,15 +35,12 @@ public class Dimension {
     }
 
     public static Integer getNextKey(List<Integer> ignoreList, Integer i) {
-
-        int next = (i+1) % mLabelToDataType.size();
-
-        //FIXME: ja irgendwas komisch hier...
+        //when all dimension are equal
         if (mLabelToDataType.size() == Dimension.size()) {
-            //System.out.println("Shouldn't be!");
-            return next;
+            return i;
         }
 
+        int next = (i+1) % mLabelToDataType.size();
         while (ignoreList.contains(next)) {
             next = ++next % mLabelToDataType.size();
         }

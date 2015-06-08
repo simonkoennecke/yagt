@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Leider etwas unvollständig
+ * Leider etwas unvollständig aber für die Aufgabe auch nicht relevant.
  */
 public class NearestNeighbourSearch {
     private Entity mSearchEntity;

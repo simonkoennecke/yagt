@@ -2,13 +2,14 @@ This Repository is for Lab Project of Course 'Algorithmische Geometrie' at FU Be
 
 # Introduction
 
-You will find all necessary information here. 
+You will find all necessary information here.
+ 
 
 ## Get the Source Code
 
 To retrieve the source code of your project run the command (make sure you have installed git):
 ```
-$> git clone git@github.com:simonkoennecke/yagt.git
+$> git clone https://github.com/simonkoennecke/yagt.git
 $> cd yagt
 ```
 
