@@ -1,14 +1,14 @@
 package de.farbtrommel.yagt.exercise;
 
 import de.farbtrommel.yagt.kdtree.*;
+import de.farbtrommel.yagt.kdtree.search.OrthogonalSearch;
+import de.farbtrommel.yagt.kdtree.search.Range;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.util.List;
-
-import static org.apache.commons.csv.CSVFormat.*;
 
 public class Lab7 {
     public static void main(String[] args) {
@@ -21,13 +21,13 @@ public class Lab7 {
             DataSet dataSet = new DataSet();
 
             //Define Columns
-            dataSet.addColumn("Country", new String());
+            //dataSet.addColumn("Country", new String());
             dataSet.addColumn("City", new String());
-            dataSet.addColumn("Region", new Integer(1));
+            //dataSet.addColumn("Region", new Integer(1));
             dataSet.addColumn("Latitude", new Double(0));
             dataSet.addColumn("Longitude", new Double(0));
 
-            Reader in = new FileReader("C:\\Users\\simon_000\\workspace\\yagt\\orte_weltweit.txt");
+            Reader in = new FileReader("orte_deutschland.txt");
 
             final CSVParser parser = new CSVParser(in, CSVFormat.RFC4180.newFormat('\t').withHeader());
             int i=0;
@@ -35,16 +35,16 @@ public class Lab7 {
                 Entity entity = new Entity();
                 //System.out.println(record.toString());
 
-                entity.add("Country", record.get("Country"));
+                //entity.add("Country", record.get("Country"));
                 entity.add("City", record.get("City"));
-                entity.add("Region", new Integer(record.get("Region")));
+                //entity.add("Region", new Integer(record.get("Region")));
                 entity.add("Latitude", new Double(record.get("Latitude")));
                 entity.add("Longitude", new Double(record.get("Longitude")));
 
                 dataSet.addRow(entity);
-                if(i++ == 20000) {
-                    break;
-                }
+                //if(i++ == 350000) {
+                    //break;
+                //}
             }
 
             System.out.println(dataSet);
@@ -55,12 +55,14 @@ public class Lab7 {
             System.out.println("Finished the initialization of kd-Tree...");
 
             System.out.println("Query: ");
-            kdTree.addFilter("Country", new Range<String>("A", "B"));
-            kdTree.addFilter("Region", new Range<Integer>(1, 2));
-            printFilter(kdTree);
+            OrthogonalSearch orthogonalSearch = new OrthogonalSearch();
+            orthogonalSearch.addFilter("City", new Range<String>("w", "z"));
+            orthogonalSearch.addFilter("Latitude", new Range<Double>(52.4d, 53d));
+            orthogonalSearch.addFilter("Longitude", new Range<Double>(12.45, 13.4));
+            printFilter(orthogonalSearch);
 
             System.out.println("Result: ");
-            List<Entity> list = kdTree.search();
+            List<Entity> list = orthogonalSearch.search(kdTree.getRootVertex());
             printResults(list);
 
         } catch (FileNotFoundException e) {
@@ -91,8 +93,6 @@ public class Lab7 {
                 dataSet.addRow(entity);
             }
             dataSet.sort(0);
-            System.out.println("Data set valid: " + ((dataSet.valid()) ? "yes" : "no"));
-            System.out.println("Data Set (sort by x value): ");
             System.out.println(dataSet);
             System.out.println();
 
@@ -101,12 +101,13 @@ public class Lab7 {
             KdTree kdTree = new KdTree(dataSet);
 
             System.out.println("Query: ");
-            kdTree.addFilter("x", new Range(dataSet.get(3).get(0).mValue,
+            OrthogonalSearch orthogonalSearch = new OrthogonalSearch();
+            orthogonalSearch.addFilter("x", new Range(dataSet.get(3).get(0).mValue,
                     dataSet.get(6).get(0).mValue));
-            printFilter(kdTree);
+            printFilter(orthogonalSearch);
 
             System.out.println("Result: ");
-            List<Entity> list = kdTree.search();
+            List<Entity> list = orthogonalSearch.search(kdTree.getRootVertex());
             printResults(list);
 
         } catch (Exception e) {
@@ -114,9 +115,9 @@ public class Lab7 {
         }
     }
 
-    private static void printFilter(KdTree kdTree) {
+    private static void printFilter(OrthogonalSearch orthogonalSearch) {
         for (int i = 0; i < Dimension.size(); i++) {
-            Range range = kdTree.getRange(i);
+            Range range = orthogonalSearch.getRange(i);
             System.out.print(Dimension.getLabel(i) + ": ");
             System.out.println(range);
         }

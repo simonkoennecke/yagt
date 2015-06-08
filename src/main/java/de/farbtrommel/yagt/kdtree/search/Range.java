@@ -1,4 +1,4 @@
-package de.farbtrommel.yagt.kdtree;
+package de.farbtrommel.yagt.kdtree.search;
 
 /**
  * Simple Range object without getters.
