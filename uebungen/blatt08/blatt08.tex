@@ -1,0 +1,165 @@
+%Dokumententyp
+\documentclass[a4paper]{article}
+
+\usepackage[a4paper,left=2cm, right=3cm, top=2cm]{geometry}
+
+%Kodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%Grafiken einbinden
+\usepackage{graphicx}
+\usepackage{subfigure} 
+
+%Position von Grafiken und Tabellen erzwingen:
+\usepackage{float}
+
+%URLs im Literaturverzeichnis
+\usepackage{url}
+
+\usepackage{amsmath}
+
+%Vektoren einfacher angeben:
+\newcommand{\vektor}[1]{\left( \begin{array}{c} #1 \end{array} \right) }
+
+
+%Schriftart Arial:
+% \usepackage{helvet}
+
+%Figures with text around it:
+\usepackage{wrapfig}
+
+\usepackage{listings}
+
+%seitennummern rechts:
+% \usepackage{fancyhdr}
+% \fancyhf{} % clear all header and footers
+% \renewcommand{\headrulewidth}{0pt} % remove the header rule
+% \rfoot{\thepage}
+% \fancypagestyle{plain}{%redefining plain pagestyle
+% \fancyhf %clear all headers and footers fields
+% \fancyhead[R]{\thepage} %prints the page number on the right side of the header
+% }
+
+%Schriftart Times New Roman "like"
+\usepackage{txfonts}
+
+%Sprache
+\usepackage[german]{babel}
+
+%Checkmarks: (usage: \checkmark)
+\usepackage{dingbat}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+ 
+\lstset{language=Java,
+basicstyle=\ttfamily,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=1,
+numbersep=5pt,
+tabsize=4,
+showspaces=false,
+lineskip={-1.5pt},
+showstringspaces=false}
+
+%Tabellenextras
+\usepackage{tabularx}
+
+%Zeilenabstand 1.5
+\linespread{1.5}
+\usepackage{setspace}
+
+%Figure Captions mit Fußnoten
+\usepackage{footnote}
+%\setlength{\parindent}{0pt} 
+
+
+%itemize items richtig ausrichten (nicht links überlappen!)
+% \setlist{leftmargin=0}
+
+% %%%%TITELSEITE%%%%%%(
+% \title{ Konzept und Implementierung\\ eines Systems zur \\Anforderung und Verwaltung von virtuellen privaten Clustern}
+% \author{\textbf{\large Bachelorarbeit}}
+% 
+% \date{zur Erlangung des akademischen Grades Bachelor of Science an der Universität Paderborn im Fachbereich Informatik im Studiengang Bachelor Informatik}
+
+% %%%%TITELSEITE%%%%%%)
+
+% \pagestyle{fancy}
+\begin{document}
+
+\title{Algorithmische Geometrie - Sommersemester 2015\\
+       8. Aufgabenblatt }
+\author{Simon Koennecke und Felix Bröker}
+\date{}
+\maketitle
+
+\section*{Aufgabe 1 - Vorverarbeitungszeit für Bereichsbäume}
+
+Im folgenden sehen wir uns zunächst in Pseudocode an, 
+wie ein 2d-Bereichsbaum aufgebaut werden kann:
+
+\begin{lstlisting}
+Eingabe: pX, pY (nach x- bzw. y-Koordinate sortiertes Array der Punkte aus P)
+Ausgabe: Wurzelknoten des 2d-Bereichbaums
+
+Create-2d-Range-Tree(pX, pY)
+IF size(pX) == 0
+	return NULL;
+ELSE
+	yTree = Create-1d-Range-Tree(pX, pY);
+
+IF size(pX) == 1
+	return new Node(pX[0], yTree, NULL, NULL);
+ELSE
+	leftNode  = Create-2d-Range-Tree(pX[0..size(pX)/2], pY);
+	rightNode = Create-2d-Range-Tree(pX[size(pX)/2+1..size(pX)-1], pY);
+	return new Node(pX[size(pX)/2], yTree, leftNode, rightNode);
+\end{lstlisting}
+
+Die 4 Parameter von "`Node"' geben dabei den zu speichernden x-Wert (der jeweilige Median), 
+den zum Knoten zugehörigen 1d-Bereichsbaum (bzgl. der y-Koordinaten der zugehörigen Punkte),
+den linken, sowie rechten Kindknoten an. "`Create-1d-Range-Tree(pX, pY)"' erstellt einen 1d-Bereichsbaum
+für alle Punkte in pX nach deren y-Koordinate. 
+
+\subsection*{Laufzeitabschätzung}
+Zur Laufzeitabschätzung stellen wir folgende Rekursionsgleichungen auf:
+$$T(\leq 1) = \mathcal{O}(1)$$
+Im Fall von $n \leq 1$ (Rekursionsanker) haben wir eine konstante Laufzeit.
+Dies können wir auch an obigem Pseudocode ablesen. Ist die Eingabegröße $ n < 1$ bzw. $n = 0$
+wird lediglich ein "`NULL"'-Element zurückgegeben. Im Fall $n = 1$ wird lediglich ein neuer Knoten
+und dessen 1-elementiger 1d-Range-Tree (ebenfalls konstante Zeit) angelegt und zurückgegeben. 
+In allen anderen Fällen setzt sich die Laufzeit aus der Zeit für die Konstruktion eines 1d-Range-Trees
+(Zeile 8), der Zeit für den Aufruf beider Rekursionen (Zeilen 13,14) und der Erstellung des Rückgabeknotens (Zeile 15) zusammen:
+
+$$T(n) = T(\lfloor n/2\rfloor) + T(\lceil n/2\rceil) + \underbrace{\mathcal{O}(n) + \mathcal{O}(1)}_{\mathcal{O}(n)}$$
+
+\textit{TODO: Hier noch begründen, weshalb wir den yTree, also 1d-Range-Tree mithilfe der 
+sortierten Liste pY in O(n) Zeit konstruieren können..}
+
+ Die Zeit für die Erstellung des Rückgabeknotens inklusive anderer
+konstanter Operationen wie z.B. der verwendeten IF-Abfragen kann mit $\mathcal{O}(1)$ abgeschätzt
+werden. Da die aktuelle Punktemenge der Größe $n$ anhand ihres Medians geteilt und als Eingabe der
+nächsten Rekursionen verwendet werden, und nicht sicher ist, ob $n$ eine 2er-Potenz ist, werden
+jeweils die auf- bzw. abgerundeten Hälften der Eingabegröße zur Abschätzung ($T(\lfloor n/2\rfloor)$  und $T(\lceil n/2\rceil)$) verwendet. 
+
+Die aufgestellte Rekursionsgleichung entspricht genau der Rekursionsgleichung wie wir sie von Sortieralgorithmen wie z.B. Mergesort kennen. Für Mergesort ist die Laufzeitabschätzung 
+$T(n) = \mathcal{O}(n \log n)$ bekannt. Die hier vorgestellte Berechnung/Konstruktion eines
+2d-Range-Trees benötigt also ebenfalls $\mathcal{O}(n \log n)$ Zeit.
+
+\section*{Aufgabe 2 - dynamische Segmentbäume}
+\section*{Aufgabe 3 - Punkt-Rechteck-Anfragen}
+
+
+\end{document}
+
