@@ -83,6 +83,9 @@ showstringspaces=false}
 \usepackage{footnote}
 %\setlength{\parindent}{0pt} 
 
+%Graphen/Trees zeichnen:
+\usepackage{tikz}
+
 
 %itemize items richtig ausrichten (nicht links überlappen!)
 % \setlist{leftmargin=0}
@@ -120,17 +123,20 @@ ELSE
 	yTree = Create-1d-Range-Tree(pX, pY);
 
 IF size(pX) == 1
-	return new Node(pX[0], yTree, NULL, NULL);
+	return new Node(pX[1], yTree, NULL, NULL);
 ELSE
-	leftNode  = Create-2d-Range-Tree(pX[0..size(pX)/2], pY);
-	rightNode = Create-2d-Range-Tree(pX[size(pX)/2+1..size(pX)-1], pY);
-	return new Node(pX[size(pX)/2], yTree, leftNode, rightNode);
+	pY1 = updatepY(pX[1..ceiling(size(pX)/2)], pY);
+	pY2 = updatepY(ceiling(pX[size(pX)/2)+1..size(pX)], pY);
+	leftNode  = Create-2d-Range-Tree(pX[1..ceiling(size(pX)/2)], pY1);
+	rightNode = Create-2d-Range-Tree(ceiling(pX[size(pX)/2)+1..size(pX)], pY2);
+	return new Node(ceiling(pX[size(pX)/2]), yTree, leftNode, rightNode);
 \end{lstlisting}
 
 Die 4 Parameter von "`Node"' geben dabei den zu speichernden x-Wert (der jeweilige Median), 
 den zum Knoten zugehörigen 1d-Bereichsbaum (bzgl. der y-Koordinaten der zugehörigen Punkte),
-den linken, sowie rechten Kindknoten an. "`Create-1d-Range-Tree(pX, pY)"' erstellt einen 1d-Bereichsbaum
-für alle Punkte in pX nach deren y-Koordinate. 
+den linken, sowie rechten Kindknoten an. "`Create-1d-Range-Tree(pX, pY)"' erstellt einen 1d-Bereichsbaum für alle Punkte in pX nach deren y-Koordinate. 
+Die Funktion updatepY(pX, pY) reduziert die Menge pY jeweils um die nicht in pX enthaltenen Punkte.
+Dieser Vorgang benötigt $\mathcal{O}(size(pX))$ viele Operationen.
 
 \subsection*{Laufzeitabschätzung}
 Zur Laufzeitabschätzung stellen wir folgende Rekursionsgleichungen auf:
@@ -140,12 +146,16 @@ Dies können wir auch an obigem Pseudocode ablesen. Ist die Eingabegröße $ n <
 wird lediglich ein "`NULL"'-Element zurückgegeben. Im Fall $n = 1$ wird lediglich ein neuer Knoten
 und dessen 1-elementiger 1d-Range-Tree (ebenfalls konstante Zeit) angelegt und zurückgegeben. 
 In allen anderen Fällen setzt sich die Laufzeit aus der Zeit für die Konstruktion eines 1d-Range-Trees
-(Zeile 8), der Zeit für den Aufruf beider Rekursionen (Zeilen 13,14) und der Erstellung des Rückgabeknotens (Zeile 15) zusammen:
+(Zeile 8), der Zeit zur Reduzierung der Menge pY (Zeilen 13, 14), der Zeit für den Aufruf beider Rekursionen (Zeilen 15,16) und der Erstellung des Rückgabeknotens (Zeile 17) zusammen:
 
-$$T(n) = T(\lfloor n/2\rfloor) + T(\lceil n/2\rceil) + \underbrace{\mathcal{O}(n) + \mathcal{O}(1)}_{\mathcal{O}(n)}$$
+$$T(n) = T(\lfloor n/2\rfloor) + T(\lceil n/2\rceil) + \underbrace{\mathcal{O}(n) + \mathcal{O}(n) + \mathcal{O}(1)}_{\mathcal{O}(n)}$$
 
-\textit{TODO: Hier noch begründen, weshalb wir den yTree, also 1d-Range-Tree mithilfe der 
-sortierten Liste pY in O(n) Zeit konstruieren können..}
+Der 1d-Range-Tree kann mithilfe der 
+sortierten Liste pY in O(n) Zeit konstruiert werden. Die grobe Idee zur Lösung in O(n) lässt sich 
+wie folgt beschreiben: Es werden je zwei der Knoten am Anfang der Liste entnommen, der entsprechende
+Elternknoten erstellt und dieser am Ende der Liste wieder eingefügt, solange bis nur noch ein Knoten
+in der Liste enthalten ist. Da die Menge der Knoten eines binären Baums in $\mathcal{O}(n)$ liegt, 
+benötigt diese Prozedur ebenfalls $\mathcal{O}(n)$ Zeit. 
 
  Die Zeit für die Erstellung des Rückgabeknotens inklusive anderer
 konstanter Operationen wie z.B. der verwendeten IF-Abfragen kann mit $\mathcal{O}(1)$ abgeschätzt
@@ -158,6 +168,70 @@ $T(n) = \mathcal{O}(n \log n)$ bekannt. Die hier vorgestellte Berechnung/Konstru
 2d-Range-Trees benötigt also ebenfalls $\mathcal{O}(n \log n)$ Zeit.
 
 \section*{Aufgabe 2 - dynamische Segmentbäume}
+Wir haben ein Universum $U$ gegeben. Sei weiterhin ein dynamischer Segmentbaum in Form eines AVL-Baums über diesem Universum gegeben. Dieser beinhaltet bereits eine Menge $I$ von Intervallen. 
+
+Im Folgenden beschreiben wir zunächst das Einfügen eines neuen Intervalls $I_n = [a,b]$:
+
+\begin{itemize}
+ \item Fall 1 ( $a \wedge b \in U$ ): 
+    Füge $I_n$ nach bekannter Prozedur in den Segmentbaum ein.
+ \item Fall 2 ( $a \vee b  \notin U$)
+    \begin{itemize}
+     \item Erweitere das Universum $U$ wie folgt: $U = U \cup \left\{a,b\right\}$
+     \item Aktualisiere den AVL-Baum entsprechend für $a$ bzw. $b$. Dabei werden die in der 
+     AVL-Einfügeoperation verwendeten Rotationen wie folgt angepasst/erweitert:
+     \begin{itemize}
+      \item Im Falle einer Rechts-Rotation:
+      
+   
+      \begin{tikzpicture}
+	[scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
+	\node (n1) at (5,10) {};
+	\node (n2) at (4,8) {};
+	\node (n3) at (3,6) {};
+	\node (n4) at (6,8) {y};
+	\node (n5) at (5,6) {x};
+	\node (n6) at (7,6) {$a_3$};
+	\node (n7) at (4,4) {$a_1$};
+	\node (n8) at (6,4) {$a_2$};
+	
+	\node (n9) at (12,10) {};
+	\node (n10) at (11,8) {};
+	\node (n11) at (10,6) {};
+	\node (n12) at (13,8) {x};
+	\node (n13) at (12,6) {$a_1$};
+	\node (n14) at (14,6) {y};
+	\node (n15) at (13,4) {$a_2$};
+	\node (n16) at (15,4) {$a_3$};
+
+
+	\foreach \from/\to in {n1/n2,n2/n3,n1/n4,n4/n5,n4/n6,n5/n7,n5/n8, n9/n10,n10/n11,n9/n12,n12/n13,n12/n14,n14/n15,n14/n16}
+	  \draw (\from) -- (\to);
+
+      \end{tikzpicture}
+      
+      Bei der Rechts-Rotation um den Knoten y müssen die jeweils zugeordneten Intervall-Listen
+      wie folgt angepasst werden:
+    
+      \begin{itemize}
+       \item Die Intervall-Liste von $a_1$ wird erweitert um die Liste von x, also $L(a_1) = L(a_1) \cup L(x)$
+       \item Der Knoten x erhält als neue Intervall-Liste die Liste von y.
+       \item Der K
+      \end{itemize}
+
+      
+      \item Im Falle einer Links-Rotation: Verfahre analog zum Fall einer Rechts-Rotation.
+     \end{itemize}
+
+    \end{itemize}
+
+\end{itemize}
+
+
+
+
+
+
 \section*{Aufgabe 3 - Punkt-Rechteck-Anfragen}
 
 
