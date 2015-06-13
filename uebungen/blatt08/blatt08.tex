@@ -85,6 +85,8 @@ showstringspaces=false}
 
 %Graphen/Trees zeichnen:
 \usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 
 
 %itemize items richtig ausrichten (nicht links überlappen!)
@@ -168,62 +170,78 @@ $T(n) = \mathcal{O}(n \log n)$ bekannt. Die hier vorgestellte Berechnung/Konstru
 2d-Range-Trees benötigt also ebenfalls $\mathcal{O}(n \log n)$ Zeit.
 
 \section*{Aufgabe 2 - dynamische Segmentbäume}
-Wir haben ein Universum $U$ gegeben. Sei weiterhin ein dynamischer Segmentbaum in Form eines AVL-Baums über diesem Universum gegeben. Dieser beinhaltet bereits eine Menge $I$ von Intervallen. 
+Wir haben ein Universum $U$ mit $|U| = N$ gegeben. Sei weiterhin ein dynamischer Segmentbaum in Form eines AVL-Baums über diesem Universum gegeben. Dieser beinhaltet bereits eine Menge $I$ von Intervallen. 
 
-Im Folgenden beschreiben wir zunächst das Einfügen eines neuen Intervalls $I_n = [a,b]$:
+Im Folgenden beschreiben wir zunächst das \textbf{Einfügen} eines neuen Intervalls $I_n = [a,b]$:
 
 \begin{itemize}
- \item Fall 1 ( $a \wedge b \in U$ ): 
-    Füge $I_n$ nach bekannter Prozedur in den Segmentbaum ein.
- \item Fall 2 ( $a \vee b  \notin U$)
+ \item Fall 1 ( $a \in U \wedge b \in U$ ): 
+    Füge $I_n$ nach bekannter Prozedur in den Segmentbaum ein. Dies geht bekanntermaßen 
+    in $\mathcal{O}(\log N)$ Zeit.
+ \item Fall 2 ( $a  \notin U \vee b  \notin U$)
     \begin{itemize}
      \item Erweitere das Universum $U$ wie folgt: $U = U \cup \left\{a,b\right\}$
-     \item Aktualisiere den AVL-Baum entsprechend für $a$ bzw. $b$. Dabei werden die in der 
-     AVL-Einfügeoperation verwendeten Rotationen wie folgt angepasst/erweitert:
-     \begin{itemize}
-      \item Im Falle einer Rechts-Rotation:
-      
-   
-      \begin{tikzpicture}
-	[scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
-	\node (n1) at (5,10) {};
-	\node (n2) at (4,8) {};
-	\node (n3) at (3,6) {};
-	\node (n4) at (6,8) {y};
-	\node (n5) at (5,6) {x};
-	\node (n6) at (7,6) {$a_3$};
-	\node (n7) at (4,4) {$a_1$};
-	\node (n8) at (6,4) {$a_2$};
+     \item Für jedes neue Element $x \in \{a,b\}$ führe jeweils folgende Schritte aus:
+     
+	\begin{figure}[!htb]
+	   		\subfigure[Elternknoten ein $\leq$ Knoten ($b$ durch gestrichelte Linie gekennzeichnet)]{\includegraphics[width=0.5\textwidth]{aufgabe02_1}} 
+   		\subfigure[Elternknoten ein $<$ Knoten ($b$ durch gestrichelte Linie gekennzeichnet)]{\includegraphics[width=0.5\textwidth]{aufgabe02}} 
+	\end{figure} 
 	
-	\node (n9) at (12,10) {};
-	\node (n10) at (11,8) {};
-	\node (n11) at (10,6) {};
-	\node (n12) at (13,8) {x};
-	\node (n13) at (12,6) {$a_1$};
-	\node (n14) at (14,6) {y};
-	\node (n15) at (13,4) {$a_2$};
-	\node (n16) at (15,4) {$a_3$};
+     \begin{enumerate}
+     	\item Führe eine Binärsuche nach $x$ durch. Wir landen dabei in einem Blattknoten $b$
+     	mit einem offenen Intervall $(i,j)$. 
+     	\item Wir entfernen $b$ aus dem Baum, merken uns jedoch den Elternknoten $p(b)$ 
+     	und die Knotenliste $b_{KL}$ von $b$.
+     	\item Wir erstellen neue Knoten für die Intervalle $(i,x)$, $[x,x]$ und $(x,j)$
+     	\item Weiterhin erstellen wir die Knoten "`$\leq x$"' und "`$< x$"'.
+     	\item Falls $p(b)$ ein "`$<$"'-Knoten ist, entfernen wir die Knotenliste $p(b)_{KL}$ von $p(b)$
+     	und fügen sie zum Knoten "`$\leq x$"' hinzu.
+     	\item Alle neu erstellten Knoten bis auf "`$(x,j)$"' speichern wir nun in einer Liste $L$ mit folgender Reihenfolge:
+     	L = \circled{$\leq x$}, \circled{$< x$}, \circled{$(i,x)$}, \circled{$[x,x]$}
+     	\item Falls $p(b)$ ein "`$<$"'-Knoten ist, entnehmen 
+     	wir den Knoten $p(b)$ und seinen rechten Kindknoten $rc(p(b))$ aus dem Baum und fügen sie
+     	in dieser Reihenfolge am Ende der Liste $L$ ein. 
+     	\item Nun fügen wir auch "`$[x,j]$"' am Ende der Liste $L$ ein.
+     	\item Schließlich durchlaufen wir die Liste $L$ vom Anfang bis zum Ende und fügen 
+     	die entsprechenden Knoten nacheinander in den AVL-Baum ein. 
+     	
+     	Die Abbildungen (a) und (b) illustrieren die Änderungen, welche im Fall eines "`$\leq$"'- 
+     	und eines "`$<$"'-Elternknotens $p(b)$ bewirkt werden.
+     	
+     	\item Um eine richtige Verteilung der ursprünglichen Intervalle im aktualisierten
+     	Segmentbaum sicherzustellen, wenden wir noch folgende Operation an: 
+     	Wir interpretieren den Knoten "`$\leq x$"' als Wurzelknoten eines eigenen Segmentbaums und
+     	fügen nacheinander alle Intervalle $I_b$ der Knotenliste $b_{KL}$, welche wir uns zuvor gemerkt haben, in dem "`Segmentbaum"' "`$\leq x$"' ein.
+     	\item Insgesamt ist der aktualisierte Baum nun wieder in einem gültigen Zustand bzgl. des 
+     	aktualisierten Universums $U$ und der zuvor bereits gespeicherten Intervalle $I$.
+     	\item Das neue Intervall $I_n = [a,b]$ kann nun nach der bekannten Prozedur 
+     	in $\mathcal{O}(\log N_n)$ ($N_n$ ist Größe des aktualisierten Universums $U$) Zeit im Baum eingefügt werden.
 
+     \end{enumerate}
+\end{itemize}
 
-	\foreach \from/\to in {n1/n2,n2/n3,n1/n4,n4/n5,n4/n6,n5/n7,n5/n8, n9/n10,n10/n11,n9/n12,n12/n13,n12/n14,n14/n15,n14/n16}
-	  \draw (\from) -- (\to);
+Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen wir wie folgt vor:
 
-      \end{tikzpicture}
-      
-      Bei der Rechts-Rotation um den Knoten y müssen die jeweils zugeordneten Intervall-Listen
-      wie folgt angepasst werden:
-    
-      \begin{itemize}
-       \item Die Intervall-Liste von $a_1$ wird erweitert um die Liste von x, also $L(a_1) = L(a_1) \cup L(x)$
-       \item Der Knoten x erhält als neue Intervall-Liste die Liste von y.
-       \item Der K
-      \end{itemize}
-
-      
-      \item Im Falle einer Links-Rotation: Verfahre analog zum Fall einer Rechts-Rotation.
-     \end{itemize}
-
-    \end{itemize}
+\begin{itemize}
+	\item Fall 1 ($\exists I_i = [a_i, \_] \in U, \exists I_j = [\_, b_j] \in U: \qquad a = a_i \wedge b = b_j \wedge I_i \neq I_a \wedge I_j \neq I_a $):
+	
+	Streiche $I_a$ nach bekannter Prozedur aus dem Segmentbaum. Dies geht bekanntermaßen in 
+	$\mathcal{O}(\log N)$ Zeit. 
+	\item Fall 2 ($\neg(\exists I_i = [a_i, \_] \in U, \exists I_j = [\_, b_j] \in U: \qquad a = a_i \wedge b = b_j \wedge I_i \neq I_a \wedge I_j \neq I_a )$):
+	
+	In diesem Fall streichen wir zunächst ebenfalls $I_a$ nach bekannter Prozedur aus dem Segmentbaum.
+	Allerdings existieren nun ein oder zwei Punkte $x \in \{a,b\}$, welche nicht mehr Intervallendpunkt
+	irgendeines verbliebenen Intervalls $I_i$ sind. D.h., der aktuelle Segmentbaum speichert diese
+	Punkte $x$ unnötigerweise, was einen höheren Speicherbedarf der Datenstruktur bedeutet.
+	Deshalb beschreiben wir im Folgenden, wie wir nun jeweils auch einen solchen Punkt $x$ aus dem Segmentbaum
+	entfernen:
+	
+	\begin{enumerate}
+		\item Zunächst aktualisieren wir $U$ mit $U = U\setminus \{x\}$
+		\item 
+	\end{enumerate}
+\end{itemize}
 
 \end{itemize}
 
