@@ -221,6 +221,29 @@ Im Folgenden beschreiben wir zunächst das \textbf{Einfügen} eines neuen Interv
      \end{enumerate}
 \end{itemize}
 
+Zur besseren Übersicht hier die gleichen Schritte noch einmal in abgekürzter Schreibweise in
+Pseudocode:
+
+\begin{lstlisting}
+Insert(T, x)
+	b = binarySearch(T, x);  //Wir erhalten ein Blatt b eines offenen Intervalls (i,j)
+	bParent = parent(b);
+	bNodelist = nodeList(b);
+	avlDelete(T, b);
+	leqX = new Node(<=x);
+	IF bParent.isSmallerThanNode()
+		leqX.setNodeList(bParent.getNodeList());
+		bParent.deleteNodeList()
+	List L = new List {leqX, new Node(<x), new Node((i,x)), new Node([x,x])}
+	L.addToEndOfList(bParent, rightChild(bParent), new Node([x,j]));
+	FOR EACH node in L
+		avlInsert(T, node);
+	FOR EACH node in bNodelist
+		avlInsert(rootNode = leqX, node);
+	insertInterval(T, I = [a,b]);
+	
+\end{lstlisting}
+
 Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen wir wie folgt vor:
 
 \begin{itemize}
@@ -280,13 +303,7 @@ die Liste der zugehörigen x-Intervalle $k_L$ durch einen Verweis auf
 den Segmentbaum $sY$, welcher die korrespondierenden y-Intervalle der (zu den x-Intervallen 
 gehörenden) Rechtecke beinhaltet. Das Traversieren benötigt dabei $\mathcal{O}(n)$ Zeit.
 Die Konstruktion eines Segmentbaums $sY$ benötigt $\mathcal{O}(\log(n) \cdot \log^2(n))$ Zeit. Da bei einer Gleichverteilung der Intervalle im $sX$ die Anzahl der Elemente in einem $sY$ im Mittel bei $\frac{2 \cdot h  \cdot n}{2 \cdot n} = h = log(n)$ liegt.
-Die Gesamtlaufzeit liegt also bei $\mathcal{O}(n \log n) + \mathcal{O}(n) + \mathcal{O}(\log n \log^2 n)$ ergo $\mathcal{O}(n \log n)$.
-
-
-TODO: Hier berechnen, wie lange es dauert, für alle maximal n * 2 log n Intervalleinträge
-Segmentbäume aufzubauen...
-
-TODO: Insgesamtlaufzeit ,also O(n log n) + O(n) + O(??) = O(???)... angeben.. 
+Die Gesamtlaufzeit liegt also bei $\mathcal{O}(n \log n) + \mathcal{O}(n) + \mathcal{O}(\log n \log^2 n)$ ergo $\mathcal{O}(n \log n)$. 
 
 \subsubsection*{Speicherbedarf}
 Der Speicherbedarf für den "`gewöhnlichen"' Segmentbaum liegt  in $\mathbb{O}(n \log n)$ (Beachte: Das Universum $U$ ist nur über den Endpunkten der x-Intervalle
@@ -374,21 +391,6 @@ der Ergebnismenge).
 \end{itemize}
 
 Anmerkung: Bei nicht Achsenparallelen Rechtecken werden die Intervalle mit den extremen x und y Werten als Intervall in den Segmentbaum aufgenommen, das kann in $\mathcal{O}(1)$ berechnet werden. Bei der Ausgabe eines Rechteckes muss noch geprüft werden, ob der Suchpunkt im Rechteck befindet, dies ist ebenfalls in $\mathcal{O}(1)$ möglich (z. B. durch zwei Dreiecke).
-
-
-
-TODOs:
-\begin{itemize}
-	\item Da wir nicht wissen, ob alle Rechtecke achsenparallel sind, nehmen wir bei nicht-achsenparallelen Rechtecken die jeweiligen y-/x-Extrempunkte und erstellen auf dieser Grundlage
-	ein neues Rechteck, welches das alte umfasst -> Bei der Anfrage auf das echte Rechteck
-	referenzieren und in konstanter Zeit testen, ob Punkt im Rechteck liegt (z.B. zweimal 
-	Test für Dreieck)
-	\item Bezug Intervalle / Rechtecke vllt noch in Datenstrruktur verpacken?? (Simon: Ach das finde etwas übertrieben aber ein guter Punkt ^^) 
-	\item Darauf hinweisen, dass wir nur von $n$ statt $N$ sprechen, da $N = |U|$ in unserem
-	Fall nur um einen kleinen Faktor von $n$ abhängt, da $U$ auf n Intervallen aufgebaut wird 
-	und nicht unabhängig von $n$ groß ist. 
-\end{itemize}
-
 
 \end{document}
 
