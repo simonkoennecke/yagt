@@ -128,7 +128,7 @@ greifen wir auf folgende Vorüberlegungen zurück:
 
 	\begin{figure}[!htb]
 \subfigure[Beispiel von 3 überlappungsfreien 4-Ecken, dessen Kanten (z,i) nicht alle 
-"`verbunden"'/zur Deckung gebracht werden können]{\includegraphics[width=0.25\textwidth]{aufgabe1a}} 
+	"`verbunden"'/zur Deckung gebracht werden können]{\includegraphics[width=0.25\textwidth]{aufgabe1a}} 
 	\end{figure} 
 
 Wir überlegen uns nun, für welche Werte von $m$ die genannte Forderung eingehalten 
@@ -204,13 +204,52 @@ $W_4$ noch hierhin zeichnen... (https://de.wikipedia.org/wiki/4-D)
 \subsection*{(c)}
 
 \section*{Aufgabe 3 - Konvexe Hülle}
-(vielleicht insgesamt drauf hinweisen, dass keine gleichen Punkte vorkommen, 
-bzw. wie in der Vorlesung angenommen x,y,z immer verschieden sind für alle punkte)
+
+Die Punkte in S seien in allgemeiner Lage. Es wird die konvexe Hülle für $CH(S)$ gesucht. Wir nehmen an das $|S| = n$, wobei $n > 6$ ist. Der Fall $n \leq 6$ ist durch die allgemeine Lage von $S$ offensichtlich. Für $n > 6$:
+
+\begin{enumerate}
+	\item Es werden für alle Dimension die Extrempunkte $T  = \{x_{1_{min}}$, $x_{1_{max}}, \dots, x_{d_{min}}$, $x_{d_{max}}\}$ gesucht. Es wird ein Datenstruktur $F$ mit den Facetten des durch $T$ implizierten Octaeders angelegt. Des Weiteren wird der Schwerpunkt $g = \frac{\sum_{p \in T}{ p } }{|T|}$ berechnet. Die Menge $S = S \setminus T$ wird aktualisiert. Dies initiale Schritte liegen in $\mathcal{O}(n)$.
+	\item Solange $S \neq \varnothing$:
+
+	\begin{itemize}
+		\item Wir wählen ein Punkt $p \in S$ und aktualisieren $S = S \setminus p$ und erstellen ein Strecke $s = \overline{gp}$.
+		
+		\item Berechne die Menge aller geschnitten Flächen: $I = \{f \quad | \quad s \cap f \neq \varnothing, (s \cap f) \neq p, f \in F\}$. $I$ sei ein Queue. Dazu prüfen wir iterativ alle Facetten in $F$ also $\mathcal{O}(n)$. Für die weitere Betrachtung nehmen wir an, dass das innere der konvexen Hülle als der Schnitt der negativen Halbräume aller
+		durch die Flächen $f \in F$ definierten Ebenen gegeben ist.
+		
+		TODO: $|I| > 1$ wenn Strecke s eine Kante oder Ecke schneidet
+		
+		\item Fall $p \in CH(T)$ ist die Menge $I = \varnothing$, weiter mit Punkt zwei.
+		\item Fall $p \notin CH(T)$ ist die Menge $I \neq \varnothing$. 
+		\begin{itemize}
+			\item Betrachte alle Nachbarn von $I$ und füge die Nachbarn zu $I$ hinzu, wenn $p$ im positiven Halbraum vom jeweiligen Nachbarn liegt. Falls ein Nachbar $r$ im negativen
+Halbraum liegt, markiere genau die Kante, welche $r$ mit seinem Nachbarn in $I$ teilt. Dies wird solange wiederholt bis kein Nachbar $r$ mehr existiert, für den gilt, $p$ liegt im positiven Halbraum von $r$.  Die Laufzeit liegt $\mathcal{O}(n)$. 
+			\item  Solange $I \neq \varnothing$
+			\begin{itemize}
+				\item Wähle $i = I.dequeue()$
+				\item $F = triangulation(F,i,p)$ 
+				\item Die drei Operation liegen in $\mathcal{O}(1)$.
+			\end{itemize}
+		\end{itemize}
+		
+	\end{itemize}		
+\end{enumerate}
+
+Die Funktion $triangulation(F,i,p)$ wird wie folgt definiert:
+
+\begin{itemize}
+	\item $F = F \setminus i$
+	\item 
+	\item Fall $i = I_1$: $F = F \cup \Delta_{i,p}$, wobei $\Delta_{i,p}$ die Menge aller Dreiecke der Triangulierung von $p$ mit der Facette $i$ ist.
+	\item Sonst: 
+\end{itemize}
+
 Idee: (keine Ahnung, ob dies noch ein Brute-Force-Algo ist..
 Nehme Extremwerte für x, y, z , und verbinde diese, 
 dann hat man eine Art Octaeder, nur mit "`verzogenen"' Dreiecken als Flächen, also nicht regelmäßig..
 
-Berechne den Schwerpunkt $s$ durch Aufaddierung der Extremwerte und Division durch 6.
+
+Berechne den Schwerpunkt $s$ durch akkumulieren der Extremwerte und Division durch 6.
 
 Ab jetzt für jeden neuen Punkt $p$:
 
