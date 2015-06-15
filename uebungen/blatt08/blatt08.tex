@@ -239,7 +239,7 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 	
 	\begin{enumerate}
 		\item Zunächst aktualisieren wir $U$ mit $U = U\setminus \{x\}$
-		\item 
+		\item Gehe zum $X$
 	\end{enumerate}
 \end{itemize}
 
@@ -373,7 +373,7 @@ Einfluss auf die Laufzeit.
 der Ergebnismenge).
 \end{itemize}
 
-
+Anmerkung: Bei nicht Achsenparallelen Rechtecken werden die Intervalle mit den extremen x und y Werten als Intervall in den Segmentbaum aufgenommen, das kann in $\mathcal{O}(1)$ berechnet werden. Bei der Ausgabe eines Rechteckes muss noch geprüft werden, ob der Suchpunkt im Rechteck befindet, dies ist ebenfalls in $\mathcal{O}(1)$ möglich (z. B. durch zwei Dreiecke).
 
 
 
@@ -383,7 +383,7 @@ TODOs:
 	ein neues Rechteck, welches das alte umfasst -> Bei der Anfrage auf das echte Rechteck
 	referenzieren und in konstanter Zeit testen, ob Punkt im Rechteck liegt (z.B. zweimal 
 	Test für Dreieck)
-	\item Bezug Intervalle / Rechtecke vllt noch in Datenstrruktur verpacken??
+	\item Bezug Intervalle / Rechtecke vllt noch in Datenstrruktur verpacken?? (Simon: Ach das finde etwas übertrieben aber ein guter Punkt ^^) 
 	\item Darauf hinweisen, dass wir nur von $n$ statt $N$ sprechen, da $N = |U|$ in unserem
 	Fall nur um einen kleinen Faktor von $n$ abhängt, da $U$ auf n Intervallen aufgebaut wird 
 	und nicht unabhängig von $n$ groß ist. 
