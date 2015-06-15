@@ -359,13 +359,13 @@ sekundäre Binärsuchen überlegen wir uns folgendes:
 	die korrespondierenden $sY$-Bäume durchsuchen müssen, wissen wir, dass wir je nach Verteilung
 	der $n$ Intervalleinträge im ursprünglichen Baum nun Bäume mit entsprechender Größe durchsuchen müssen. Die Anfragezeit in Abhängigkeit von x (der Anzahl der Knoten des Anfragepfades, über welche die $n$ Intervalleinträge gleichverteilt sind) ist mit folgender Funktion bestimmt:
 	
-	$$q(x) = \log(\frac{n}{x}) * x$$
+	$$q(x) = \log(\frac{n}{x}) \cdot x$$
 	
 	Da $q(x \in [1,\frac{n}{2}))$ streng monoton steigend ist und die Länge des Anfragepfades
 	höchstens $x = \log n$ Knoten enthält, ist das Maximum der Anfragezeit bei gleich verteilten
-	Intervalleinträgen mit $q(\log n) = \log(\frac{n}{\log n}) * \log n = 
-	(\log n - \log(\log n)) * \log n = \log^2 n - 
-	\underbrace{\log(\log(n)) * \log n}_{\leq \mathcal{O}(\log^2 n)} = \mathcal{O}(\log^2 n)$ gegeben.
+	Intervalleinträgen mit $q(\log n) = \log(\frac{n}{\log n}) \cdot \log n = 
+	(\log n - \log(\log n)) \cdot \log n = \log^2 n - 
+	\underbrace{\log(\log(n)) \cdot \log n}_{< \quad \mathcal{O}(\log^2 n)} = \mathcal{O}(\log^2 n)$ gegeben.
 	
 	Um sicherzustellen, dass sich die Anfragezeit nicht weiter verschlimmern kann, falls
 	die ursprünglichen Intervalle nicht über $x$ Knoten gleichverteilt, sondern auch ungleich
@@ -373,7 +373,7 @@ sekundäre Binärsuchen überlegen wir uns folgendes:
 	wie sich die Anfragezeit beim "`Kippen"' um einen Faktor $\alpha \in (0,1)$ in die eine, bzw. andere Richtung ändert:
 	
 	\begin{align*}
-	g(\alpha \in (0,1)) &= \log (\alpha * n) + \log((1-\alpha) * n) \\
+	g(\alpha \in (0,1)) &= \log (\alpha \cdot n) + \log((1-\alpha) \cdot n) \\
 						&= \log (\alpha) + \log(n) + \log (1-\alpha) + \log (n) \\
 						&= 2\log (n) + \underbrace{\log(\alpha) + \log (1-\alpha)}_{= k(\alpha)}						
 	\end{align*}
