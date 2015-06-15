@@ -396,7 +396,7 @@ Einfluss auf die Laufzeit.
 der Ergebnismenge).
 \end{itemize}
 
-Anmerkung: Bei nicht Achsenparallelen Rechtecken werden die Intervalle mit den extremen x und y Werten als Intervall in den Segmentbaum aufgenommen, das kann in $\mathcal{O}(1)$ berechnet werden. Bei der Ausgabe eines Rechteckes muss noch geprüft werden, ob der Suchpunkt im Rechteck befindet, dies ist ebenfalls in $\mathcal{O}(1)$ möglich (z. B. durch zwei Dreiecke).
+Anmerkung: Die nicht Achsenparallelen Rechtecken werden durch das Intervalle $I_i$ mit den extremen von x und y Werten beschrieben ($I_i = [x_min, x_max] x [y_min, y_max]$). Die Intervalle $I_i$ werden in den Segmentbaum aufgenommen. Das berechnen der Intervalle $I_i$ liegt in $\mathcal{O}(1)$. Bei der Ausgabe eines Rechteckes muss noch geprüft werden, ob der Suchpunkt im Rechteck sich befindet, dies ist ebenfalls in $\mathcal{O}(1)$ möglich (z. B. durch zwei Dreiecke).
 
 \end{document}
 
