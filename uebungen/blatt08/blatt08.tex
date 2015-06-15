@@ -365,7 +365,7 @@ sekundäre Binärsuchen überlegen wir uns folgendes:
 	höchstens $x = \log n$ Knoten enthält, ist das Maximum der Anfragezeit bei gleich verteilten
 	Intervalleinträgen mit $q(\log n) = \log(\frac{n}{\log n}) \cdot \log n = 
 	(\log n - \log(\log n)) \cdot \log n = \log^2 n - 
-	\underbrace{\log(\log(n)) \cdot \log n}_{< \quad \mathcal{O}(\log^2 n)} = \mathcal{O}(\log^2 n)$ gegeben.
+	\underbrace{\log(\log(n)) \cdot \log n}_{o(\log^2 n)} = \mathcal{O}(\log^2 n)$ gegeben.
 	
 	Um sicherzustellen, dass sich die Anfragezeit nicht weiter verschlimmern kann, falls
 	die ursprünglichen Intervalle nicht über $x$ Knoten gleichverteilt, sondern auch ungleich
