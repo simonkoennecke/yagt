@@ -226,7 +226,8 @@ Pseudocode:
 
 \begin{lstlisting}
 Insert(T, x)
-	b = binarySearch(T, x);  //Wir erhalten ein Blatt b eines offenen Intervalls (i,j)
+	//Wir erhalten ein Blatt b eines offenen Intervalls (i,j)
+	b = binarySearch(T, x); 
 	bParent = parent(b);
 	bNodelist = nodeList(b);
 	avlDelete(T, b);
@@ -262,8 +263,10 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 	
 \begin{lstlisting}
 Delete(T, x)
+	//Aktualisiere das Universum
+	Universe.delete(x);
 	//Wir erhalten ein Blatt b eines geschlossenes Intervalls [i,i]
-	b = binarySearch(T, x);  
+	b = binarySearch(T, x); 
 	bParent = parent(b);
 	bParentOfParent = parent(bParent);
 	avlDelete(T, bParent);
@@ -271,9 +274,15 @@ Delete(T, x)
 	updateInterval(a, bParent.leftChild.IntervalMinValue);
 	
 	if bParentOfParent.leftChild = bParent
-		bParentOfParent.parent = bParentOfParent.rightChild;
+		if bParentOfParent.parent.leftChild = bParentOfParent
+			bParentOfParent.parent.leftChild = bParentOfParent.rightChild;
+		else
+			bParentOfParent.parent.rightChild = bParentOfParent.rightChild;
 	else
-		bParentOfParent.parent = bParentOfParent.leftChild;
+		if bParentOfParent.parent.leftChild = bParentOfParent
+			bParentOfParent.parent.leftChild = bParentOfParent.leftChild;
+		else
+			bParentOfParent.parent.rightChild = bParentOfParent.leftChild;
 	
 \end{lstlisting}
 
