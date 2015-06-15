@@ -239,7 +239,7 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 	
 	\begin{enumerate}
 		\item Zunächst aktualisieren wir $U$ mit $U = U\setminus \{x\}$
-		\item 
+		\item Gehe zum $X$
 	\end{enumerate}
 \end{itemize}
 
@@ -256,8 +256,8 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 Als Datenstruktur für effiziente Punkt-Rechteck-Anfragen verwenden wir einen Segmentbaum, 
 welcher in seinen Knoten nicht auf Listen, sondern auf weitere Segmentbäume verweist.
 Der primäre Segmentbaum ist über den x-Intervallen der $n$ Rechtecke definiert. 
-Dabei ist das Universum $U$ des Segmentbaums als die Vereinigung aller Intervall-Endpunkte
-der x-Intervalle gegeben. 
+Dabei ist das Universum $U_x$ des Segmentbaums als die Vereinigung aller Intervall-Endpunkte
+der x-Intervalle gegeben. Des Weiteren schätzen wir die Größe von $U_x$ und $U_y$ mit jeweils $\mathcal{O}(n)$ ab.
 
 Die in einem "`gewöhnlichen"' Segmentbaum vorhandenen Listen geben Aufschluss über die 
 Intervalle, in denen ein Punkt der Anfrage liegt. Wir ersetzen diese Listen von 
@@ -270,8 +270,8 @@ in welchen Rechtecken sich der Punkt befindet.
 
 \subsubsection*{Vorverarbeitungszeit}
 Um die beschriebene Datenstruktur zu erhalten, konstruieren wir zunächst einen
-"`gewöhnlichen"' Segmentbaum $S$ über dem Universum $U$ und allen 
-$n$ x-Intervallen. Da die Größe von $U$ in unserem Fall 
+"`gewöhnlichen"' Segmentbaum $S$ über dem Universum $U_x$ und allen 
+$n$ x-Intervallen. Da die Größe von $U_x$ in unserem Fall 
 lediglich Endpunkte der $n$ x-Intervalle umfasst und somit in $\mathcal{O}(n)$ liegt, 
 kann die Laufzeit zur Konstruktion mit $\mathcal{O}(n \log n)$ abgeschätzt werden.
 
@@ -279,7 +279,10 @@ Anschließend traversieren wir den Baum $S$ und ersetzen an jedem Knoten $k$ (fa
 die Liste der zugehörigen x-Intervalle $k_L$ durch einen Verweis auf 
 den Segmentbaum $sY$, welcher die korrespondierenden y-Intervalle der (zu den x-Intervallen 
 gehörenden) Rechtecke beinhaltet. Das Traversieren benötigt dabei $\mathcal{O}(n)$ Zeit.
-Die Konstruktion eines Segmentbaums $sY$ benötigt ....
+Die Konstruktion eines Segmentbaums $sY$ benötigt $\mathcal{O}(\log(n) \cdot \log^2(n))$ Zeit. Da bei einer Gleichverteilung der Intervalle im $sX$ die Anzahl der Elemente in einem $sY$ im Mittel bei $\frac{2 \cdot h  \cdot n}{2 \cdot n} = h = log(n)$ liegt.
+Die Gesamtlaufzeit liegt also bei $\mathcal{O}(n \log n) + \mathcal{O}(n) + \mathcal{O}(\log n \log^2 n)$ ergo $\mathcal{O}(n \log n)$.
+
+
 TODO: Hier berechnen, wie lange es dauert, für alle maximal n * 2 log n Intervalleinträge
 Segmentbäume aufzubauen...
 
@@ -370,7 +373,7 @@ Einfluss auf die Laufzeit.
 der Ergebnismenge).
 \end{itemize}
 
-
+Anmerkung: Bei nicht Achsenparallelen Rechtecken werden die Intervalle mit den extremen x und y Werten als Intervall in den Segmentbaum aufgenommen, das kann in $\mathcal{O}(1)$ berechnet werden. Bei der Ausgabe eines Rechteckes muss noch geprüft werden, ob der Suchpunkt im Rechteck befindet, dies ist ebenfalls in $\mathcal{O}(1)$ möglich (z. B. durch zwei Dreiecke).
 
 
 
@@ -380,7 +383,7 @@ TODOs:
 	ein neues Rechteck, welches das alte umfasst -> Bei der Anfrage auf das echte Rechteck
 	referenzieren und in konstanter Zeit testen, ob Punkt im Rechteck liegt (z.B. zweimal 
 	Test für Dreieck)
-	\item Bezug Intervalle / Rechtecke vllt noch in Datenstrruktur verpacken??
+	\item Bezug Intervalle / Rechtecke vllt noch in Datenstrruktur verpacken?? (Simon: Ach das finde etwas übertrieben aber ein guter Punkt ^^) 
 	\item Darauf hinweisen, dass wir nur von $n$ statt $N$ sprechen, da $N = |U|$ in unserem
 	Fall nur um einen kleinen Faktor von $n$ abhängt, da $U$ auf n Intervallen aufgebaut wird 
 	und nicht unabhängig von $n$ groß ist. 
