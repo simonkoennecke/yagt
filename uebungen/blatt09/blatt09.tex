@@ -205,25 +205,45 @@ $W_4$ noch hierhin zeichnen... (https://de.wikipedia.org/wiki/4-D)
 
 \section*{Aufgabe 3 - Konvexe Hülle}
 
-Die Punkte in S seien in allgemeiner Lage. Es wird die konvexe Hülle für $CH(S)$ gesucht. Wir nehmen an das $|S| = n$, wobei $n > 6$ ist. Der Fall $n \leq 6$ ist durch die allgemeine Lage von $S$ offensichtlich. Für $n > 6$:
+Letztendliche Idee:
+\begin{itemize}
+ \item Durchlaufe menge $S$ und schmeiß alle Facetten raus, in dessen positiven Halbraum $p$ liegt.
+ \item Durchlauf reduzierte Menge $S$ nochmals und prüfe für jede Facette $f$, ob $f$ eine Kante ohne Nachbarn besitzt.
+ Wenn ja, dann verbinde beide Eckpunkte dieser Kante mit $p$. Das machen wir $n$ mal. Damit haben wir O($n^2$)..
+ FERTIG :-).
+ 
+ 
+\end{itemize}
+
+
+Sei die Punktmenge $S$ in allgemeiner Lage.
+Es wird die konvexe Hülle $CH(S)$ gesucht. Das Innere der konvexen Hülle kann als der Schnitt der negativen Halbräume aller durch die Facetten von $CH(S)$ definierten Ebenen aufgefasst werden.
+Wir nehmen an, dass $|S| = n$, wobei $n > 6$ ist. 
+Der Fall $n \leq 6$ ist durch die allgemeine Lage von $S$ offensichtlich. Für $n > 6$:
 
 \begin{enumerate}
-	\item Es werden für alle Dimension die Extrempunkte $T  = \{x_{1_{min}}$, $x_{1_{max}}, \dots, x_{d_{min}}$, $x_{d_{max}}\}$ gesucht. Es wird ein Datenstruktur $F$ mit den Facetten des durch $T$ implizierten Octaeders angelegt. Des Weiteren wird der Schwerpunkt $g = \frac{\sum_{p \in T}{ p } }{|T|}$ berechnet. Die Menge $S = S \setminus T$ wird aktualisiert. Dies initiale Schritte liegen in $\mathcal{O}(n)$.
+	\item Es werden für alle Dimensionen die Extrempunkte $T  = \{x_{1_{min}}$, $x_{1_{max}}, \dots, x_{d_{min}}$, $x_{d_{max}}\}$ gesucht. 
+	    Es wird ein Datenstruktur $F$ mit den Facetten des durch $T$ implizierten Octaeders angelegt. Des Weiteren wird der Schwerpunkt $g = \frac{\sum_{p \in T}{ p } }{|T|}$ berechnet. Die Menge $S$ wird durch $S = S \setminus T$ aktualisiert. Diese initialen Schritte liegen in $\mathcal{O}(n)$.
 	\item Solange $S \neq \varnothing$:
 
 	\begin{itemize}
-		\item Wir wählen ein Punkt $p \in S$ und aktualisieren $S = S \setminus p$ und erstellen ein Strecke $s = \overline{gp}$.
+		\item Wir wählen ein Punkt $p \in S$ und aktualisieren $S$ durch $S = S \setminus p$ und erstellen ein Strecke $s = \overline{gp}$.
 		
-		\item Berechne die Menge aller geschnitten Flächen: $I = \{f \quad | \quad s \cap f \neq \varnothing, (s \cap f) \neq p, f \in F\}$. $I$ sei ein Queue. Dazu prüfen wir iterativ alle Facetten in $F$ also $\mathcal{O}(n)$. Für die weitere Betrachtung nehmen wir an, dass das innere der konvexen Hülle als der Schnitt der negativen Halbräume aller
-		durch die Flächen $f \in F$ definierten Ebenen gegeben ist.
+		\item Berechne die Menge aller geschnittenen Flächen: $I = \{f \quad | \quad s \cap f \neq \varnothing, (s \cap f) \neq p, f \in F\}$. $I$ sei ein Queue. 
+		Dazu prüfen wir iterativ alle Facetten in $F$. Dies benötigt $\mathcal{O}(n)$ Zeit.
 		
-		TODO: $|I| > 1$ wenn Strecke s eine Kante oder Ecke schneidet
+		\item Fall $I = \varnothing$, weiter mit Punkt zwei. Da $p$ in der konvexe Hülle liegt.
 		
-		\item Fall $p \in CH(T)$ ist die Menge $I = \varnothing$, weiter mit Punkt zwei.
-		\item Fall $p \notin CH(T)$ ist die Menge $I \neq \varnothing$. 
+		\item Fall $I \neq \varnothing$. Füge $p$ zu konvexe Hülle hinzu.
+		
 		\begin{itemize}
-			\item Betrachte alle Nachbarn von $I$ und füge die Nachbarn zu $I$ hinzu, wenn $p$ im positiven Halbraum vom jeweiligen Nachbarn liegt. Falls ein Nachbar $r$ im negativen
-Halbraum liegt, markiere genau die Kante, welche $r$ mit seinem Nachbarn in $I$ teilt. Dies wird solange wiederholt bis kein Nachbar $r$ mehr existiert, für den gilt, $p$ liegt im positiven Halbraum von $r$.  Die Laufzeit liegt $\mathcal{O}(n)$. 
+			\item Füge alle alle Faceten
+			
+			\item Betrachte alle Nachbarn von $I$ und füge die Nachbarn zu $I$ hinzu, wenn $p$ im positiven Halbraum vom jeweiligen Nachbarn liegt. 
+			Falls ein Nachbar $r$ im negativen Halbraum liegt, markiere genau die Kante, welche $r$ mit seinem Nachbarn in $I$ teilt. 
+			Dies wird solange wiederholt bis kein Nachbar $r$ mehr existiert, für den gilt, $p$ liegt im positiven Halbraum von $r$.  
+			Die Laufzeit liegt $\mathcal{O}(n)$. 
+			
 			\item  Solange $I \neq \varnothing$
 			\begin{itemize}
 				\item Wähle $i = I.dequeue()$
