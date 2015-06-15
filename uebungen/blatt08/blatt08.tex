@@ -260,23 +260,27 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 	Deshalb beschreiben wir im Folgenden, wie wir nun jeweils auch einen solchen Knoten $x$ aus dem Segmentbaum
 	entfernen:
 	
-	\begin{enumerate}
-		\item Zunächst aktualisieren wir $U$ mit $U = U\setminus \{x\}$
-		\item Gehe zum Knoten $x$.
-	\end{enumerate}
-\end{itemize}
-
-\end{itemize}
-
-
 \begin{lstlisting}
 Delete(T, x)
-	b = binarySearch(T, x);  //Wir erhalten ein Blatt b eines offenen Intervalls (i,j)
+	//Wir erhalten ein Blatt b eines geschlossenes Intervalls [i,i]
+	b = binarySearch(T, x);  
 	bParent = parent(b);
-	avlDelete(T, b);
+	bParentOfParent = parent(bParent);
+	avlDelete(T, bParent);
+	a = Successor(T, b);
+	updateInterval(a, bParent.leftChild.IntervalMinValue);
+	
+	if bParentOfParent.leftChild = bParent
+		bParentOfParent.parent = bParentOfParent.rightChild;
+	else
+		bParentOfParent.parent = bParentOfParent.leftChild;
+	
 \end{lstlisting}
 
 
+\end{itemize}
+
+\end{itemize}
 
 
 \section*{Aufgabe 3 - Punkt-Rechteck-Anfragen}
