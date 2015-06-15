@@ -262,13 +262,19 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 	
 	\begin{enumerate}
 		\item Zunächst aktualisieren wir $U$ mit $U = U\setminus \{x\}$
-		\item Gehe zum $X$
+		\item Gehe zum Knoten $x$.
 	\end{enumerate}
 \end{itemize}
 
 \end{itemize}
 
 
+\begin{lstlisting}
+Delete(T, x)
+	b = binarySearch(T, x);  //Wir erhalten ein Blatt b eines offenen Intervalls (i,j)
+	bParent = parent(b);
+	avlDelete(T, b);
+\end{lstlisting}
 
 
 
@@ -306,7 +312,7 @@ Die Konstruktion eines Segmentbaums $sY$ benötigt $\mathcal{O}(\log(n) \cdot \l
 Die Gesamtlaufzeit liegt also bei $\mathcal{O}(n \log n) + \mathcal{O}(n) + \mathcal{O}(\log n \log^2 n)$ ergo $\mathcal{O}(n \log n)$. 
 
 \subsubsection*{Speicherbedarf}
-Der Speicherbedarf für den "`gewöhnlichen"' Segmentbaum liegt  in $\mathbb{O}(n \log n)$ (Beachte: Das Universum $U$ ist nur über den Endpunkten der x-Intervalle
+Der Speicherbedarf für den "`gewöhnlichen"' Segmentbaum liegt  in $\mathcal{O}(n \log n)$ (Beachte: Das Universum $U$ ist nur über den Endpunkten der x-Intervalle
 definiert/konstruiert). Hinzu kommt der Speicherbedarf für alle Segmentbäume $sY$.
 Dieser lässt sich wie folgt abschätzen:
 
@@ -359,7 +365,7 @@ sekundäre Binärsuchen überlegen wir uns folgendes:
 	höchstens $x = \log n$ Knoten enthält, ist das Maximum der Anfragezeit bei gleich verteilten
 	Intervalleinträgen mit $q(\log n) = \log(\frac{n}{\log n}) * \log n = 
 	(\log n - \log(\log n)) * \log n = \log^2 n - 
-	\underbrace{\log(\log(n)) * \log n}_{= o(\log^2 n)} = \mathcal{O}(\log^2 n)$ gegeben.
+	\underbrace{\log(\log(n)) * \log n}_{\leq \mathcal{O}(\log^2 n)} = \mathcal{O}(\log^2 n)$ gegeben.
 	
 	Um sicherzustellen, dass sich die Anfragezeit nicht weiter verschlimmern kann, falls
 	die ursprünglichen Intervalle nicht über $x$ Knoten gleichverteilt, sondern auch ungleich
