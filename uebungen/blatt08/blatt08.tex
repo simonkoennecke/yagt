@@ -254,10 +254,10 @@ Zum \textbf{Streichen} eines Intervalls $I_a = [a,b]$ aus dem Segmentbaum gehen 
 	\item Fall 2 ($\neg(\exists I_i = [a_i, \_] \in U, \exists I_j = [\_, b_j] \in U: \qquad a = a_i \wedge b = b_j \wedge I_i \neq I_a \wedge I_j \neq I_a )$):
 	
 	In diesem Fall streichen wir zunächst ebenfalls $I_a$ nach bekannter Prozedur aus dem Segmentbaum.
-	Allerdings existieren nun ein oder zwei Punkte $x \in \{a,b\}$, welche nicht mehr Intervallendpunkt
+	Allerdings existieren nun ein oder zwei Knoten $x \in \{a,b\}$, welche nicht mehr Intervallendpunkt
 	irgendeines verbliebenen Intervalls $I_i$ sind. D.h., der aktuelle Segmentbaum speichert diese
-	Punkte $x$ unnötigerweise, was einen höheren Speicherbedarf der Datenstruktur bedeutet.
-	Deshalb beschreiben wir im Folgenden, wie wir nun jeweils auch einen solchen Punkt $x$ aus dem Segmentbaum
+	Knoten $x$ unnötigerweise, was einen höheren Speicherbedarf der Datenstruktur bedeutet.
+	Deshalb beschreiben wir im Folgenden, wie wir nun jeweils auch einen solchen Knoten $x$ aus dem Segmentbaum
 	entfernen:
 	
 	\begin{enumerate}
