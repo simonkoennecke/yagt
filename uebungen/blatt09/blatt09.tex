@@ -216,7 +216,7 @@ Zu Vereinfachung nehmen wir an, dass die ersten vier Punkte aus $S$ in allgemein
 		\item Fall 2: $p$ liegt außerhalb der konvexen Hülle von $F$.
 	\begin{itemize}
 		\item Entferne die Facetten bei dem $p$ im positiven Halbraum liegt.
-		\item Durchlaufe wiederholt die Facetten und verbinde die Eckpunkte von Kanten ohne Nachbarn mit dem Punkt $p$.
+		\item Durchlaufe wiederholt die Facetten und verbinde die Eckpunkte von Kanten ohne Nachbarn mit dem Punkt $p$ und füge die resultierende Facette zu $F$ hinzu.
 	\end{itemize}
 	\end{itemize}
 \end{itemize}
@@ -225,6 +225,11 @@ Zu Vereinfachung nehmen wir an, dass die ersten vier Punkte aus $S$ in allgemein
 \subsubsection*{Laufzeit}
 
 Die Prüfung, ob ein Punkt $p$ in der konvexen Hülle $F$ liegt, kann wie folgt realisiert werden: Der Punkt $p$ liegt im negativen Halbraum aller Facetten aus $F$. Dies kann in $\mathcal{O}(n)$ Zeit geprüft werden, da die Anzahl der Facetten zu den Punkten durch die Eulerformel in linearer Abhängigkeit stehen. Das Entfernen der Facetten, bei dem der Punkt $p$ im positiven Halbraum liegt, benötigt $\mathcal{O}(n)$ Zeit. Das finden der Eckpunkte von Kanten ohne Nachbarn wird durch wiederholten durchlaufen aller übrig geblieben Facetten ermöglicht und benötigt ebenfalls $\mathcal{O}(n)$ Zeit. Insgesamt wird $\mathcal{O}(3n)$ Zeit benötigt. Dies Vorgehen wird für $n$ Punkte wiederholt und daraus resultiert die Gesamtlaufzeit $\mathcal{O}(n^2)$.
+
+\subsubsection*{Speicherplatzbedarf}
+
+Im Initialzustand sind die Facetten $F$ Dreiecke und beim inkrementellen hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen. Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$.
+
 
 \end{document}
 
