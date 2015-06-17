@@ -205,95 +205,26 @@ $W_4$ noch hierhin zeichnen... (https://de.wikipedia.org/wiki/4-D)
 
 \section*{Aufgabe 3 - Konvexe Hülle}
 
-Letztendliche Idee:
+Sei die Punktmenge $S \subset \mathcal{R}^3$ gegeben, $|S| = n$ und $F$ die Facetten der konvexen Hülle. Der negative Halbraum einer Facette $F$ beschreibt das innere der konvexen Hülle. 
+Zu Vereinfachung nehmen wir an, dass die ersten vier Punkte aus $S$ in allgemeiner Lage sind. Somit spannen die ersten vier Punkte ein Tetraeder und die vier Facetten des Tetraeder werden in $F$ gespeichert. Anschließen werden die Punkte inkrementell hinzugefügt unter Anwendung folgenden Algorithmus:
+
 \begin{itemize}
- \item Durchlaufe menge $S$ und schmeiß alle Facetten raus, in dessen positiven Halbraum $p$ liegt.
- \item Durchlauf reduzierte Menge $S$ nochmals und prüfe für jede Facette $f$, ob $f$ eine Kante ohne Nachbarn besitzt.
- Wenn ja, dann verbinde beide Eckpunkte dieser Kante mit $p$. Das machen wir $n$ mal. Damit haben wir O($n^2$)..
- FERTIG :-).
- 
- 
-\end{itemize}
-
-
-Sei die Punktmenge $S$ in allgemeiner Lage.
-Es wird die konvexe Hülle $CH(S)$ gesucht. Das Innere der konvexen Hülle kann als der Schnitt der negativen Halbräume aller durch die Facetten von $CH(S)$ definierten Ebenen aufgefasst werden.
-Wir nehmen an, dass $|S| = n$, wobei $n > 6$ ist. 
-Der Fall $n \leq 6$ ist durch die allgemeine Lage von $S$ offensichtlich. Für $n > 6$:
-
-\begin{enumerate}
-	\item Es werden für alle Dimensionen die Extrempunkte $T  = \{x_{1_{min}}$, $x_{1_{max}}, \dots, x_{d_{min}}$, $x_{d_{max}}\}$ gesucht. 
-	    Es wird ein Datenstruktur $F$ mit den Facetten des durch $T$ implizierten Octaeders angelegt. Des Weiteren wird der Schwerpunkt $g = \frac{\sum_{p \in T}{ p } }{|T|}$ berechnet. Die Menge $S$ wird durch $S = S \setminus T$ aktualisiert. Diese initialen Schritte liegen in $\mathcal{O}(n)$.
-	\item Solange $S \neq \varnothing$:
-
+	\item Solange $S \neq \varnothing$
+	\begin{itemize}	
+		\item Wähle ein Punkt $p \in S$ und aktualisiere $S$ mit $S = S \setminus {p}$
+		\item Fall 1: $p$ liegt in der konvexen Hülle von $F$, weiter mit dem ersten Schritt.
+		\item Fall 2: $p$ liegt außerhalb der konvexen Hülle von $F$.
 	\begin{itemize}
-		\item Wir wählen ein Punkt $p \in S$ und aktualisieren $S$ durch $S = S \setminus p$ und erstellen ein Strecke $s = \overline{gp}$.
-		
-		\item Berechne die Menge aller geschnittenen Flächen: $I = \{f \quad | \quad s \cap f \neq \varnothing, (s \cap f) \neq p, f \in F\}$. $I$ sei ein Queue. 
-		Dazu prüfen wir iterativ alle Facetten in $F$. Dies benötigt $\mathcal{O}(n)$ Zeit.
-		
-		\item Fall $I = \varnothing$, weiter mit Punkt zwei. Da $p$ in der konvexe Hülle liegt.
-		
-		\item Fall $I \neq \varnothing$. Füge $p$ zu konvexe Hülle hinzu.
-		
-		\begin{itemize}
-			\item Füge alle alle Faceten
-			
-			\item Betrachte alle Nachbarn von $I$ und füge die Nachbarn zu $I$ hinzu, wenn $p$ im positiven Halbraum vom jeweiligen Nachbarn liegt. 
-			Falls ein Nachbar $r$ im negativen Halbraum liegt, markiere genau die Kante, welche $r$ mit seinem Nachbarn in $I$ teilt. 
-			Dies wird solange wiederholt bis kein Nachbar $r$ mehr existiert, für den gilt, $p$ liegt im positiven Halbraum von $r$.  
-			Die Laufzeit liegt $\mathcal{O}(n)$. 
-			
-			\item  Solange $I \neq \varnothing$
-			\begin{itemize}
-				\item Wähle $i = I.dequeue()$
-				\item $F = triangulation(F,i,p)$ 
-				\item Die drei Operation liegen in $\mathcal{O}(1)$.
-			\end{itemize}
-		\end{itemize}
-		
-	\end{itemize}		
-\end{enumerate}
-
-Die Funktion $triangulation(F,i,p)$ wird wie folgt definiert:
-
-\begin{itemize}
-	\item $F = F \setminus i$
-	\item 
-	\item Fall $i = I_1$: $F = F \cup \Delta_{i,p}$, wobei $\Delta_{i,p}$ die Menge aller Dreiecke der Triangulierung von $p$ mit der Facette $i$ ist.
-	\item Sonst: 
+		\item Entferne die Facetten bei dem $p$ im positiven Halbraum liegt.
+		\item Durchlaufe wiederholt die Facetten und verbinde die Eckpunkte von Kanten ohne Nachbarn mit dem Punkt $p$.
+	\end{itemize}
+	\end{itemize}
 \end{itemize}
 
-Idee: (keine Ahnung, ob dies noch ein Brute-Force-Algo ist..
-Nehme Extremwerte für x, y, z , und verbinde diese, 
-dann hat man eine Art Octaeder, nur mit "`verzogenen"' Dreiecken als Flächen, also nicht regelmäßig..
 
+\subsubsection*{Laufzeit}
 
-Berechne den Schwerpunkt $s$ durch akkumulieren der Extremwerte und Division durch 6.
-
-Ab jetzt für jeden neuen Punkt $p$:
-
-\begin{itemize}
-	\item Teste für alle aktuell bekannten begrenzenden Flächen (am Anfang die 8
-	beschriebenen Dreiecke), welche die Strecke
-	von $\overline{sp}$ schneidet. 
-	\item Falls kein Schnitt mit irgendeiner der Flächen (Dreiecke) existiert fahre mit dem nächsten Punkt fort
-	\item Falls ein Schnittpunkt $i$ mit Fläche $f$ existiert, ersetze $f$ (1 Dreieck) durch
-	die neu entstehenden 3 Flächen (neue 3 Dreiecke), welche alle in der neuen Ecke $p$
-	zusammenlaufen.. (alle bekannten Flächen zu jedem Zeitpunkt in $F$ gespeichert. )
-\end{itemize}
-
-Laufzeit:
-
-Finden der Extremwerte geht in O(n).
-
-Testen aller Flächen auf einen Schnitt mit der Strecke $\overline{sp}$ geht in O(1) *
-O(aktuelle Anzahl der Flächen in $F$)
-
-Also, wenn für jeden neuen Punkt $p$ neue Flächen entstehen (also 3 pro Punkt) , 
-müssen in jedem Schritt 3 neue Flächen hinzugefügt werden und entsprechend steigt
-die Zeit für die Überprüfung auf einen Schnitt in den nächsten Schritten..
-Insgesamt sowas wie 0($n^2$)..
+Die Prüfung, ob ein Punkt $p$ in der konvexen Hülle $F$ liegt, kann wie folgt realisiert werden: Der Punkt $p$ liegt im negativen Halbraum aller Facetten aus $F$. Dies kann in $\mathcal{O}(n)$ Zeit geprüft werden, da die Anzahl der Facetten zu den Punkten durch die Eulerformel in linearer Abhängigkeit stehen. Das Entfernen der Facetten, bei dem der Punkt $p$ im positiven Halbraum liegt, benötigt $\mathcal{O}(n)$ Zeit. Das finden der Eckpunkte von Kanten ohne Nachbarn wird durch wiederholten durchlaufen aller übrig geblieben Facetten ermöglicht und benötigt ebenfalls $\mathcal{O}(n)$ Zeit. Insgesamt wird $\mathcal{O}(3n)$ Zeit benötigt. Dies Vorgehen wird für $n$ Punkte wiederholt und daraus resultiert die Gesamtlaufzeit $\mathcal{O}(n^2)$.
 
 \end{document}
 
