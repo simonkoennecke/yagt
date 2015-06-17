@@ -209,7 +209,7 @@ Für die Größe von $W_{f_{d-1}(d)}$ gilt $|W_{f_{d-1}(d)}| = 2*d$.
 \section*{Aufgabe 3 - Konvexe Hülle}
 
 Sei die Punktmenge $S \subset \mathcal{R}^3$ gegeben, $|S| = n$ und $F$ die Facetten der konvexen Hülle. Der Schnitt der negativen Halbräume der Facetten aus $F$ beschreiben das Innere der konvexen Hülle. 
-Zur Vereinfachung nehmen wir an, dass die ersten vier Punkte aus $S$ in allgemeiner Lage sind. Somit spannen die ersten vier Punkte ein Tetraeder und die vier Facetten des Tetraeders werden in $F$ gespeichert. Anschließend werden die Punkte inkrementell hinzugefügt unter Anwendung des folgenden Algorithmus:
+Zur Vereinfachung nehmen wir an, dass die Punkte aus $S$ in allgemeiner Lage sind. Somit spannen die ersten vier Punkte ein Tetraeder und die vier Facetten des Tetraeders werden in $F$ gespeichert. Anschließend werden die Punkte inkrementell hinzugefügt unter Anwendung des folgenden Algorithmus:
 
 \begin{itemize}
 	\item Solange $S \neq \varnothing$
@@ -232,7 +232,7 @@ Die Prüfung, ob ein Punkt $p$ in der konvexen Hülle $F$ liegt, kann wie folgt 
 
 \subsubsection*{Speicherplatzbedarf}
 
-Im Initialzustand sind die Facetten $F$ Dreiecke und beim inkrementellen Hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen. Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$.
+Im Initialzustand sind die Facetten $F$ Dreiecke und beim inkrementellen Hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen. Da die Punkte in allgemeiner Lage sind können die Facetten nur Dreiecke sein. Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$.
 
 
 \end{document}
