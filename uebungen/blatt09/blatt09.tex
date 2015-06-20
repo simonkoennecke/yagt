@@ -79,6 +79,9 @@ showstringspaces=false}
 \linespread{1.5}
 \usepackage{setspace}
 
+%
+\usepackage{cancel}
+
 %Figure Captions mit Fußnoten
 \usepackage{footnote}
 %\setlength{\parindent}{0pt} 
@@ -234,6 +237,56 @@ Die Prüfung, ob ein Punkt $p$ in der konvexen Hülle $F$ liegt, kann wie folgt 
 
 Im Initialzustand sind die Facetten $F$ Dreiecke und beim inkrementellen Hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen. Da die Punkte in allgemeiner Lage sind können die Facetten nur Dreiecke sein. Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$.
 
+\section*{"`Alternative Lösung zu Aufgabe 3"'}
 
+Sei die Punktmenge $S \subset \mathcal{R}^3$ gegeben mit $|S| = n$.
+Zur Vereinfachung nehmen wir an, dass die Punkte aus $S$ in allgemeiner Lage sind.
+Die konvexe Hülle $CH(S)$ kann daher auch als eine Menge von Facetten $F$, welche Dreiecke sind, 
+aufgefasst werden.
+
+Da je 3 Punkte $\in S$ eine Ebene definieren und wir wissen, dass für alle Flächen $\in F$ 
+gelten muss, dass alle anderen Punkte $\in S$ nur in einem durch diese Fläche/Ebene definierten Halbraum
+liegen dürfen, haben wir uns folgenden einfachen Brute-Force-Algorithmus überlegt:
+
+\textbf{
+\begin{itemize}
+	\item Für alle "`3-Punkte-Kombinationen"' $(p_i, p_j, p_k)$ von Punkten $\in S$:
+	\begin{itemize}
+		\item Prüfe, ob jeweils alle anderen Punkte $\{p | p \in S \wedge p \neq p_i, p_j, p_k\}$ 
+		nur in einem der Halbräume der durch $(p_i, p_j, p_k)$ definierten Ebene liegen.	
+		\item Falls ja, füge die Facette $f$ mit den Eckpunkten $p_i, p_j, p_k$ zu $F$ hinzu.
+	\end{itemize}
+\end{itemize}
+}
+
+Es werden also ganz im Sinne von Brute-Force stumpf alle möglichen 3er-Kombinationen von Punkten
+durchgetestet und nur die als Facette zur Lösung $F$ hinzugefügt, welche die Eigenschaft einer
+zur konvexen Hülle $CH(S)$ gehörenden Facette erfüllen. 
+
+\subsubsection*{Laufzeit}
+Die Laufzeit des Brute-Force-Algorithmus lässt sich relativ einfach wie folgt abschätzen:
+\begin{itemize}
+	\item Es gibt genau  $\binom{n}{3}$  "`3-Punkte-Kombinationen"'. Der beschriebene Schleifenrumpf
+	wird daher genau $\binom{n}{3}$ mal ausgeführt.
+	\item Das Prüfen, ob alle anderen Punkte nur in einem der Halbräume liegen, kann mit 
+	$\mathcal{O}(n)$ abgeschätzt werden, denn die Prüfung für einen Punkt benötigt bekanntermaßen
+	konstante Zeit. Dies muss entsprechend für $n-3 = \mathcal{O}(n)$ Punkte wiederholt werden.
+	\item Falls die Prüfung positiv verläuft, kann die entsprechende Facette $f$ in konstanter Zeit
+	in $F$ eingefügt werden (in einer konkreten Implementation z.B. durch Anhängen von $f$ 
+	an eine Liste $F$).
+\end{itemize}
+
+Damit ergibt sich eine Gesamtlaufzeit von:
+
+\begin{align*}
+\binom{n}{3} * (\underbrace{\mathcal{O}(n) + \mathcal{O}(1))}_{= \mathcal{O}(n)} &= 
+\frac{n!}{3! * (n-3)!} * \mathcal{O}(n) \\
+&= \frac{n * (n-1) * (n-2) * \cancel{(n-3) * \dots * 1}}{6 * \cancel{(n-3)!}} * \mathcal{O}(n) \\
+&= \frac{n^3 - 3n^2 + 2n}{6} * \mathcal{O}(n) \\
+&= \mathcal{O}(n^3) * \mathcal{O}(n) \\&= \mathcal{O}(n^4)
+\end{align*}
+
+\subsubsection*{Speicherplatzbedarf}
+TODO:.. 
 \end{document}
 
