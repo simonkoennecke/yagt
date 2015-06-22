@@ -197,9 +197,10 @@ Dann sind die $d-1$-dimensionalen Facetten $W_{f_{d-1}(d)}$ von $W_d$ gegeben mi
 
 $W_{f_{d-1}(d)} = \{\vec{0}_d + x_1 e_{i1} + ... + x_{d-1} e_{i(d-1)}\} \cup \{\vec{1}_d - x_1 e_{i1} - ... - x_{d-1} e_{i(d-1)}\}$, wobei $x_i \in [0,1]$ und $e_{ij}$ Spaltenvektor von $I$.
 Zudem muss für ein beliebiges aber festes $i$ gelten, dass die Vektoren $e_{ij}$ paarweise
-verschieden sind. Und es muss für ein beliebiges aber festes $i_1$ 
-und ein beliebiges aber festes $i_2$ mit $i_1 \neq i_2$ gelten: 
-$\{e_{i_1j}\} \neq \{e_{i_2}j\}$.
+verschieden sind. Und es muss für ein beliebiges aber festes $i_a$ 
+und ein beliebiges aber festes $i_b$ mit $i_a \neq i_b$ gelten: 
+$\{e_{i_1j}\} \neq \{e_{i_2j}\}$ (Es sollen alle Kombinationen von Einheitsvektoren in den Gleichungen berücksichtigt werden).
+
 Für die Größe von $W_{f_{d-1}(d)}$ gilt $|W_{f_{d-1}(d)}| = 2*d$.
 
 \subsection*{(b)}
@@ -209,36 +210,25 @@ Für die Größe von $W_{f_{d-1}(d)}$ gilt $|W_{f_{d-1}(d)}| = 2*d$.
 
 \subsection*{(c)}
 
+\begin{figure}[!htb]
+\subfigure[Skizze eines $S_4$ Hypertetraeders]{\includegraphics[width=0.25\textwidth]{hypertetraeder}} 
+\end{figure} 
+
+Wie in Aufgabe a greifen wir im Folgenden wieder auf die Einheitsmatrix $I$ und deren Einheitsvektoren $\vec{e_i}$ etc. zurück.
+Die $d-1$-dimensionalen Facetten $S_{f_{d-1}(d)}$ von $S_d$ sind gegeben mit:
+
+$\{\vec{0_d} + x_1\vec{e_{i_1}} +  x_2\vec{e_{i_2}} + \dots  + x_{d-1}\vec{e_{i_{d-1}}} | \sum_{i=1}^{d-1}x_i \leq 1\} \cup 
+\{\vec{e_1} + x_1  (\vec{e_2}-\vec{e_1}) + x_2(\vec{e_3}-\vec{e_1}) + \dots + x_{d-1}(\vec{e_{d-1}} - \vec{e_1}) |  \sum_{i=1}^{d-1} x_i \leq 1 \}$
+
+Zudem muss für ein beliebiges aber festes $i$ gelten, dass die Vektoren $e_{ij}$ paarweise
+verschieden sind. Und es muss für ein beliebiges aber festes $i_a$ 
+und ein beliebiges aber festes $i_b$ mit $i_a \neq i_b$ gelten: 
+$\{e_{i_aj}\} \neq \{e_{i_bj}\}$ (Es sollen alle Kombinationen von Einheitsvektoren in den Gleichungen berücksichtigt werden).
+
+Für die Größe von $S_{f_{d-1}(d)}$ gilt $|S_{f_{d-1}(d)}| = d+1$.
+
+
 \section*{Aufgabe 3 - Konvexe Hülle}
-
-Sei die Punktmenge $S \subset \mathcal{R}^3$ gegeben, $|S| = n$ und $F$ die Facetten der konvexen Hülle. Der Schnitt der negativen Halbräume der Facetten aus $F$ beschreiben das Innere der konvexen Hülle. 
-Zur Vereinfachung nehmen wir an, dass die Punkte aus $S$ in allgemeiner Lage sind. Somit spannen die ersten vier Punkte ein Tetraeder und die vier Facetten des Tetraeders werden in $F$ gespeichert. Anschließend werden die Punkte inkrementell hinzugefügt unter Anwendung des folgenden Algorithmus:
-
-\begin{itemize}
-	\item Solange $S \neq \varnothing$
-	\begin{itemize}	
-		\item Wähle ein Punkt $p \in S$ und aktualisiere $S$ mit $S = S \setminus \{p\}$
-		\item Fall 1: $p$ liegt in der konvexen Hülle von $F$, weiter mit dem ersten Schritt.
-		\item Fall 2: $p$ liegt außerhalb der konvexen Hülle von $F$.
-	\begin{itemize}
-		\item Entferne die Facetten aus $F$ bei denen $p$ im positiven Halbraum liegt.
-		\item Durchlaufe wiederholt die Facetten aus $F$ und wähle von den Facetten alle Kanten $ e = (i,j) $, welche keine Nachbarfacette haben.
-		Füge jeweils die neue Facette mit den Eckpunkten $i,j$ und $p$ zu $F$ hinzu, wobei die Nachbarschaftsbeziehungen entsprechend aktualisiert werden. 
-	\end{itemize}
-	\end{itemize}
-\end{itemize}
-
-
-\subsubsection*{Laufzeit}
-
-Die Prüfung, ob ein Punkt $p$ in der konvexen Hülle $F$ liegt, kann wie folgt realisiert werden: Der Punkt $p$ liegt im negativen Halbraum aller Facetten aus $F$. Dies kann in $\mathcal{O}(n)$ Zeit geprüft werden, da die Anzahl der Facetten zu den Punkten durch die Eulerformel in linearer Abhängigkeit stehen. Das Entfernen der Facetten, bei dem der Punkt $p$ im positiven Halbraum liegt, benötigt $\mathcal{O}(n)$ Zeit. Das finden der Eckpunkte von Kanten ohne Nachbarn wird durch wiederholtes Durchlaufen aller übrig geblieben Facetten ermöglicht und benötigt ebenfalls $\mathcal{O}(n)$ Zeit. Insgesamt wird $\mathcal{O}(3n)$ Zeit benötigt. Dies Vorgehen wird für $n$ Punkte wiederholt und daraus resultiert die Gesamtlaufzeit $\mathcal{O}(n^2)$.
-
-\subsubsection*{Speicherplatzbedarf}
-
-Im Initialzustand sind die Facetten $F$ Dreiecke und beim inkrementellen Hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen. Da die Punkte in allgemeiner Lage sind können die Facetten nur Dreiecke sein. Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$.
-
-\section*{"`Alternative Lösung zu Aufgabe 3"'}
-
 Sei die Punktmenge $S \subset \mathcal{R}^3$ gegeben mit $|S| = n$.
 Zur Vereinfachung nehmen wir an, dass die Punkte aus $S$ in allgemeiner Lage sind.
 Die konvexe Hülle $CH(S)$ kann daher auch als eine Menge von Facetten $F$, welche Dreiecke sind, 
@@ -287,6 +277,8 @@ Damit ergibt sich eine Gesamtlaufzeit von:
 \end{align*}
 
 \subsubsection*{Speicherplatzbedarf}
-TODO:.. 
+Beim Hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen (Da die Punkte in allgemeiner Lage sind können die Facetten nur Dreiecke sein.). Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$
+
+
 \end{document}
 

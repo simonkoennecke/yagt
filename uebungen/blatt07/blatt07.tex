@@ -105,7 +105,38 @@ showstringspaces=false}
 \maketitle
 
 \section*{Aufgabe 1 - Anfragezeit bei $k$d-Bäumen}
+Um die Anfragezeit der orthogonalen Bereichssuche für einen 3-dimensionalen $k$d-Baum zu analysieren, 
+beschränken wir uns zunächst auf die Betrachtung einer Anfrage mit 
+der Eingabe einer Achsen-parallelen Linie (statt z.B. eines gesamten Quaders).
+Dazu betrachten wir die vom Algorithmus besuchten Knoten (ausgenommen der dazwischen liegenden
+Punkte) und stellen in Abhängigkeit des aktuellen Knotens folgende Rekursionsgleichungen auf:
 
+\begin{align}
+ Q(n) &= 1 + 1 Q(\frac{n}{2}) &| kte Dimension\\
+ Q(n) &= 1 + 2 Q(\frac{n}{2}) &| (k-1)te-Dimension\\
+ Q(n) &= 1 + 2 Q(\frac{n}{2}) &| (k-2)te-Dimension\\ 
+\end{align}
+
+Diese Gleichungen ergeben sich aus der genannten Bereichsabfrage, welche
+orthogonal zur $k$ten Dimension ist. 
+
+Wir fassen im Weiteren 3 Ebenen des Baums zusammen und erhalten durch Einsetzen folgende Rekursionsgleichung:
+
+\begin{align}
+Q(n) = 4 Q(\frac{n}{8}) + \mathcal{O}(1) \\
+Q(n) = 4^i + \sum_{a=0}^{i-1} 2^a \mathcal{O}(1), i = \log_8 n
+\end{align}
+
+Aus der Gleichung 5 lässt sich die verallgemeinerte Form (Gleichung 6) ableiten. 
+
+
+
+Wir können den ersten Summand der Gleichung (6) mit $4^{log_8(n)} = 2^2^{\frac{log_2(n)}{log_2(8)}} =  n^{\frac{2}{3}}$ abschätzen.
+Der zweite Summand $\sum_{a=0}^{\log_8 n -1} 2^a$ lässt sich über die geometrische Summe mit $\mathcal{O}(n^{\frac{2}{3}})$ abschätzen. Damit erhält man insgesamt $2 \mathcal{O}(n^{\frac{2}{3}}) = \mathcal{O}(n^{\frac{2}{3}})$.
+
+Die Laufzeit für eine der genannten orthogonalen Linien kann wie gezeigt mit $\mathcal{O}(n^{\frac{2}{3}})$ 
+abgeschätzt werden. Da im 3-dimensionalen Fall der angefragte Quader 12 Kanten besitzt, erhalten wir
+im schlimmsten Fall eine Laufzeitabschätzung mit $12*\mathcal{O}(n^{\frac{2}{3}}) = \mathcal{O}(n^{\frac{2}{3}})$.
 
 
 \end{document}
