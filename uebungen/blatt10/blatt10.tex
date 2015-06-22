@@ -180,12 +180,34 @@ Unser folgender Algorithmus arbeitet also auf der dualen Darstellung und bestimm
   
  \end{itemize}
  
- Daraus resultiert eine Gesamtlaufzeit von $\mathcal{O}(n) * (\mathcal{O}(n) * (\underbrace{\mathcal{O}(1) + \mathcal{O}(\log n)}_{\mathcal{O}(\log n)})) = \mathcal{O}(n)$
+ Daraus resultiert eine Gesamtlaufzeit von $\mathcal{O}(n) * (\mathcal{O}(n) * (\underbrace{\mathcal{O}(1) + \mathcal{O}(\log n)}_{\mathcal{O}(\log n)})) = \mathcal{O}(n^2 \log n)$
 
 
 
 \section*{Aufgabe 2}
+
+Zur Bearbeitung der Aufgabe greifen wir auf das "`Upper bound theorem"' (McMullen, Shephard 1971) zurück.
+Dieses sagt aus, dass zyklische Polytope unter allen konvexen Polytopen genau diejenigen sind, welche eine größtmögliche Anzahl von Facetten (in Bezug auf eine Dimension $d$ und eine Anzahl von
+Ecken $n$) besitzen.
+
+Ein $d$-dimensionales zyklisches Poplytop ist über die so genannte Momentenkurve im $\mathcal{R}^d$ definiert. Die Momentenkurve ist definiert als:
+
+$$x: \mathcal{R} \rightarrow \mathcal{R}^d, x(t) := [t, t^2, \dots, t^d]^T$$
+
+und das $d$-dimensionale zyklische Polytop (Dimension $d$ mit $n$ Ecken) dann als:
+
+$$C(n,d) := conv\{x(t_1), x(t_2), \dots, x(t_n) \quad|\quad n > d \geq 2, t_1 < t_2 < \dots < t_n\}$$
+
+Entsprechend der Aufgabenstellung wählen wir für ein beliebiges $n \in \mathcal{N}$ nun
+einfach $n$ disjunkte Punkte auf der 4-dimensionalen Momentenkurve. 
+Die darüber definierte konvexe Hülle ist folglich genau jenes zyklisches Polytop $C(n,4)$, 
+für welches wir wissen, dass es die maximale Anzahl von Facetten unter allen konvexen Polytopen
+mit $n$ Ecken in 4 Dimensionen aufweist. 
+
+
 \section*{Aufgabe 3}
+\subsection*{(a)}
+\subsection*{(b)}
 
 \end{document}
 
