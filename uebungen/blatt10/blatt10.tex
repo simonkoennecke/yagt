@@ -204,6 +204,12 @@ Die darüber definierte konvexe Hülle ist folglich genau jenes zyklisches Polyt
 für welches wir wissen, dass es die maximale Anzahl von Facetten unter allen konvexen Polytopen
 mit $n$ Ecken in 4 Dimensionen aufweist. 
 
+Da jedes zyklische Polytop $C(n,d)$ $k$-nachbarschaftlich mit $k = \lfloor\frac{d}{2}\rfloor $ ist, also im $4
+d$-Fall
+$2$-nachbarschaftlich, wissen wir, dass alle 2er-Kombinationen von Ecken des Polytops
+(also alle Ecken mit jeweils allen anderen Ecken) über eine Kante verbunden sind. Die Anzahl der Kanten, sprich der d-3 dimensionalen
+Facetten, lässt sich demnach über den Binomialkoeffizienten mit $\binom{n}{2} = \frac{n!}{2! * (n-2)!}
+= \frac{n * (n-1)}{2} = \frac{n^2 - n}{2} = \mathcal{O}(n^2)$ abschätzen. 
 
 \section*{Aufgabe 3}
 \subsection*{(a)}
