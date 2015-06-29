@@ -1,0 +1,382 @@
+%Dokumententyp
+\documentclass[a4paper]{article}
+
+\usepackage[a4paper,left=2cm, right=3cm, top=2cm]{geometry}
+
+%Kodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%Grafiken einbinden
+\usepackage{graphicx}
+\usepackage{subfigure} 
+
+%Position von Grafiken und Tabellen erzwingen:
+\usepackage{float}
+
+%URLs im Literaturverzeichnis
+\usepackage{url}
+
+\usepackage{amsmath}
+
+%Vektoren einfacher angeben:
+\newcommand{\vektor}[1]{\left( \begin{array}{c} #1 \end{array} \right) }
+
+
+%Schriftart Arial:
+% \usepackage{helvet}
+
+%Figures with text around it:
+\usepackage{wrapfig}
+
+\usepackage{listings}
+
+%seitennummern rechts:
+% \usepackage{fancyhdr}
+% \fancyhf{} % clear all header and footers
+% \renewcommand{\headrulewidth}{0pt} % remove the header rule
+% \rfoot{\thepage}
+% \fancypagestyle{plain}{%redefining plain pagestyle
+% \fancyhf %clear all headers and footers fields
+% \fancyhead[R]{\thepage} %prints the page number on the right side of the header
+% }
+
+%Schriftart Times New Roman "like"
+\usepackage{txfonts}
+
+%Sprache
+\usepackage[german]{babel}
+
+%Checkmarks: (usage: \checkmark)
+\usepackage{dingbat}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+ 
+\lstset{language=Java,
+basicstyle=\ttfamily,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=1,
+numbersep=5pt,
+tabsize=4,
+showspaces=false,
+lineskip={-1.5pt},
+showstringspaces=false}
+
+%Tabellenextras
+\usepackage{tabularx}
+
+%Zeilenabstand 1.5
+\linespread{1.5}
+\usepackage{setspace}
+
+%
+\usepackage{cancel}
+
+%Figure Captions mit Fußnoten
+\usepackage{footnote}
+%\setlength{\parindent}{0pt} 
+
+%Graphen/Trees zeichnen:
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+
+%itemize items richtig ausrichten (nicht links überlappen!)
+% \setlist{leftmargin=0}
+
+% %%%%TITELSEITE%%%%%%(
+% \title{ Konzept und Implementierung\\ eines Systems zur \\Anforderung und Verwaltung von virtuellen privaten Clustern}
+% \author{\textbf{\large Bachelorarbeit}}
+% 
+% \date{zur Erlangung des akademischen Grades Bachelor of Science an der Universität Paderborn im Fachbereich Informatik im Studiengang Bachelor Informatik}
+
+% %%%%TITELSEITE%%%%%%)
+
+% \pagestyle{fancy}
+\begin{document}
+
+\title{Algorithmische Geometrie - Sommersemester 2015\\
+       Wichtige Infos für die Klausur}
+\date{}
+\maketitle
+
+\section*{Grundlegende Definitionen}
+
+\subsection*{Punkte, Strecken, Geraden, Ebenen}
+\subsubsection*{Hessesche Normalform}
+Kann verwendet werden, um in konstanter Zeit zu überprüfen, ob ein Punkt auf der Geraden/Ebenen
+liegt und auf welcher Seite links (Wert der Gleichung $<0$) oder
+rechts (Wert der Gleichung $>0$) dieser Punkt liegt.
+
+\subsubsection*{Konvexe Mengen (Polygone, Konvexe Hüllen, ...)}
+\begin{itemize}
+	\item Der Durchschnitt beliebig vieler konvexer Mengen ist konvex.
+	\item Die Konvexe Hülle $CH(S)$ einer Menge $S$ von Punkten ist die kleinste konvexe Menge
+	welche $S$ enthält
+	\item Das Innere eines konvexen Polygons entspricht dem Schnitt der offenen Halbräume rechts
+	aller durch die Kanten definierten Geraden
+\end{itemize}
+
+\section*{Grundlegende Fragestellungen}
+\subsubsection*{Liegt ein Punkt $p$ innerhalb eines konvexen Polygons $P$?}
+Wenn das konvexe Polygon als sortierte Liste der Kanten im Uhrzeigersinn gegeben ist:
+Liegt $p$ immer z.B. im rechten Halbraum/rechts aller durch die Kanten definierten Geraden.
+Dies benötigt pro Kante konstante und insgesamt lineare Zeit $\mathcal{O}(n)$.
+\subsubsection*{Bestimme die Schnittmenge einer Geraden $g$ mit einem konvexen Polygon $P$}
+Für jede einzelne Kante kann der Schnitt in konstanter Zeit bestimmt werden.
+Somit benötigt die Bestimmung der Schnittmenge lineare Zeit $\mathcal{O}(n)$.
+\subsubsection*{Verbesserung durch Balanciert hierarchische Darstellung}
+Die obigen Operationen können, wenn häufig ausgeführt, besser mit BHD in logarithmischer
+Zeit $\mathcal{O}(\log n)$ gelöst werden.
+\subsubsection*{Schnitt konvexer Polygone}
+\begin{itemize}
+	\item Der Schnitt von zwei konvexen Polygonen mit $n$ und $m$ Ecken hat maximal $n + m$ Ecken.
+	\item Wenn zwei Polygone $P$ und $Q$ in BHD-Darstellung gegeben sind, lässt sich in 
+	$\mathcal{O}(\log( n + m ))$ Zeit feststellen ob $P \cap Q = \varnothing$
+\end{itemize}
+\section*{Planare Graphen}
+Ein planarer Graph hat $n$ Ecken, $f$ Facetten und $e$ Kanten.
+\begin{itemize}
+	\item Eulersche Polyederformel: $n + f - e = 2$
+	\item $e \leq 3n - 6$
+	\item $f \leq 2n -4$
+	\item $n \leq 2f -4$
+\end{itemize}
+
+\subsection*{Voronoi-Diagramme}
+\begin{itemize}
+	\item Dual zur entsprechenden Delaunay-Triangulierung
+\end{itemize}
+
+\subsubsection*{Algorithmen zur Konstruktion von Voronoi-Diagrammen}
+\begin{itemize}
+	\item Divide-and-Conquer Ansatz (in linke/rechte Hälfte teilen und beide mischen ($\mathcal{O}(n)$) 
+	benötigt insgesamt $\mathcal{O}(n \log n)$
+	\item Fortune-Sweep (Sweepline-Algorithmus) benötigt $\mathcal{O}(n \log n)$.
+\end{itemize}
+
+\subsection*{Delaunay-Triangulierungen}
+\begin{itemize}
+	\item Dual zum entsprechenden Voronoi-Diagramm
+\end{itemize}
+
+\section*{Suche in ebenen Unterteilungen}
+\subsection*{Post Office Problem}
+Datenstruktur? Anfragezeit etc.?
+
+\section*{Sweepline-Verfahren}
+\begin{itemize}
+	\item Wir verwenden $SLS$ (Sweepline Status) Datenstruktur. Diese gibt Aufschluss über den
+	"`Zustand des Algorithmus"' an der aktuellen Position der Sweepline. Diese ist in der Regel
+	eine Wörterbuch-Datenstruktur, z.B. ein balancierter Suchbaum (z.B. AVL-Baum) 
+	\item Es werden Event Points definiert und behandelt.
+	\item Es gibt eine weitere Datenstruktur $EPS$ (Event-Point-Schedule), mit 
+	der entschieden wird, was der nächste Event Point ist. Dies ist in der Regel eine 
+	Priority-Queue, d.h. Heap o.ä.. Diese wird unter Umständen auch laufend aktualisiert.
+\end{itemize}
+\subsection*{Schnitte von $n$ Strecken in der Ebene}
+Die Menge aller Schnittpunkte von $n$ Strecken kann mit dem Sweepline-Verfahren in $\mathcal{O}(n \log n + k)$ bestimmt werden, wobei $k$ die Anzahl der Schnittpunkte. (Denn es gibt $2n + k$ Ereignispunkte
+und bei jedem Ereignis werden konstant viele Operationen auf den Datenstrukturen $SLS$ bzw. $EPS$ 
+(jeweils logarithmische Zeit) ausgeführt.)
+\subsection*{Triangulierung des Inneren von einfachen Polygonen}
+Geht mit Sweepline in $\mathcal{O}(n \log n)$.
+\subsection*{Fortune Sweep (Voronoi-Diagramm)}
+\begin{itemize}
+	\item $EPS$-Struktur: Wörterbuch
+	\item Event Points: Punkt der Eingabemenge wird überstrichen (Site Event)  
+	und Circle-Event (Schnitt von Spikes) 
+	\item Site Event: Die getroffene Welle wird gespalten und neue Welle/Parabel wird 
+	dazwischen eingefügt (in $SLS$ in $\mathcal{O}(\log n)$).
+	Außerdem wird/werden eventuell? ein neues/neue Circle-Event(s) in $EPS$ eingefügt (rechtester Punkt des Kreises
+	mit Mittelpunkt bei eventuellem Schnittpunkt der Spikes)
+	\item Circle-Event: Zugeordnete Welle wird wieder entfernt.
+	\item Laufzeit ist $\mathcal{O}(n \log n)$ da jeder überstrichene Punkt die Anzahl der Wellen
+	maximal um 2 erhöht (Anzahl der Wellen $\mathcal{O}(n)$). Jedes mal finden außerdem nur konstant viele
+	Operationen an den Datenstrukturen mit jeweils logarithmischer Zeit statt.
+\end{itemize}
+
+\subsection*{Berechnung der Vereinigung von Rechteckflächen}
+\begin{itemize}
+	\item $SLS$: Segmentbaum, welcher Projektionen der geschnittenen Rechtecke in x-Richtung enthält.
+	\item Event Points: x-Koordinate der Ecken der Rechtecke
+	\item $EPS$: Heap der diese enthält.
+\end{itemize}
+\section*{Geometrische Datenstrukturen}
+\subsection*{k-d-Baum}
+Beantwortet orthogonale Bereichsanfragen.
+\begin{itemize}
+	\item Anfragezeit: $\mathcal{O}(n^{1-1/d} + k)$
+	\item Platzbedarf?
+	\item Vorverarbeitungszeit?
+\end{itemize}
+\subsection*{Range-Tree / Bereichsbaum}
+Beantwortet orthogonale Bereichsanfragen.
+\begin{itemize}
+	\item Anfragezeit: $\mathcal{O}(\log^d n + k)$
+	\item Platzbedarf: $\mathcal{O}(n \log^{d-1} n)$
+	\item Vorverarbeitungszeit: $\mathcal{O}(n \log^{d-1} n)$
+\end{itemize}
+Dynamisierung ist z.B. mittels Verwendung eines AVL-Baumes möglich.
+\subsection*{Segmentbaum}
+Ermittelt für Anfragepunkt in welchen Intervallen er liegt.
+Dabei gibt das Universum $U$ mit $|U| = N$ vor, welche Intervallendpunkte "`erlaubt"' sind.
+Die Menge $S$ mit $|S| = n$ enthält alle Intervalle, welche in den entsprechenden Knotenlisten
+ gespeichert sind.
+\begin{itemize}
+	\item Jedes Intervall gehört zu $\leq 2h$ Knotenlisten
+	\item Vorverarbeitungszeit: $\mathcal{O}(N + n \log N)$
+	\item Platzbedarf: $\mathcal{O}(N + n \log N)$
+	\item Anfragezeit: $\mathcal{O}(\log N + k)$
+	\item Einfügen von Intervallen: $\mathcal{O}(g(n) \log N)$, wobei $g(n)$ die Zeit ist, die benötigt wird, um Intervalle in die Knotenlisten einzufügen.
+\end{itemize}
+
+\section*{Konvexe Hülle - Algorithmen}
+\subsection*{Algorithmen für $\mathcal{R}^3$}
+\subsubsection*{Gift Wrapping Algorithmus}
+\begin{itemize}
+	\item Laufzeit: $\mathcal{O}(n \log n)$, in höheren Dimensionen aber schlimmer..
+\end{itemize}
+\subsubsection*{Randomisierter Inkrementeller Algorithmus}
+\begin{itemize}
+	\item Erwartete Laufzeit: $\mathcal{O}(n \log n)$
+	\item Worst Case Laufzeit: $\mathcal{O}(n^2)$
+\end{itemize}
+
+\section*{Dualisierung}
+\subsection*{Konvexe Hülle mit Dualisierung lösen}
+\begin{itemize}
+	\item $H^+$ und $H^-$ (Obere und untere Halbebenen)
+	\item Verwende Dualisierung von Eckpunkt 
+	\item Im letzten Skript 2009 nochmal im Detail nachlesen!..
+\end{itemize}
+
+\subsection*{Delaunay Triangulierung}
+Die Delaunay Triangulierung im $\mathcal{R}^2$ kann durch Berechnung der konvexen Hülle
+im $\mathcal{R}^3$ berechnet werden.
+
+Hierzu werden Punkt aus dem $\mathcal{R}^2$ auf den Einheitsparaboloid $P$ im $\mathcal{R}^3$ 
+projiziert. Die Idee ist, dass wenn Punkte im $\mathcal{R}^2$ auf einem Kreis liegen und diese
+wie beschrieben projiziert wurden dann im $\mathcal{R}^3$ in einer gemeinsamen Ebene liegen.
+Jedes Dreieck der Delaunay Triangulierung entspricht einer Facette der konvexen Hülle im $\mathcal{R}^3$.
+
+Algorithmus:
+
+\begin{itemize}
+	\item Bilde Projektion
+	\item Konstruiere die konvexe Hülle im $\mathcal{R}^3$
+	\item Projiziere die Kanten der konvexen Hülle  (ohne die Facetten welche die konvexe Hülle
+	nach oben begrenzen) zurück nach $\mathcal{R}^2$
+\end{itemize}
+
+Genaue Erklärung nochmal nachlesen und genau verstehen!..
+
+\section*{Zusammenfassung der Übungszettel}
+\begin{itemize}
+	\item Zettel 1
+	\begin{itemize}
+		\item Geradendarstellung (Hessesche Normalform, Nullstellenmenge, affine Hülle)
+		\item Algorithmus mit BHD-Baum: Liegt p in P? Schnitt mit Geraden g? (log n)
+	\end{itemize}
+	\item Zettel 2
+	\begin{itemize}
+		\item Rotating Calipers (Durchmesser eines Polygons mithilfer der antipodalen Paare bestimmen)
+		\item Konvexe Hülle in $\mathcal{R}^2$ mit Divide and Conquer (d.h. mit Rotating Calipers und 
+		"`Brückenfindung"'
+	\end{itemize}
+	\item Zettel 3
+	\begin{itemize}
+		\item Graham-Scan Implementation
+		\item Inkrementelle Konstruktion der konvexen Hülle in $\mathcal{R}^2$ (Nochmal anschauen!!)
+		\item Untere Schranke für das Berechnen der konvexen Hülle durch Reduzieren des Sortierungsproblems auf das Berechnen der konvexen Hülle (Momentenkurve bzw. Parabel!)
+	\end{itemize}
+	\item Zettel 4
+	\begin{itemize}
+		\item Bewegungsplanung in der Ebene (Algorithmus für Roboter entsprechend eines Voronoi-Diagramms angeben)
+		\item Geometrische Graphen (Beweis von Eulers Formel und Beweis, dass jede Triangulierung
+		einer Menge von $n$ Punkten, von denen $r$ extrem sind, genau $2(n-1) - r $ Dreiecke enthält)
+		\item Beschreibe einen Algorithmus welcher aus einem Voronoi-Diagramm $VD(S)$ in linearer
+		Zeit den Rand der konvexen Hülle $CH(S)$ berechnet. (Jede Voronoi-Region als zyklische Folge
+		der Kanten gegeben)
+		\item Kann man das Voronoi-Diagramm von $S$ schneller als in $\Omega(n \log n)$ berechnen?
+	\end{itemize}
+	\item Zettel 5	
+	\begin{itemize}
+		\item Suchen in ebenen Unterteilungen 
+		
+		Hier sollte man eine "`einfache"' Datenstruktur mit Anfragezeit $\mathcal{O}(\log n)$ 
+		beschreiben, welche einen Punkt in einer ebenen Unterteilung findet. Vorverarbeitungszeit und 
+		Speicherplatz soll auch bestimmt werden. (Hinweis: Ziehen sie durch jeden Knoten der ebenen
+		Unterteilung eine vertikale Gerade)
+		
+		\item Voronoi-Diagramme mit der $L_1$, also Manhattan-Metrik beschreiben und skizzieren
+		\item Datenstruktur zur Punktlokalisierung in ebenen Unterteilungen (LDS)
+		
+		Diese sollte auch für unbeschränkte Facetten angepasst werden. (Großes Dreieck herumlegen)
+		Vorverarbeitungszeit, Speicherbedarf und Anfragezeit sollte in Abhängigkeit der Anzahl
+		der Knoten angegeben werden.
+	\end{itemize}
+	\item Zettel 6
+	\begin{itemize}
+		\item Voronoi-Diagramme von Strecken
+		
+		Wie sehen die Kurven aus?, Aus wie vielen Ecken, Kanten und Zellen kann $VD(S)$ höchstens
+		bestehen? Zeigen Sie dass die Voronoi-Regionen zusammenhängend sind.
+		
+		\item Fortune-Sweep illustrieren und beschreiben (z.B. Was passiert an Eventpunkten etc.)
+		
+		\item Durchschnitt einfacher Polygone
+		
+		Geben Sie einen Sweepline-Algorithmus an und anaysieren Sie. (Es gibt glaube ich einen Algo
+		in dem E-Book zur Veranstaltung..)
+	\end{itemize}
+	\item Zettel 7
+	\begin{itemize}
+		\item Anfragezeit für k-d-Bäume..
+	\end{itemize}
+	\item Zettel 8
+	\begin{itemize}
+		\item Zeigen Sie dass ein 2-dimensionaler Bereichsbaum in $\mathcal{O}(n \log n)$ aufgebaut
+		werden kann.
+		\item Beschreiben Sie das Einfügen/Streichen von Intervallen bei dynamischen Segmentbäumen
+		\item Punkt-Rechteck-Anfragen
+		Geben Sie eine Datenstruktur zum effizienten Auffinden einer Menge von Rechtecken zu einem
+		Anfragepunkt $p$ an. (Segmentbaum mit sekundären Segmentbäumen..)
+	\end{itemize}
+	\item Zettel 9
+	\begin{itemize}
+		\item Beweisen Sie, dass es in 3d höchstens 5 platonische Körper gibt
+		\item Die Ecken und $d-1$-dimensionalen Facetten vom Einheitswürfel bzw. 
+		Einheitssimplex angeben und Hypercube illustrieren.
+		\item Einfach zu beschreibender Brute-Force-Algorithmus zur Berechnung der konvexen
+		Hülle in 3d. (Nehme alle 3-Punkte-Kombinationen und teste, ob alle anderen Punkte im jeweiligen
+		Halbraum liegen (Binomialkoeffizient))
+	\end{itemize}
+	\item Zettel 10
+	\begin{itemize}
+		\item Dualisierung
+		
+		Möglichst effizienten Algorithmus der bestimmt, wie viele Punkte aus einer Menge $S$ 
+		maximal auf einer gemeinsamen Geraden liegen.
+		
+		\item Für ein beliebiges $n$ eine Punktmenge im $\mathcal{R}^4$ angeben, deren konvexe
+		Hülle Größe $\Omega(n^2)$ hat. 
+		
+		\item Eingaben/Einfügereihenfolgen für inkrementelle Konstruktion der konvexen Hülle bzw. 
+		der Trapezzerlegung eines Arrangements von Strecken angeben, so dass die Laufzeit
+		$\Omega(n^2)$ beträgt.
+	\end{itemize}
+	\item Zettel 11
+	\item Zettel 12
+\end{itemize}
+\end{document}
