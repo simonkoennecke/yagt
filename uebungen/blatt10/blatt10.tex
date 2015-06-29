@@ -276,7 +276,25 @@ Insgesamt haben wir eine Laufzeit von  $\mathcal{O}(n) + \mathcal{O}(\frac{n}{2}
 
 
 \subsection*{(b)}
+Zur Bearbeitung der Aufgabe betrachten wir den Algorithmus aus der Vorlesung und lassen dabei jedoch die Randomisierung außer Acht.
+Die Eingabemenge wählen wir mit $\frac{n}{2}$ parallelen, gleichlangen Strecken. Die anderen $\frac{n}{2}$ Strecken sind ebenfalls parallel und gleich lang, liegen jedoch
+orthogonal so zu den ersten $\frac{n}{2}$  Strecken, dass sich eine jede Strecke mit jeweils $\frac{n}{2}$ Strecken schneidet.
 
+\begin{figure}[!htb]
+\subfigure[Illustration der gewählten Eingabestrecken]{\includegraphics[width=0.25\textwidth]{aufgabe3b}} 
+\end{figure} 
+
+
+\textbf{Satz aus der Vorlesung:}
+
+\textbf{Die Trapezierung einer Menge von $n$ Strecken mit obigem randomisierten inkrementellen Algorithmus hat die erwartete Laufzeit
+$\mathcal{O}(n\log n + k)$, wobei $k$ die Anzahl der Schnittpunkte ist.}
+
+
+Beim Einfügen der ersten $\frac{n}{2}$ vertikalen Strecken beträgt die Anzahl der Schnittpunkte jeweils 0 . Beim Einfügen der horizontalen Strecken jeweils $\frac{n}{2}$.
+Damit haben wir insgesamt genau $\frac{n}{2} * \frac{n}{2} = \mathcal{O}(\frac{n^2}{4}) = \mathcal{O}(n^2)$ Schnittpunkte.
+
+Die Laufzeit beträgt somit $\mathcal{O}(n \log n + n^2) = \Omega(n^2)$.
   
 
 \end{document}
