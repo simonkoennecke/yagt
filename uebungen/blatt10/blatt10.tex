@@ -79,6 +79,9 @@ showstringspaces=false}
 \linespread{1.5}
 \usepackage{setspace}
 
+%URLs
+\usepackage{url}
+
 %
 \usepackage{cancel}
 
@@ -213,7 +216,86 @@ Facetten, lässt sich demnach über den Binomialkoeffizienten mit $\binom{n}{2} 
 
 \section*{Aufgabe 3}
 \subsection*{(a)}
+
+Da wir innerhalb der Vorlesung keinen inkrementellen Algorithmus zur Konstruktion der konvexen Hülle im $\mathcal{R}^3$ kennengelernt bzw. analysiert haben,
+stellen wir im Folgenden zunächst einen selbst entwickelten Algorithmus vor. Dieser Algorithmus erfüllt die geforderte Laufzeit $\Omega(n^2)$ für beliebige
+Eingaben und Einfügereihenfolgen. Da aber die Aufgabenstellung impliziert, dass der gegebene Algorithmus eine (zumindest erwartete) Laufzeit besser als $\Omega(n^2)$
+besitzt, haben wir recherchiert und einen entsprechenden randomisierten inkrementellen Algorithmus zur Berechnung der konvexen Hülle im $\mathcal{R}^3$ mit 
+erwarteter Laufzeit von $\mathcal{O}(n \log n)$ gefunden (Quelle: Mark de Berg et al. - "`Computational Geometry"', 2008, Springer-Verlag).
+Dieser wird auch anschaulich unter folgender URL animiert und beschrieben: \url{http://www.eecs.tufts.edu/~mhorn01/comp163/}. 
+Wir betrachten für die Bearbeitung der Aufgabe jedoch die nicht randomisierte Version dieses Algorithmus, d.h. die definierte Einfügereihenfolge
+wird beachtet.
+
+\subsection*{Inkrementeller Algorithmus mit Laufzeit $\Omega(n^2)$ unabhängig von der Eingabe und Einfügereihenfolge}
+Sei die Punktmenge $S \subset \mathcal{R}^3$ gegeben, $|S| = n$ und $F$ die Facetten der konvexen Hülle. Der Schnitt der negativen Halbräume der Facetten aus $F$ beschreiben das Innere der konvexen Hülle. 
+Zur Vereinfachung nehmen wir an, dass die Punkte aus $S$ in allgemeiner Lage sind. Somit spannen die ersten vier Punkte ein Tetraeder und die vier Facetten des Tetraeders werden in $F$ gespeichert. Anschließend werden die Punkte inkrementell hinzugefügt unter Anwendung des folgenden Algorithmus: 
+
+\begin{itemize}
+	\item Solange $S \neq \varnothing$
+	\begin{itemize}	
+		\item Wähle einen Punkt $p \in S$ und aktualisiere $S$ mit $S = S \setminus \{p\}$
+		\item Fall 1: $p$ liegt in der konvexen Hülle von $F$, weiter mit dem ersten Schritt.
+		\item Fall 2: $p$ liegt außerhalb der konvexen Hülle von $F$.
+	\begin{itemize}
+		\item Entferne die Facetten aus $F$ bei denen $p$ im positiven Halbraum liegt.
+		\item Durchlaufe wiederholt die Facetten aus $F$ und wähle von den Facetten alle Kanten $ e = (i,j) $, welche keine Nachbarfacette haben.
+		Füge jeweils die neue Facette mit den Eckpunkten $i,j$ und $p$ zu $F$ hinzu, wobei die Nachbarschaftsbeziehungen entsprechend aktualisiert werden. 
+	\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+
+\subsubsection*{Laufzeit}
+
+Die Prüfung, ob ein Punkt $p$ in der konvexen Hülle $F$ liegt, kann wie folgt realisiert werden: Der Punkt $p$ liegt im negativen Halbraum aller Facetten aus $F$. Dies kann in $\mathcal{O}(n)$ Zeit geprüft werden, da die Anzahl der Facetten zu den Punkten durch die Eulerformel in linearer Abhängigkeit stehen. Das Entfernen der Facetten, bei dem der Punkt $p$ im positiven Halbraum liegt, benötigt $\mathcal{O}(n)$ Zeit. Das finden der Eckpunkte von Kanten ohne Nachbarn wird durch wiederholtes Durchlaufen aller übrig geblieben Facetten ermöglicht und benötigt ebenfalls $\mathcal{O}(n)$ Zeit. Insgesamt wird $\mathcal{O}(3n)$ Zeit benötigt. Dies Vorgehen wird für $n$ Punkte wiederholt und daraus resultiert die Gesamtlaufzeit $\Omega(n^2)$.
+
+\subsubsection*{Speicherplatzbedarf}
+
+Im Initialzustand sind die Facetten $F$ Dreiecke und beim inkrementellen Hinzufügen der Punkte werden nur Dreiecke als Facetten aufgenommen. Da die Punkte in allgemeiner Lage sind können die Facetten nur Dreiecke sein. Daher hat jede Facette 3 Ecken und wir wissen, dass jeder Punkt aus der Menge $S$ linear viele Facetten nach der Eulerformel (Dualität planarer Graph) hat. Daraus resultiert der Speicherplatzbedarf von $\mathcal{O}(n)$.
+
+\subsection*{Alternativer Algorithmus mit erwarteter Laufzeit von $\mathcal{O}(n \log n)$}
+In der von de Berg et al. beschriebenen Laufzeitanalyse wird die erwartete Anzahl der in einem Schritt $i$ neu hinzuzufügenden Facetten nach oben mit einer Konstante ($c = 6$) abgeschätzt.
+Dies folgt aus einer Betrachtung des mittleren Knotengrades im Schritt $i$. 
+
+Wie wir nun zeigen, können wir über die folgend definierte Eingabe und Einfügereihenfolge diesen Wert auf einen von $n$ linear abhängigen Wert erhöhen/"`verschlimmern"'.
+
+Dazu konstruieren wir eine Eingabe der Größe $n$, wobei wir $\lfloor\frac{n}{2}\rfloor$ Punkte auf einem Kreisrand in der $x-y-Ebene$ anordnen. 
+Sei $m = (x_m,y_m)$ der Mittelpunkt dieses Kreises. Die verbliebenen $\lceil\frac{n}{2}\rceil$ Punkte sind beschrieben durch $(x_m, y_m, z_i)$. Es gilt dabei dass $z_i < z_{i+1}$.
+Das heißt wir ordnen die Hälfte der Punkte auf einem Kreis in der Ebene an und wählen danach immer Punkte über dem Kreismittelpunkt, welche bezgl. $z$ immer weiter 
+"`in die Höhe wachsen"'. Die Einfügereihenfolge kann in der beschriebenen Weise übernommen werden.
+
+Dann ergibt sich folgende Änderung für die erwartete Laufzeit eines Schrittes $i$:
+
+Das Erstellen des Initialzustands, d.h. die Konstruktion des Tetraeders benötigt $\mathcal{O}(n)$ Zeit.
+Das Einfügen der $\mathcal{O}(\frac{n}{2})$ ersten Punkte (die auf dem Kreis liegen) benötigt jeweils konstante Zeit,
+da pro Punkt jeweils nur konstant viele neue Facetten erstellt/gelöscht werden. also insgesamt auch $\mathcal{O}(\frac{n}{2})$ Zeit.
+Für die verbleibende Punktmenge benötigen wir $\mathcal{O}((\frac{n}{2})^2)$ Zeit. Denn aufgrund der Lage der ersten $\mathcal{O}(\frac{n}{2})$ Punkte
+müssen wir für jeden neu hinzugefügten Punkt  $\mathcal{O}(\frac{n}{2})$ neue Flächen hinzufügen bzw. löschen. 
+
+Insgesamt haben wir eine Laufzeit von  $\mathcal{O}(n) + \mathcal{O}(\frac{n}{2}) + \mathcal{O}((\frac{n}{2})^2) = \mathcal{O}(\frac{n^2}{4}) = \Omega(n^2) $.
+
+
 \subsection*{(b)}
+Zur Bearbeitung der Aufgabe betrachten wir den Algorithmus aus der Vorlesung und lassen dabei jedoch die Randomisierung außer Acht.
+Die Eingabemenge wählen wir mit $\frac{n}{2}$ parallelen, gleichlangen Strecken. Die anderen $\frac{n}{2}$ Strecken sind ebenfalls parallel und gleich lang, liegen jedoch
+orthogonal so zu den ersten $\frac{n}{2}$  Strecken, dass sich eine jede Strecke mit jeweils $\frac{n}{2}$ Strecken schneidet.
+
+\begin{figure}[!htb]
+\subfigure[Illustration der gewählten Eingabestrecken]{\includegraphics[width=0.25\textwidth]{aufgabe3b}} 
+\end{figure} 
+
+
+\textbf{Satz aus der Vorlesung:}
+
+\textbf{Die Trapezierung einer Menge von $n$ Strecken mit obigem randomisierten inkrementellen Algorithmus hat die erwartete Laufzeit
+$\mathcal{O}(n\log n + k)$, wobei $k$ die Anzahl der Schnittpunkte ist.}
+
+
+Beim Einfügen der ersten $\frac{n}{2}$ vertikalen Strecken beträgt die Anzahl der Schnittpunkte jeweils 0 . Beim Einfügen der horizontalen Strecken jeweils $\frac{n}{2}$.
+Damit haben wir insgesamt genau $\frac{n}{2} * \frac{n}{2} = \mathcal{O}(\frac{n^2}{4}) = \mathcal{O}(n^2)$ Schnittpunkte.
+
+Die Laufzeit beträgt somit $\mathcal{O}(n \log n + n^2) = \Omega(n^2)$.
+  
 
 \end{document}
 
