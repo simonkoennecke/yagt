@@ -1,0 +1,192 @@
+%Dokumententyp
+\documentclass[a4paper]{article}
+
+\usepackage[a4paper,left=2cm, right=3cm, top=2cm]{geometry}
+
+%Kodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%Grafiken einbinden
+\usepackage{graphicx}
+\usepackage{subfigure} 
+
+%Position von Grafiken und Tabellen erzwingen:
+\usepackage{float}
+
+%URLs im Literaturverzeichnis
+\usepackage{url}
+
+\usepackage{amsmath}
+
+%Vektoren einfacher angeben:
+\newcommand{\vektor}[1]{\left( \begin{array}{c} #1 \end{array} \right) }
+
+
+%Schriftart Arial:
+% \usepackage{helvet}
+
+%Figures with text around it:
+\usepackage{wrapfig}
+
+\usepackage{listings}
+
+%seitennummern rechts:
+% \usepackage{fancyhdr}
+% \fancyhf{} % clear all header and footers
+% \renewcommand{\headrulewidth}{0pt} % remove the header rule
+% \rfoot{\thepage}
+% \fancypagestyle{plain}{%redefining plain pagestyle
+% \fancyhf %clear all headers and footers fields
+% \fancyhead[R]{\thepage} %prints the page number on the right side of the header
+% }
+
+%Schriftart Times New Roman "like"
+\usepackage{txfonts}
+
+%Sprache
+\usepackage[german]{babel}
+
+%Checkmarks: (usage: \checkmark)
+\usepackage{dingbat}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+ 
+\lstset{language=Java,
+basicstyle=\ttfamily,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=1,
+numbersep=5pt,
+tabsize=4,
+showspaces=false,
+lineskip={-1.5pt},
+showstringspaces=false}
+
+%Tabellenextras
+\usepackage{tabularx}
+
+%Zeilenabstand 1.5
+\linespread{1.5}
+\usepackage{setspace}
+
+%URLs
+\usepackage{url}
+
+%
+\usepackage{cancel}
+
+%Figure Captions mit Fußnoten
+\usepackage{footnote}
+%\setlength{\parindent}{0pt} 
+
+%Graphen/Trees zeichnen:
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+
+%itemize items richtig ausrichten (nicht links überlappen!)
+% \setlist{leftmargin=0}
+
+% %%%%TITELSEITE%%%%%%(
+% \title{ Konzept und Implementierung\\ eines Systems zur \\Anforderung und Verwaltung von virtuellen privaten Clustern}
+% \author{\textbf{\large Bachelorarbeit}}
+% 
+% \date{zur Erlangung des akademischen Grades Bachelor of Science an der Universität Paderborn im Fachbereich Informatik im Studiengang Bachelor Informatik}
+
+% %%%%TITELSEITE%%%%%%)
+
+% \pagestyle{fancy}
+\begin{document}
+
+\title{Algorithmische Geometrie - Sommersemester 2015\\
+       11. Aufgabenblatt }
+\author{Simon Koennecke und Felix Bröker}
+\date{}
+\maketitle
+
+\section*{Aufgabe 1: Konfliktecken}
+
+
+
+\section*{Aufgabe 2: Randomisiert inkrementelle Konstruktionen}
+
+
+
+\subsection*{(a) konvexe Hülle}
+
+Es sei eine beliebiges Punktmenge $P = \left\{p_1, \dots, p_n\right\} \subset \mathcal{R}^2$ und $|P| = n$ in allgemeiner Lage gegeben. 
+Die ersten ersten drei Punkte spannen ein Dreieck, also eine Konvexe Hülle $S$ bestehend aus $\{p_1, p_2, p_3\}$, auf. 
+Der Punkt $s$ sei der Schwerpunkt dieses Dreiecks $\{p_1, p_2, p_3\}$ (Berechnung ist in konstanter Zeit möglich).
+Nun sollen Punkte $p_i$ ($i > 3$) zu der konvexen Hülle $S$ hinzugefügt werden. 
+Dabei soll die konvexe Hülle ggf. angepasst werden, falls $p_i$ außerhalb von $S$ liegt. 
+$h_i$ sei die Halbgerade von $s$ durch $p_i$. Das Prüfen, ob ein Punkt rechts oder links von einer Halbgeraden liegt, ist in $\mathcal{O}(1)$ Zeit möglich.
+
+\subsection*{Algorithmus}
+
+\begin{enumerate}
+
+\item Solange $p_i \in P = \varnothing$:
+
+\begin{enumerate}
+
+  \item Finde den Kegel beschrieben durch $K_{h_r,h_s}$ (wobei gilt: $h_s$ ist Nachfolger von $h_r$), in dem $p_i$ liegt.
+
+  \begin{itemize}
+	  \item[2.1] $p_i$ wird nun zu $S$ hinzugefügt, so dass $p_s$ Nachfolger und $p_r$ Vorgänger von $q$ ist.
+	  
+	  \item[2.2] entlang beider Richtungen in $S$ führe folgende Schritte (hier beschrieben im Uhrzeigersinn (gegen den Uhrzeigersinn ist analog zu verstehen)) ausgehend von $q$ aus:
+	  
+	  \begin{itemize}
+		  \item bestimme die Determinante $T(q, Nachfolger(p_s), p_s)$. Ist diese $>0$ ($p_s$ ist Teil der konvexen Hülle von $S$), ist man fertig.
+		  \item im anderen Fall entferne $p_s$ aus $S$ und fahre mit Schritt 2.2 und $p_s = Nachfolger(p_s)$ fort. 
+	  \end{itemize}
+
+  \end{itemize}
+  
+\end{enumerate}
+
+\end{enumerate}
+
+Notizen:
+Zur Verwaltung der Punkte von $S$ soll die Datenstruktur "`Dynamic Array"'
+eingesetzt werden. 
+Diese besitzt folgende armotisierte Laufzeiten:
+\begin{itemize}
+ \item Add: O(1)
+ \item Remove: O(1)
+ \item Find: O(1)
+\end{itemize}
+
+\subsection*{Laufzeit}
+\begin{enumerate}
+\item Der erste Schritt ist in $\mathcal{O}(n)$ Zeit berechenbar. (z.B. durch
+Prüfen, ob der Punkt in keinem der rechten Halbräume der Geraden, beschrieben durch
+zwei aufeinander folgende Punkte $pi$ und $p_{i+1}$ liegt)
+\item Im zweiten Schritt kann der Kegel, in welchem der Punkt $q$ liegt, in Laufzeit
+$\mathcal{O}(n)$ gefunden werden. (hier z.B. ähnlich zu Schritt 1 durch Vergleiche 
+mit den verschiedenen Halbräumen der $n$ Halbgeraden $h_i$)
+\item Der Punkt $q$ kann in Schritt 2.1 in Zeit $\mathcal{O}(1)$ zu $S$ hinzugefügt werden.
+\item Der Schritt 2.2 benötigt pro Durchlauf (also pro Berechnung und Auswertung der jeweiligen
+Determinante und eventuellem Entfernen des aktuellen Punktes $p_s$) konstante Zeit, also $\mathcal{O}(1)$. Insgesamt wird dieser Schritt pro Richtung grob abgeschätzt $< n$-mal häufig ausgeführt, für beide Richtungen also $< 2n$-mal. Damit hat der Schritt 2.2 insgesamt eine Laufzeit von $\mathcal{O}(n)$.
+\end{enumerate}
+
+Die gesamte Laufzeit des Algorithmus kann also mit $\mathcal{O}(n)$ + $\mathcal{O}(n)$ + $\mathcal{O}(1)$ + $\mathcal{O}(n)$ = $\mathcal{O}(n)$ abgeschätzt werden. 
+
+
+\subsection*{(b) Voronoi-Diagramm}
+
+  
+
+\end{document}
+
