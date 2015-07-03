@@ -171,8 +171,6 @@ Insgesamt können wir somit die Konfliktstruktur in $\mathcal{O}(n)$ Zeit auf di
 
 \subsection*{(a) konvexe Hülle}
 
-
-
 Es sei eine Punktmenge $P = \left\{p_1, \dots, p_n\right\} \subset \mathcal{R}^2$ mit $|P| = n$ in allgemeiner Lage gegeben. Sei zudem $S_i$ die konvexe Hülle der ersten $i$ aus $P$
 entnommenen Punkte.
 
@@ -188,22 +186,27 @@ Außerdem erstellen wir einen AVL-Baum $B$, welcher zu Beginn jedes $i$ten Schri
 der Winkel $\alpha_i$ enthält. Das heißt, zu Beginn werden entsprechend initial die Punkte $p_i, p_j, p_k$ bzgl. des jeweiligen Winkels $\alpha_i$ 
 in $B$ eingefügt ($\mathcal{O}(\log 3) = \mathcal{O}(1)$).
 
+\begin{figure}[!htb]
+\centering
+\subfigure[Illustration von $S_3$ mit nächstem Punkt $p_i$]{\includegraphics[width=0.6\textwidth]{aufgabe2a}} 
+\end{figure} 
+
 Im Folgenden beschreiben wir nun den inkrementellen Schritt jeweils für alle weiteren $n-3$ Punkte $p_i \in P$.
 Dabei nutzen wir das in der Vorlesung vorgestellte Konzept der "`Kegel"', welche durch die Strahlen 
 vom Schwerpunkt $s$ durch die aktuellen Punkte der konvexen Hülle definiert sind, aus.
 
 \begin{enumerate}
- \item Führe eine Binärsuche in $B$ mit $winkel(p_i)$ durch. Wir erhalten einen Punkt $p_k$, welcher einer der beiden Punkte
+ \item Führe eine Binärsuche in $B$ mit $\alpha(p_i)$ durch. Wir erhalten einen Punkt $p_k$, welcher einer der beiden Punkte
  aus $S_{i-1}$ ist, welche den gesuchten Kegel definieren.
- \item Falls $winkel(p_i) < winkel(p_k)$, führe eine Vorgänger-Suche in $B$ mit $winkel(p_k)$ aus, ansonsten analog eine Nachfolger-Suche.
+ \item Falls $\alpha(p_i) < \alpha(p_k)$, führe eine Vorgänger-Suche in $B$ mit $\alpha(p_k)$ aus, ansonsten analog eine Nachfolger-Suche.
  Damit haben wir den zweiten Punkt $p_l \in S_{i-1}$ des gesuchten Kegels bestimmt. 
  
  \textit{Hinweis: Ist ein Nachfolger bzw. Vorgänger nicht vorhanden, entnehme entsprechend das Minimum bzw. Maximum aus $B$.}
  \item Nun prüfen wir für den neu hinzuzufügenden Punkt $p_i$, ob dieser sich außer- oder innerhalb von $S_{i-i}$ befindet. 
- Dies können wir überprüfen, indem wir testen, ob der Punkt (je nach Definition und Lage der Punkte $p_k$ und $p_l$ in $S_{i-1}$ zueinander) rechts oder links der durch $p_k$ und $p_l$ definierten Geraden befindet. 
+ Dies können wir überprüfen, indem wir testen, ob der Punkt (je nach Lage der Punkte $p_k$ und $p_l$ in $S_{i-1}$ zueinander) rechts oder links der durch $p_k$ und $p_l$ definierten Geraden befindet. 
  \item Gilt also $p_i \in S_{i-1}$, so setzen wir $S_i = S_{i-1}$ und fahren mit dem nächsten Punkt im Schritt 1 fort. 
  
- Im anderen Fall setzen wir ebenfalls $S_i = S_{i-1}$, führen jedoch auch zusätzlich folgende Schritte für jeweils "`beide Richtungen"' der konvexen Hülle $S_{i-1}$ für $p_m \in \{p_k, p_l\}$  aus:
+ Im anderen Fall setzen wir ebenfalls $S_i = S_{i-1}$, führen jedoch zusätzlich folgende Schritte für jeweils "`beide Richtungen"' der konvexen Hülle $S_{i-1}$ für $p_m \in \{p_k, p_l\}$  aus:
  \begin{enumerate}
   \item Wir berechnen den Winkel $\beta$ der Strecken $\overline{p_i p_m}$ und $\overline{p_m p_{m+1}}$, wobei $p_{m+1} \in S_{i-1}$ der nächste Punkt auf der konvexen
   Hülle in entsprechender Richtung ist. Ist der "`potentielle Innenwinkel"' $\beta < 180$\textdegree, so sind wir für diese Richtung fertig
@@ -213,7 +216,7 @@ vom Schwerpunkt $s$ durch die aktuellen Punkte der konvexen Hülle definiert sin
 
  Für "`beide Richtungen"' kennen wir nun die beiden Punkte aus $S_{i-1}$, zwischen denen der neue Punkt $p_i$ in der konvexen Hülle
  eingefügt werden muss. Aktualisiere entsprechend $S_i$ mit $S_i = S_i \cup \{p_i\}$. 
- Füge außerdem $p_i$ mit $winkel(p_i)$ zu $B$ hinzu.
+ Füge außerdem $p_i$ mit $\alpha(p_i)$ zu $B$ hinzu.
  Fahre nun mit dem nächsten Punkt in Schritt 1 fort.
 \end{enumerate}
 
@@ -228,23 +231,64 @@ der Gesamtlaufzeit $T(n)$:
  \begin{itemize}
   \item Kegel und zugehörige Punkte $\in S_{i-1}$ bestimmen: $\mathcal{O}(\log n)$
   \item Prüfen, ob Punkt $p_i$ rechts bzw. links der beschriebenen Geraden liegt: $\mathcal{O}(1)$
-  \item Falls $p_i$ außerhalb von $S_{i-1}$ für "`beide Richtungen"' (also 2 mal):
+  \item Falls $p_i$ außerhalb von $S_{i-1}$ für "`beide Richtungen"' (solange
+  Winkel nicht konvex):
   \begin{itemize}
-   \item Winkel berechnen + Vergleichen: $\mathcal{O}(1)$
-   \item Falls Winkel nicht konvex:
-   
-    $S_i$ und $p_m$ aktualisieren ($\mathcal{O}(1)$) und "`$x$-mal"' diesen und vorherigen Schritt wiederholen bis Winkel konvex
+    \item $S_i$ und $p_m$ aktualisieren: $\mathcal{O}(1)$ 
+    \item $B$ aktualisieren: $\mathcal{O}(\log n)$
   \end{itemize}
 
  \end{itemize}
 
 \end{itemize}
 
+Damit folgt: 
+\begin{align*}
+T(n) &= \mathcal{O}(1) + (n-3) * (\mathcal{O}(\log n) + \mathcal{O}(1) + x(p_i,S_{i-1}) * ( 
+\mathcal{O}(1) + \mathcal{O}(\log n)))\\
+&= \mathcal{O}(n * ( x(p_i, S_{i-1}) * \log n) )
+\end{align*}
+,wobei $x(p_i, S_{i-1}) = 1 + $ \textit{"`Anzahl der im $i$-ten Schritt
+aufgrund des Punktes $p_i$ zu entfernenden Punkte aus $S_{i-1}$"'}.
 
+Da wir uns leicht überlegen können, dass jeder Punkt $\in P$ 
+im Laufe des Algorithmus maximal einmal 
+zur konvexen Hülle $S_i$ hinzugefügt und maximal einmal wieder aus der konvexen Hülle $S_j$ mit
+$j > i$ entfernt werden kann, ist $x(p_i, S_{i-1})$ im Mittel konstant 
+und damit
+eine Laufzeitabschätzung von 
 
+$T(n) = \mathcal{O}(n \log n)$ gegeben.
+
+Diese Abschätzung ist aufgrund des gerade beschriebenen Kriteriums vollständig unabhängig
+von der Einfügereihenfolge der Punkte und deckt den randomisierten Fall somit ab.
 
 \subsection*{(b) Voronoi-Diagramm}
 
+Idee: 
+
+Die ersten zwei Punkte nehmen und den Bisektor berechnen.. (einfach nur Mittelsenkrechte)
+
+Dann Konfliktgraph aufbauen: Also für alle noch einzufügenden Punkte
+eine Kante zu einem von beiden Bisektorknoten einfügen, je nachdem in welchem
+Teil des Bisektors der Punkt landen würde.
+
+Dann wie bei (a) nacheinander für alle Punkte p:
+
+Im Konfliktgraphen schauen, mit welcher Facette(f) p verknüpft ist.
+
+Dann zwischen p und dem Punkt der Facette f den Bisektor berechnen
+
+und die Schnittpunkte dieses Bisektors mit Kanten des aktuellen Voronoi-Diagramms.
+
+An den Schnittpunkten werden dann die "`nicht mehr aktuellen"' Teile der Voronoi-Kanten gelöscht
+und für die jeweils benachbarten Facetten mit dem neuen Punkt p die weiteren Bisektoren zu diesen
+berechnet. - Werden hier wieder alte Bisektor-"`Teile"' geschnitten, müssen die 
+veralteten Teile der Voronoi-Kanten wieder gelöscht werden und durch einen neuen Bisektor-"`Teil"'
+ersetzt werden usw. usw. \dots
+
+Also bestimmt wieder $n$ mal im Mittel konstant viele OPerationen mit logarithmischer Zeit,
+also O log n..
   
 
 \end{document}
