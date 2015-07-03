@@ -75,6 +75,9 @@ showstringspaces=false}
 %Tabellenextras
 \usepackage{tabularx}
 
+% Gradzeichen..:)
+\usepackage{textcomp}
+
 %Zeilenabstand 1.5
 \linespread{1.5}
 \usepackage{setspace}
@@ -118,6 +121,49 @@ showstringspaces=false}
 \section*{Aufgabe 1: Konfliktecken}
 
 
+Gegeben ist eine Menge von Halbräumen $H = \{h_1, \dots, h_n\}$ mit $h_i \subset \mathcal{R}^3$ und $|H| = n$.
+% Für alle Halbräume $h_i \in H$ und $h_j \in H$ gelte $h_i \cap h_j \neq h_i$ mit $i \neq j$.
+Die einzelnen Halbräume $h_i \in H$ seien durch die hessesche Normalform für Ebenen 
+repräsentiert, wobei der jeweilige Normalenvektor in die Richtung des spezifizierten
+Halbraums zeigt. Des Weiteren gelte für alle zu zwei Halbräumen
+$h_i, h_j \in H$ (entsprechend der Hesseschen Normalform) gehörenden Ebenen $e_i, e_j$ mit $i \neq j$, dass diese nicht parallel zueinander sind.
+
+
+\begin{figure}[!htb]
+\centering
+\subfigure[Illustration des initialen Konfliktgraphen]{\includegraphics[width=0.35\textwidth]{konfliktgraph}} 
+\end{figure} 
+
+
+
+Zunächst nehmen wir vier Halbräume $h_i, h_j, h_k, h_l \in H$. 
+Diese spannen ein Tetraeder $T$ auf. 
+
+Für den Aufbau der Konfliktstruktur (bipartiter Graph) erstellen wir als erstes 
+"`Halbraum"'-Knoten für einen jeden Halbraum $h_i \in H$. Dies benötigt $\mathcal{O}(n-4)$
+Zeit.
+
+Dann erstellen wir für jede der 4 Ecken $k_i \in T$ einen "`Eck"'-Knoten im Konfliktgraph
+($\mathcal{O}(1)$).
+Anschließend durchlaufen wir alle noch verbleibenden Halbräume $h_i \in H$ 
+und prüfen jeweils für jeden "`Eck"'-Knoten mit Ecke $k_i$ , ob $k_i$ nicht im 
+jeweiligen Halbraum $h_i$ liegt (Dies kann beispielsweise direkt über die Hessesche Normalform
+in konstanter Zeit ausgewertet werden.). Wenn dies der Fall ist, fügen wir eine Kante $e$ in 
+den Konfliktgraph ein, welche den "`Eck"'-Knoten von Ecke $k_i$ mit dem "`Halbraum"'-Knoten
+von $h_i$ verbindet. 
+
+Da wir insgesamt $4 * (n-4)$ Operationen jeweils konstanter Zeit haben, benötigen
+wir hier ebenfalls $\mathcal{O}(n)$ Zeit.
+
+Insgesamt können wir somit die Konfliktstruktur in $\mathcal{O}(n)$ Zeit auf die beschriebene Weise initialisieren.
+
+
+
+
+
+
+
+
 
 \section*{Aufgabe 2: Randomisiert inkrementelle Konstruktionen}
 
@@ -125,63 +171,76 @@ showstringspaces=false}
 
 \subsection*{(a) konvexe Hülle}
 
-Es sei eine beliebiges Punktmenge $P = \left\{p_1, \dots, p_n\right\} \subset \mathcal{R}^2$ und $|P| = n$ in allgemeiner Lage gegeben. 
-Die ersten ersten drei Punkte spannen ein Dreieck, also eine Konvexe Hülle $S$ bestehend aus $\{p_1, p_2, p_3\}$, auf. 
-Der Punkt $s$ sei der Schwerpunkt dieses Dreiecks $\{p_1, p_2, p_3\}$ (Berechnung ist in konstanter Zeit möglich).
-Nun sollen Punkte $p_i$ ($i > 3$) zu der konvexen Hülle $S$ hinzugefügt werden. 
-Dabei soll die konvexe Hülle ggf. angepasst werden, falls $p_i$ außerhalb von $S$ liegt. 
-$h_i$ sei die Halbgerade von $s$ durch $p_i$. Das Prüfen, ob ein Punkt rechts oder links von einer Halbgeraden liegt, ist in $\mathcal{O}(1)$ Zeit möglich.
 
-\subsection*{Algorithmus}
+
+Es sei eine Punktmenge $P = \left\{p_1, \dots, p_n\right\} \subset \mathcal{R}^2$ mit $|P| = n$ in allgemeiner Lage gegeben. Sei zudem $S_i$ die konvexe Hülle der ersten $i$ aus $P$
+entnommenen Punkte.
+
+Wir entnehmen zunächst drei beliebige Punkte $p_i, p_j, p_k$ aus $P$ und aktualisieren
+$P$ mit $P = P \setminus \{p_i, p_j, p_k\}$. Wegen der allgemeinen Lage  spannen $p_i, p_j, p_k$
+ein Dreieck und damit zugleich die konvexe Hülle $S_3$ auf. 
+
+Zur Bearbeitung der nächsten
+$n-3$ Punkte aus $P$ berechnen wir weiterhin den Schwerpunkt $s$ von $S_3$.
+Den Schwerpunkt $s$ zusammen mit dem von $s$ nach rechts ausgehenden Strahl, welcher parallel zur x-Achse verläuft,
+verwenden wir im weiteren Verlauf als "`Bezugsrahmen"' für die Berechnung des eingeschlossenen Winkels $\alpha \in [0,360)$ (wie bei Polarkoordinaten).
+Außerdem erstellen wir einen AVL-Baum $B$, welcher zu Beginn jedes $i$ten Schrittes alle Punkte der konvexen Hülle $S_{i-1}$ entsprechend
+der Winkel $\alpha_i$ enthält. Das heißt, zu Beginn werden entsprechend initial die Punkte $p_i, p_j, p_k$ bzgl. des jeweiligen Winkels $\alpha_i$ 
+in $B$ eingefügt ($\mathcal{O}(\log 3) = \mathcal{O}(1)$).
+
+Im Folgenden beschreiben wir nun den inkrementellen Schritt jeweils für alle weiteren $n-3$ Punkte $p_i \in P$.
+Dabei nutzen wir das in der Vorlesung vorgestellte Konzept der "`Kegel"', welche durch die Strahlen 
+vom Schwerpunkt $s$ durch die aktuellen Punkte der konvexen Hülle definiert sind, aus.
 
 \begin{enumerate}
+ \item Führe eine Binärsuche in $B$ mit $winkel(p_i)$ durch. Wir erhalten einen Punkt $p_k$, welcher einer der beiden Punkte
+ aus $S_{i-1}$ ist, welche den gesuchten Kegel definieren.
+ \item Falls $winkel(p_i) < winkel(p_k)$, führe eine Vorgänger-Suche in $B$ mit $winkel(p_k)$ aus, ansonsten analog eine Nachfolger-Suche.
+ Damit haben wir den zweiten Punkt $p_l \in S_{i-1}$ des gesuchten Kegels bestimmt. 
+ 
+ \textit{Hinweis: Ist ein Nachfolger bzw. Vorgänger nicht vorhanden, entnehme entsprechend das Minimum bzw. Maximum aus $B$.}
+ \item Nun prüfen wir für den neu hinzuzufügenden Punkt $p_i$, ob dieser sich außer- oder innerhalb von $S_{i-i}$ befindet. 
+ Dies können wir überprüfen, indem wir testen, ob der Punkt (je nach Definition und Lage der Punkte $p_k$ und $p_l$ in $S_{i-1}$ zueinander) rechts oder links der durch $p_k$ und $p_l$ definierten Geraden befindet. 
+ \item Gilt also $p_i \in S_{i-1}$, so setzen wir $S_i = S_{i-1}$ und fahren mit dem nächsten Punkt im Schritt 1 fort. 
+ 
+ Im anderen Fall setzen wir ebenfalls $S_i = S_{i-1}$, führen jedoch auch zusätzlich folgende Schritte für jeweils "`beide Richtungen"' der konvexen Hülle $S_{i-1}$ für $p_m \in \{p_k, p_l\}$  aus:
+ \begin{enumerate}
+  \item Wir berechnen den Winkel $\beta$ der Strecken $\overline{p_i p_m}$ und $\overline{p_m p_{m+1}}$, wobei $p_{m+1} \in S_{i-1}$ der nächste Punkt auf der konvexen
+  Hülle in entsprechender Richtung ist. Ist der "`potentielle Innenwinkel"' $\beta < 180$\textdegree, so sind wir für diese Richtung fertig
+  und merken uns $p_m$.
+  \item Gilt $\beta > 180$\textdegree, so entfernen wir $p_m$ aus $B$, setzen $S_i = S_i \setminus \{p_m\}$, setzen $p_m = p_{m+1}$ und fahren mit (a) fort.
+ \end{enumerate}
 
-\item Solange $p_i \in P = \varnothing$:
-
-\begin{enumerate}
-
-  \item Finde den Kegel beschrieben durch $K_{h_r,h_s}$ (wobei gilt: $h_s$ ist Nachfolger von $h_r$), in dem $p_i$ liegt.
-
-  \begin{itemize}
-	  \item[2.1] $p_i$ wird nun zu $S$ hinzugefügt, so dass $p_s$ Nachfolger und $p_r$ Vorgänger von $q$ ist.
-	  
-	  \item[2.2] entlang beider Richtungen in $S$ führe folgende Schritte (hier beschrieben im Uhrzeigersinn (gegen den Uhrzeigersinn ist analog zu verstehen)) ausgehend von $q$ aus:
-	  
-	  \begin{itemize}
-		  \item bestimme die Determinante $T(q, Nachfolger(p_s), p_s)$. Ist diese $>0$ ($p_s$ ist Teil der konvexen Hülle von $S$), ist man fertig.
-		  \item im anderen Fall entferne $p_s$ aus $S$ und fahre mit Schritt 2.2 und $p_s = Nachfolger(p_s)$ fort. 
-	  \end{itemize}
-
-  \end{itemize}
-  
+ Für "`beide Richtungen"' kennen wir nun die beiden Punkte aus $S_{i-1}$, zwischen denen der neue Punkt $p_i$ in der konvexen Hülle
+ eingefügt werden muss. Aktualisiere entsprechend $S_i$ mit $S_i = S_i \cup \{p_i\}$. 
+ Füge außerdem $p_i$ mit $winkel(p_i)$ zu $B$ hinzu.
+ Fahre nun mit dem nächsten Punkt in Schritt 1 fort.
 \end{enumerate}
 
-\end{enumerate}
-
-Notizen:
-Zur Verwaltung der Punkte von $S$ soll die Datenstruktur "`Dynamic Array"'
-eingesetzt werden. 
-Diese besitzt folgende armotisierte Laufzeiten:
-\begin{itemize}
- \item Add: O(1)
- \item Remove: O(1)
- \item Find: O(1)
-\end{itemize}
 
 \subsection*{Laufzeit}
-\begin{enumerate}
-\item Der erste Schritt ist in $\mathcal{O}(n)$ Zeit berechenbar. (z.B. durch
-Prüfen, ob der Punkt in keinem der rechten Halbräume der Geraden, beschrieben durch
-zwei aufeinander folgende Punkte $pi$ und $p_{i+1}$ liegt)
-\item Im zweiten Schritt kann der Kegel, in welchem der Punkt $q$ liegt, in Laufzeit
-$\mathcal{O}(n)$ gefunden werden. (hier z.B. ähnlich zu Schritt 1 durch Vergleiche 
-mit den verschiedenen Halbräumen der $n$ Halbgeraden $h_i$)
-\item Der Punkt $q$ kann in Schritt 2.1 in Zeit $\mathcal{O}(1)$ zu $S$ hinzugefügt werden.
-\item Der Schritt 2.2 benötigt pro Durchlauf (also pro Berechnung und Auswertung der jeweiligen
-Determinante und eventuellem Entfernen des aktuellen Punktes $p_s$) konstante Zeit, also $\mathcal{O}(1)$. Insgesamt wird dieser Schritt pro Richtung grob abgeschätzt $< n$-mal häufig ausgeführt, für beide Richtungen also $< 2n$-mal. Damit hat der Schritt 2.2 insgesamt eine Laufzeit von $\mathcal{O}(n)$.
-\end{enumerate}
+Da laut Tutorium für diese Aufgabe eigentlich keine Laufzeitanalyse vorgesehen war, beschränken wir uns hier nur auf eine grobe Abschätzung
+der Gesamtlaufzeit $T(n)$:
 
-Die gesamte Laufzeit des Algorithmus kann also mit $\mathcal{O}(n)$ + $\mathcal{O}(n)$ + $\mathcal{O}(1)$ + $\mathcal{O}(n)$ = $\mathcal{O}(n)$ abgeschätzt werden. 
+\begin{itemize}
+ \item Initialisieren von $B$, $s$ und $S_3$: $\mathcal{O}(1)$
+ \item n-3 mal:
+ \begin{itemize}
+  \item Kegel und zugehörige Punkte $\in S_{i-1}$ bestimmen: $\mathcal{O}(\log n)$
+  \item Prüfen, ob Punkt $p_i$ rechts bzw. links der beschriebenen Geraden liegt: $\mathcal{O}(1)$
+  \item Falls $p_i$ außerhalb von $S_{i-1}$ für "`beide Richtungen"' (also 2 mal):
+  \begin{itemize}
+   \item Winkel berechnen + Vergleichen: $\mathcal{O}(1)$
+   \item Falls Winkel nicht konvex:
+   
+    $S_i$ und $p_m$ aktualisieren ($\mathcal{O}(1)$) und "`$x$-mal"' diesen und vorherigen Schritt wiederholen bis Winkel konvex
+  \end{itemize}
+
+ \end{itemize}
+
+\end{itemize}
+
+
 
 
 \subsection*{(b) Voronoi-Diagramm}
